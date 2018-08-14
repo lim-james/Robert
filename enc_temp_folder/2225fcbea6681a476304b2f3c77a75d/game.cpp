@@ -234,8 +234,6 @@ void moveCharacter()
 		}
 		bSomethingHappened = true;
 	}
-
-	// player 1 actions
 	if (g_abKeyPressed[K_W])
 	{
 		if (player1->position.facing == up)
