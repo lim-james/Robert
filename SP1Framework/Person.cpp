@@ -78,66 +78,31 @@ void Person::move()
 }
 
 //--------------------------------------------------------------
-// Purpose  : Returns whether player is facing specified object.
-//			  And performs the callback action with the new char
-// Input    : char, Grid*, callback, char
-// Output   : bool
+// Purpose  : Returns what player is facing.
+// Input    : Grid*
+// Output   : Node
 //--------------------------------------------------------------
-bool Person::ifFacing(char c, Grid* grid, void action(Node*, char), char icon)
+Node* Person::facingIn(Grid* grid)
 {
-	COORD &p = position.coord;
-	Node *n = grid->nodes[p.Y] + p.X;
-
 	switch (position.facing)
 	{
 		case up:
-			if (p.Y > 0 && grid->nodes[p.Y - 1][p.X].icon == c)
-				n = grid->nodes[p.Y - 1] + p.X;
-			else
-				return false;
-			break;
+			return grid->nodes[position.coord.Y - (position.coord.Y > 0)] + position.coord.X;
 		case down:
-			if (p.Y < grid->size.Y - 1 && grid->nodes[p.Y + 1][p.X].icon == c)
-				n = grid->nodes[p.Y + 1] + p.X;
-			else
-				return false;
-			break;
+			return grid->nodes[position.coord.Y + (position.coord.Y < grid->size.Y - 1)] + position.coord.X;
 		case left:
-			if (p.X > 0 && grid->nodes[p.Y][p.X - 1].icon == c)
-				n = grid->nodes[p.Y] + p.X - 1;
-			else
-				return false;
-			break;
+			return grid->nodes[position.coord.Y] + position.coord.X - (position.coord.Y < 0);
 		case right:
-			if (p.X < grid->size.X - 1 && grid->nodes[p.Y][p.X + 1].icon == c)
-				n = grid->nodes[p.Y] + p.X + 1;
-			else
-				return false;
-			break;
-		default:
-			return false;
+			return grid->nodes[position.coord.Y] + position.coord.X + (position.coord.X < grid->size.X - 1);
 	}
-	
-	action(n, icon);
-	return true;
 }
 
-//--------------------------------------------------------------
-// Purpose  : Returns what player is facing.
+// --------------------------------------------------------------
+// Purpose  : Returns what player is standing on.
 // Input    : Grid*
-// Output   : cHar
+// Output   : Node
 //--------------------------------------------------------------
-char Person::facingIn(Grid* grid)
+Node* Person::standingOn(Grid* grid)
 {
-	switch (position.facing)
-	{
-	case up:
-		return grid->nodes[position.coord.Y - 1][position.coord.X].icon;
-	case down:
-		return grid->nodes[position.coord.Y + 1][position.coord.X].icon;
-	case left:
-		return grid->nodes[position.coord.Y][position.coord.X - 1].icon;
-	case right:
-		return grid->nodes[position.coord.Y][position.coord.X + 1].icon;
-	}
+	return grid->nodes[position.coord.Y] + position.coord.X;
 }

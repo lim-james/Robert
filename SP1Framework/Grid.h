@@ -6,7 +6,6 @@
 #include <string>
 
 #include "Node.h"
-#include "Door.h"
 
 struct Grid
 {

@@ -6,6 +6,9 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <map>
+#include <fstream>
+#include <algorithm>
 
 double  g_dElapsedTime;
 double  g_dDeltaTime;
@@ -19,8 +22,12 @@ int prevTime = 0;
 // Console object
 Console g_Console(256, 64, "SP1 Framework");
 
+// stores attributes of nodes
+std::map<char, std::string> attrs;
+
 // stores grid
 Grid *grid = new Grid("AUNTY'S_ATTRIBUTES.txt", "AUNTY'S_HOUSE_1st_STOREY.txt");
+
 
 // players
 Player *player1 = new Player('#', Position(), red, white);
@@ -49,12 +56,35 @@ void init( void )
 	player1->position = Position(c1, up);
 
 	COORD c2;
-	c2.X = 9;
+	c2.X = 1;
 	c2.Y = 9;
 	player2->position = Position(c2, up);
 
+	initAttrs();
+
     // sets the width, height and the font name to use in the console
-    g_Console.setConsoleFont(0, 16, L"Consolas");
+	g_Console.setConsoleFont(0, 16, L"Consolas");
+}
+
+//--------------------------------------------------------------
+// Purpose  : Initialisation function for attributes
+//            Initialize map with char and its name
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
+void initAttrs() 
+{
+	std::ifstream ifs("AUNTY'S_ATTRIBUTES_NAME.txt");
+	int count;
+	ifs >> count;
+	for (int i = 0; i < count; ++i)
+	{
+		int key;
+		std::string value;
+		ifs >> key >> value;
+		std::replace(value.begin(), value.end(), '_', ' ');
+		attrs[key] = value;
+	}
 }
 
 //--------------------------------------------------------------
@@ -244,17 +274,29 @@ void moveCharacter()
 			}
 			player1->somethingHappened = true;
 		}
+
 		if (g_abKeyPressed[K_SPACE])
 		{
-			if (!player1->ifFacing(178, grid, openDoor, 176))
+			Node* item = player1->facingIn(grid);
+			if (item->icon == (char)178)
 			{
-				if (player1->ifFacing(176, grid, closeDoor, 178))
-				{
-					player1->somethingHappened = true;
-				}
+				open(item, 176);
+				player1->somethingHappened = true;
 			}
-			else
+			else if (item->icon == (char)176)
 			{
+				close(item, 178);
+				player1->somethingHappened = true;
+			}
+
+			if (item->icon == (char)47)
+			{
+				open(item, 96);
+				player1->somethingHappened = true;
+			}
+			else if (item->icon == (char)96)
+			{
+				close(item, 47);
 				player1->somethingHappened = true;
 			}
 		}
@@ -325,21 +367,30 @@ void moveCharacter()
 
 		if (g_abKeyPressed[K_RETURN])
 		{
-			if (!player2->ifFacing(178, grid, openDoor, 176))
+			Node* item = player2->facingIn(grid);
+			if (item->icon == (char)178)
 			{
-				if (player2->ifFacing(176, grid, closeDoor, 178))
-				{
-					player2->somethingHappened = true;
-				}
+				open(item, 176);
+				player2->somethingHappened = true;
 			}
-			else
+			else if (item->icon == (char)176)
 			{
+				close(item, 178);
+				player2->somethingHappened = true;
+			}
+
+			if (item->icon == (char)47)
+			{
+				open(item, 96);
+				player2->somethingHappened = true;
+			}
+			else if (item->icon == (char)96)
+			{
+				close(item, 47);
 				player2->somethingHappened = true;
 			}
 		}
 	}
-
-	
 
     if (player1->somethingHappened)
     {
@@ -352,6 +403,20 @@ void moveCharacter()
 		// set the bounce time to some time in the future to prevent accidental triggers
 		player2->bounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
 	}
+
+	if (player1->somethingHappened || player2->somethingHappened)
+	{
+		if (player1->standingOn(grid)->icon == (char)186 && player2->standingOn(grid)->icon == (char)186)
+		{
+			delete grid;
+			grid = new Grid("AUNTY'S_ATTRIBUTES.txt", "AUNTY'S_HOUSE_2ND_STOREY.txt");
+		}
+		if (player1->standingOn(grid)->icon == (char)186 && player2->standingOn(grid)->icon == (char)186)
+		{
+			delete grid;
+			grid = new Grid("AUNTY'S_ATTRIBUTES.txt", "AUNTY'S_HOUSE_1ST_STOREY.txt");
+		}
+	}
 }
 void processUserInput()
 {
@@ -363,7 +428,7 @@ void processUserInput()
 void clearScreen()
 {
     // Clears the buffer with this colour attribute
-    g_Console.clearBuffer(0x1F);
+    g_Console.clearBuffer(0xFF);
 }
 
 void renderSplashScreen()  // renders the splash screen
@@ -384,6 +449,8 @@ void renderGame()
 {
     renderMap();        // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
+	renderMessage(attrs[player1->facingIn(grid)->icon], player1);
+	renderMessage(attrs[player2->facingIn(grid)->icon], player2);
 }
 
 void renderMap()
@@ -432,13 +499,14 @@ void renderMessage(std::string str, Player *p)
 {
 	COORD c;
 	c.Y = (g_Console.getConsoleSize().Y - grid->size.Y) / 4;
-	if (p == player2) c.Y *= 3;
+	if (p == player2) c.Y = g_Console.getConsoleSize().Y - c.Y;
 
 	for (c.X = 0; c.X < g_Console.getConsoleSize().X; ++c.X)
-		g_Console.writeToBuffer(c, ' ');
+		g_Console.writeToBuffer(c, ' ', 0xff);
 
+	int length = str.length();
 	c.X = (g_Console.getConsoleSize().X - str.length()) / 2;
-	g_Console.writeToBuffer(c, str);
+	g_Console.writeToBuffer(c, str, 0xf0);
 }
 
 void renderFramerate()

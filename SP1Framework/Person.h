@@ -19,8 +19,8 @@ struct Person
 	WORD getAttribute();							// returns attribute
 	bool canMoveIn(Grid*);							// moves player in a specified direction
 	void move();									// moves player in a specified direction
-	bool ifFacing(char, Grid*, void(Node*, char), char);	// check if player is facing an item, and if true perform callback
-	char facingIn(Grid*);
+	Node* facingIn(Grid*);
+	Node* standingOn(Grid*);
 };
 
 #endif

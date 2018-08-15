@@ -1,0 +1,23 @@
+22
+87 wall
+45 nothing
+64 stove
+178 door
+186 stairs
+70 table 
+233 chair
+222 tv
+47 window
+200 bed
+201 bed
+187 bed
+188 bed
+205 bed
+186 bed
+254 closet
+228 fridge
+154 toilet
+234 basin
+157 key
+254 circuit_breaker
+240 safe

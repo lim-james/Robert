@@ -79,7 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Door.cpp" />
+    <ClCompile Include="Actions.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Framework\console.cpp" />
     <ClCompile Include="Framework\timer.cpp" />
@@ -93,7 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Colours.h" />
-    <ClInclude Include="Door.h" />
+    <ClInclude Include="Actions.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Framework\console.h" />
     <ClInclude Include="Framework\timer.h" />
@@ -105,6 +105,7 @@
     <ClInclude Include="Position.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="AUNTY%27S_ATTRIBUTES_NAME.txt" />
     <Text Include="AUNTY%27S_ATTRIBUTES.txt" />
     <Text Include="AUNTY%27S_HOUSE_1ST_STOREY.txt" />
     <Text Include="AUNTY%27S_HOUSE_2ND_STOREY.txt" />

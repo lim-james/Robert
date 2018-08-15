@@ -33,9 +33,6 @@
     <ClCompile Include="game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Door.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -54,6 +51,9 @@
     <ClCompile Include="Position.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Actions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\console.h">
@@ -66,9 +66,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Colours.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Door.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Grid.h">
@@ -89,6 +86,9 @@
     <ClInclude Include="Position.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Actions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="AUNTY%27S_ATTRIBUTES.txt">
@@ -104,6 +104,9 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="AUNTY%27S_HOUSE_2ND_STOREY.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="AUNTY%27S_ATTRIBUTES_NAME.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
