@@ -91,7 +91,7 @@ Node* Person::facingIn(Grid* grid)
 		case down:
 			return grid->nodes[position.coord.Y + (position.coord.Y < grid->size.Y - 1)] + position.coord.X;
 		case left:
-			return grid->nodes[position.coord.Y] + position.coord.X - (position.coord.Y < 0);
+			return grid->nodes[position.coord.Y] + position.coord.X - (position.coord.X > 0);
 		case right:
 			return grid->nodes[position.coord.Y] + position.coord.X + (position.coord.X < grid->size.X - 1);
 	}
