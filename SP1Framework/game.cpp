@@ -163,7 +163,9 @@ void gameplay()            // gameplay logic
 
 void moveCharacter()
 {
-    bool bSomethingHappened = false;
+	player1->somethingHappened = false;
+	player2->somethingHappened = false;
+
 	if ((int)(g_dElapsedTime * 5) != prevTime)
 	{
 		prevTime = g_dElapsedTime * 5;
@@ -174,148 +176,176 @@ void moveCharacter()
 
     // Updating the location of the character based on the key press
     // providing a beep sound whenver we shift the character
-    if (g_abKeyPressed[K_UP])
-    {
-		if (player2->position.facing == up)
-		{
-			if (player2->canMoveIn(grid))
-			{
-				player2->move();
-			}
-		}
-		else
-		{
-			player2->position.facing = up;
-		}
-		bSomethingHappened = true;
-    }
-	if (g_abKeyPressed[K_LEFT])
+	if (player2->bounceTime < g_dElapsedTime)
 	{
-		if (player2->position.facing == left)
+		if (g_abKeyPressed[K_UP])
 		{
-			if (player2->canMoveIn(grid))
+			if (player2->position.facing == up)
 			{
-				player2->move();
+				if (player2->canMoveIn(grid))
+				{
+					player2->move();
+				}
 			}
-		}
-		else
-		{
-			player2->position.facing = left;
-		}
-		bSomethingHappened = true;
-	}
-	if (g_abKeyPressed[K_DOWN])
-	{
-		if (player2->position.facing == down)
-		{
-			if (player2->canMoveIn(grid))
+			else
 			{
-				player2->move();
+				player2->position.facing = up;
 			}
+			player2->somethingHappened = true;
 		}
-		else
+		if (g_abKeyPressed[K_LEFT])
 		{
-			player2->position.facing = down;
-		}
-		bSomethingHappened = true;
-	}
-	if (g_abKeyPressed[K_RIGHT])
-	{
-		if (player2->position.facing == right)
-		{
-			if (player2->canMoveIn(grid))
+			if (player2->position.facing == left)
 			{
-				player2->move();
+				if (player2->canMoveIn(grid))
+				{
+					player2->move();
+				}
 			}
+			else
+			{
+				player2->position.facing = left;
+			}
+			player2->somethingHappened = true;
 		}
-		else
+		if (g_abKeyPressed[K_DOWN])
 		{
-			player2->position.facing = right;
+			if (player2->position.facing == down)
+			{
+				if (player2->canMoveIn(grid))
+				{
+					player2->move();
+				}
+			}
+			else
+			{
+				player2->position.facing = down;
+			}
+			player2->somethingHappened = true;
 		}
-		bSomethingHappened = true;
+		if (g_abKeyPressed[K_RIGHT])
+		{
+			if (player2->position.facing == right)
+			{
+				if (player2->canMoveIn(grid))
+				{
+					player2->move();
+				}
+			}
+			else
+			{
+				player2->position.facing = right;
+			}
+			player2->somethingHappened = true;
+		}
 	}
 
-	// player 1 actions
-	if (g_abKeyPressed[K_W])
+	if (player1->bounceTime < g_dElapsedTime)
 	{
-		if (player1->position.facing == up)
+		// player 1 actions
+		if (g_abKeyPressed[K_W])
 		{
-			if (player1->canMoveIn(grid))
+			if (player1->position.facing == up)
 			{
-				//Beep(1440, 30);
-				player1->move();
+				if (player1->canMoveIn(grid))
+				{
+					//Beep(1440, 30);
+					player1->move();
+				}
 			}
-		}
-		else
-		{
-			player1->position.facing = up;
-		}
-		bSomethingHappened = true;
-	}
-	if (g_abKeyPressed[K_A])
-	{
-		if (player1->position.facing == left)
-		{
-			if (player1->canMoveIn(grid))
-			{	
-				//Beep(1440, 30);
-				player1->move();
+			else
+			{
+				player1->position.facing = up;
 			}
+			player1->somethingHappened = true;
 		}
-		else
+		if (g_abKeyPressed[K_A])
 		{
-			player1->position.facing = left;
-		}
-		bSomethingHappened = true;
-	}
-	if (g_abKeyPressed[K_S])
-	{
-		if (player1->position.facing == down)
-		{
-			if (player1->canMoveIn(grid))
-			{	
-				//Beep(1440, 30);
-				player1->move();
+			if (player1->position.facing == left)
+			{
+				if (player1->canMoveIn(grid))
+				{
+					//Beep(1440, 30);
+					player1->move();
+				}
 			}
-		}
-		else
-		{
-			player1->position.facing = down;
-		}
-		bSomethingHappened = true;
-	}
-	if (g_abKeyPressed[K_D])
-	{
-		if (player1->position.facing == right)
-		{
-			if (player1->canMoveIn(grid))
-			{	
-				//Beep(1440, 30);
-				player1->move();
+			else
+			{
+				player1->position.facing = left;
 			}
+			player1->somethingHappened = true;
 		}
-		else
+		if (g_abKeyPressed[K_S])
 		{
-			player1->position.facing = right;
+			if (player1->position.facing == down)
+			{
+				if (player1->canMoveIn(grid))
+				{
+					//Beep(1440, 30);
+					player1->move();
+				}
+			}
+			else
+			{
+				player1->position.facing = down;
+			}
+			player1->somethingHappened = true;
 		}
-		bSomethingHappened = true;
+		if (g_abKeyPressed[K_D])
+		{
+			if (player1->position.facing == right)
+			{
+				if (player1->canMoveIn(grid))
+				{
+					//Beep(1440, 30);
+					player1->move();
+				}
+			}
+			else
+			{
+				player1->position.facing = right;
+			}
+			player1->somethingHappened = true;
+		}
 	}
-
 
 	if (g_abKeyPressed[K_SPACE])
 	{
 		if (!player1->ifFacing(178, grid, openDoor, 176))
-			player1->ifFacing(176, grid, closeDoor, 178);
+		{
+			if (player1->ifFacing(176, grid, closeDoor, 178))
+			{
+				player1->somethingHappened = true;
+			}
+		}
+		else
+		{
+			player1->somethingHappened = true;
+		}
 		if (!player2->ifFacing(178, grid, openDoor, 176))
-			player2->ifFacing(176, grid, closeDoor, 178);
-		bSomethingHappened = true;
+		{
+			if (player2->ifFacing(176, grid, closeDoor, 178))
+			{
+				player2->somethingHappened = true;
+			}
+		}
+		else
+		{
+			player2->somethingHappened = true;
+		}
 	}
 
-    if (bSomethingHappened)
+    if (player1->somethingHappened)
     {
         // set the bounce time to some time in the future to prevent accidental triggers
-        g_dBounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
+        player1->bounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
     }
+
+	if (player2->somethingHappened)
+	{
+		// set the bounce time to some time in the future to prevent accidental triggers
+		player2->bounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
+	}
 }
 void processUserInput()
 {

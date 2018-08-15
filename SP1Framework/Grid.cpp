@@ -44,17 +44,6 @@ Grid::Grid(std::string attr, std::string file)
 			char item = ' ';
 			ifs >> item;
 			this->nodes[r][c] = attrs[item];
-			switch (item) {
-			case 'w':
-				//this->nodes[r][c] = Node(' ', true, black, black);
-				break;
-			case 'D':
-				//this->nodes[r][c] = Door(178, 176, grey, white);
-				break;
-			default:
-				//this->nodes[r][c] = Node(' ', false, white, white);
-				break;
-			}
 		}
 	}
 

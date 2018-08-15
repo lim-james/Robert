@@ -20,6 +20,7 @@ struct Person
 	bool canMoveIn(Grid*);							// moves player in a specified direction
 	void move();									// moves player in a specified direction
 	bool ifFacing(char, Grid*, void(Node*, char), char);	// check if player is facing an item, and if true perform callback
+	char facing();
 };
 
 #endif
