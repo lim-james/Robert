@@ -7,7 +7,7 @@
 
 struct Enemy : Person
 {
-	int currentIndex, numberOfPositions;
+	int nextIndex, numberOfPositions;
 	Position *positions;
 
 	Enemy();										// default constructor

@@ -1,6 +1,8 @@
 #ifndef PERSON_H
 #define PERSON_H
 
+# define M_PI 3.14159265358979323846
+
 #include <Windows.h>
 #include "Grid.h"
 #include "Position.h"

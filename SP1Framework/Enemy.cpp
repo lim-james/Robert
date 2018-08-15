@@ -31,7 +31,9 @@ Enemy::Enemy(const char i, std::string file, Colour fc, Colour bc)
 				break;
 		}
 	}
-	currentIndex = 0;
+	nextIndex = 1;
+
+	position = positions[0];
 
 	icon = i;
 	foregroundColor = fc;
@@ -44,9 +46,48 @@ Enemy::~Enemy()
 
 void Enemy::move() 
 {
-	if (currentIndex < numberOfPositions - 1)
-		currentIndex++;
+	double yDiff = -(positions[nextIndex].coord.Y - position.coord.Y);
+	double xDiff = positions[nextIndex].coord.X - position.coord.X;
+	
+	if (xDiff == 0 && yDiff == 0)
+	{
+		this->position.facing = positions[nextIndex].facing;
+		if (nextIndex < numberOfPositions - 1)
+			nextIndex++;
+		else
+			nextIndex = 0;
+		return;
+	}
+
+	double refAngle = std::atan(abs(yDiff) / abs(xDiff)) / M_PI * 180.0;
+
+	if (xDiff >= 0) 
+	{
+		if (yDiff < 0)
+		{
+			refAngle = 360 - refAngle;
+		}
+	}
 	else
-		currentIndex = 0;
-	position = positions[currentIndex];
+	{
+		if (yDiff > 0)
+		{
+			refAngle = 180 - refAngle;
+		}
+		else
+		{
+			refAngle = 180 + refAngle; 
+		}
+	}
+
+	if (refAngle >= 45.0 && refAngle < 135.0)
+		this->position.facing = up;
+	else if (refAngle >= 135.0 && refAngle < 225.0)
+		this->position.facing = left;
+	else if (refAngle >= 225.0 && refAngle < 315.0)
+		this->position.facing = down;
+	else
+		this->position.facing = right;
+
+	Person::move();
 }

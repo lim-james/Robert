@@ -495,8 +495,7 @@ void renderCharacter()
 }
 
 void renderMessage(std::string str, Player *p)
-{
-	
+{	
 	COORD c;
 	c.Y = (g_Console.getConsoleSize().Y - grid->size.Y) / 4;
 	if (p == player2)
