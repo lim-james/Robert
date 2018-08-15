@@ -121,3 +121,23 @@ bool Person::ifFacing(char c, Grid* grid, void action(Node*, char), char icon)
 	action(n, icon);
 	return true;
 }
+
+//--------------------------------------------------------------
+// Purpose  : Returns what player is facing.
+// Input    : Grid*
+// Output   : cHar
+//--------------------------------------------------------------
+char Person::facingIn(Grid* grid)
+{
+	switch (position.facing)
+	{
+	case up:
+		return grid->nodes[position.coord.Y - 1][position.coord.X].icon;
+	case down:
+		return grid->nodes[position.coord.Y + 1][position.coord.X].icon;
+	case left:
+		return grid->nodes[position.coord.Y][position.coord.X - 1].icon;
+	case right:
+		return grid->nodes[position.coord.Y][position.coord.X + 1].icon;
+	}
+}

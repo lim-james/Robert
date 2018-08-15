@@ -93,7 +93,8 @@ void getInput( void )
 	g_abKeyPressed[K_A] = isKeyPressed(0x41);
 	g_abKeyPressed[K_S] = isKeyPressed(0x53);
 	g_abKeyPressed[K_D] = isKeyPressed(0x44);
-    g_abKeyPressed[K_SPACE]  = isKeyPressed(VK_SPACE);
+	g_abKeyPressed[K_RETURN] = isKeyPressed(VK_RETURN);
+	g_abKeyPressed[K_SPACE] = isKeyPressed(VK_SPACE);
     g_abKeyPressed[K_ESCAPE] = isKeyPressed(VK_ESCAPE);
 }
 
@@ -176,70 +177,6 @@ void moveCharacter()
 
     // Updating the location of the character based on the key press
     // providing a beep sound whenver we shift the character
-	if (player2->bounceTime < g_dElapsedTime)
-	{
-		if (g_abKeyPressed[K_UP])
-		{
-			if (player2->position.facing == up)
-			{
-				if (player2->canMoveIn(grid))
-				{
-					player2->move();
-				}
-			}
-			else
-			{
-				player2->position.facing = up;
-			}
-			player2->somethingHappened = true;
-		}
-		if (g_abKeyPressed[K_LEFT])
-		{
-			if (player2->position.facing == left)
-			{
-				if (player2->canMoveIn(grid))
-				{
-					player2->move();
-				}
-			}
-			else
-			{
-				player2->position.facing = left;
-			}
-			player2->somethingHappened = true;
-		}
-		if (g_abKeyPressed[K_DOWN])
-		{
-			if (player2->position.facing == down)
-			{
-				if (player2->canMoveIn(grid))
-				{
-					player2->move();
-				}
-			}
-			else
-			{
-				player2->position.facing = down;
-			}
-			player2->somethingHappened = true;
-		}
-		if (g_abKeyPressed[K_RIGHT])
-		{
-			if (player2->position.facing == right)
-			{
-				if (player2->canMoveIn(grid))
-				{
-					player2->move();
-				}
-			}
-			else
-			{
-				player2->position.facing = right;
-			}
-			player2->somethingHappened = true;
-		}
-	}
-
 	if (player1->bounceTime < g_dElapsedTime)
 	{
 		// player 1 actions
@@ -307,33 +244,102 @@ void moveCharacter()
 			}
 			player1->somethingHappened = true;
 		}
-	}
-
-	if (g_abKeyPressed[K_SPACE])
-	{
-		if (!player1->ifFacing(178, grid, openDoor, 176))
+		if (g_abKeyPressed[K_SPACE])
 		{
-			if (player1->ifFacing(176, grid, closeDoor, 178))
+			if (!player1->ifFacing(178, grid, openDoor, 176))
+			{
+				if (player1->ifFacing(176, grid, closeDoor, 178))
+				{
+					player1->somethingHappened = true;
+				}
+			}
+			else
 			{
 				player1->somethingHappened = true;
 			}
 		}
-		else
+	}
+
+	if (player2->bounceTime < g_dElapsedTime)
+	{
+		if (g_abKeyPressed[K_UP])
 		{
-			player1->somethingHappened = true;
+			if (player2->position.facing == up)
+			{
+				if (player2->canMoveIn(grid))
+				{
+					player2->move();
+				}
+			}
+			else
+			{
+				player2->position.facing = up;
+			}
+			player2->somethingHappened = true;
 		}
-		if (!player2->ifFacing(178, grid, openDoor, 176))
+		if (g_abKeyPressed[K_LEFT])
 		{
-			if (player2->ifFacing(176, grid, closeDoor, 178))
+			if (player2->position.facing == left)
+			{
+				if (player2->canMoveIn(grid))
+				{
+					player2->move();
+				}
+			}
+			else
+			{
+				player2->position.facing = left;
+			}
+			player2->somethingHappened = true;
+		}
+		if (g_abKeyPressed[K_DOWN])
+		{
+			if (player2->position.facing == down)
+			{
+				if (player2->canMoveIn(grid))
+				{
+					player2->move();
+				}
+			}
+			else
+			{
+				player2->position.facing = down;
+			}
+			player2->somethingHappened = true;
+		}
+		if (g_abKeyPressed[K_RIGHT])
+		{
+			if (player2->position.facing == right)
+			{
+				if (player2->canMoveIn(grid))
+				{
+					player2->move();
+				}
+			}
+			else
+			{
+				player2->position.facing = right;
+			}
+			player2->somethingHappened = true;
+		}
+
+		if (g_abKeyPressed[K_RETURN])
+		{
+			if (!player2->ifFacing(178, grid, openDoor, 176))
+			{
+				if (player2->ifFacing(176, grid, closeDoor, 178))
+				{
+					player2->somethingHappened = true;
+				}
+			}
+			else
 			{
 				player2->somethingHappened = true;
 			}
 		}
-		else
-		{
-			player2->somethingHappened = true;
-		}
 	}
+
+	
 
     if (player1->somethingHappened)
     {
@@ -422,6 +428,19 @@ void renderCharacter()
 	g_Console.writeToBuffer(enemy, guard->icon, guard->getAttribute());
 }
 
+void renderMessage(std::string str, Player *p)
+{
+	COORD c;
+	c.Y = (g_Console.getConsoleSize().Y - grid->size.Y) / 4;
+	if (p == player2) c.Y *= 3;
+
+	for (c.X = 0; c.X < g_Console.getConsoleSize().X; ++c.X)
+		g_Console.writeToBuffer(c, ' ');
+
+	c.X = (g_Console.getConsoleSize().X - str.length()) / 2;
+	g_Console.writeToBuffer(c, str);
+}
+
 void renderFramerate()
 {
     COORD c;
@@ -440,8 +459,10 @@ void renderFramerate()
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str(), 0x59);
 }
+
 void renderToScreen()
 {
     // Writes the buffer to the console, hence you will see what you have written
     g_Console.flushBufferToConsole();
 }
+

@@ -20,6 +20,7 @@ enum EKEYS
 	K_S,
 	K_D,
     K_ESCAPE,
+	K_RETURN,
     K_SPACE,
     K_COUNT
 };
@@ -47,6 +48,7 @@ void renderSplashScreen();  // renders the splash screen
 void renderGame();          // renders the game stuff
 void renderMap();           // renders the map to the buffer first
 void renderCharacter();     // renders the character into the buffer
+void renderMessage(std::string, Player*); // renders a short message for player
 void renderFramerate();     // renders debug information, frame rate, elapsed time, etc
 void renderToScreen();      // dump the contents of the buffer to the screen, one frame worth of game
 
