@@ -28,7 +28,6 @@ std::map<char, std::string> attrs;
 // stores grid
 Grid *grid = new Grid("AUNTY'S_ATTRIBUTES.txt", "AUNTY'S_HOUSE_1st_STOREY.txt");
 
-
 // players
 Player *player1 = new Player('#', Position(), red, white);
 Player *player2 = new Player('#', Position(), blue, white);
@@ -497,9 +496,18 @@ void renderCharacter()
 
 void renderMessage(std::string str, Player *p)
 {
+	
 	COORD c;
 	c.Y = (g_Console.getConsoleSize().Y - grid->size.Y) / 4;
-	if (p == player2) c.Y = g_Console.getConsoleSize().Y - c.Y;
+	if (p == player2)
+	{
+		c.Y = g_Console.getConsoleSize().Y - c.Y;
+		if (str[0] == ']') str = "[enter" + str;
+	}
+	else
+	{
+		if (str[0] == ']') str = "[space" + str;
+	}
 
 	for (c.X = 0; c.X < g_Console.getConsoleSize().X; ++c.X)
 		g_Console.writeToBuffer(c, ' ', 0xff);
