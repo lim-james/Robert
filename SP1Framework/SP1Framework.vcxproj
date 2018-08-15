@@ -85,6 +85,7 @@
     <ClCompile Include="Framework\timer.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Person.cpp" />
@@ -99,6 +100,7 @@
     <ClInclude Include="Framework\timer.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="Level.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="Player.h" />
@@ -109,7 +111,9 @@
     <Text Include="AUNTY%27S_ATTRIBUTES.txt" />
     <Text Include="AUNTY%27S_HOUSE_1ST_STOREY.txt" />
     <Text Include="AUNTY%27S_HOUSE_2ND_STOREY.txt" />
-    <Text Include="Guard_1.txt" />
+    <Text Include="AUNTY%27S_HOUSE_LEVEL.txt" />
+    <Text Include="AUNTY%27S_HOUSE_GUARD_1.txt" />
+    <Text Include="AUNTY%27S_HOUSE_PLAYERS.txt" />
     <Text Include="Test_Map.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

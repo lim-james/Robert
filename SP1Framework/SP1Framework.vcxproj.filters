@@ -54,6 +54,9 @@
     <ClCompile Include="Actions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\console.h">
@@ -89,6 +92,9 @@
     <ClInclude Include="Actions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="AUNTY%27S_ATTRIBUTES.txt">
@@ -100,13 +106,19 @@
     <Text Include="Test_Map.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="Guard_1.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
     <Text Include="AUNTY%27S_HOUSE_2ND_STOREY.txt">
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="AUNTY%27S_ATTRIBUTES_NAME.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="AUNTY%27S_HOUSE_LEVEL.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="AUNTY%27S_HOUSE_GUARD_1.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="AUNTY%27S_HOUSE_PLAYERS.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

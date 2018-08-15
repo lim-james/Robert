@@ -22,16 +22,15 @@ int prevTime = 0;
 // Console object
 Console g_Console(256, 64, "SP1 Framework");
 
-// stores attributes of nodes
-std::map<char, std::string> attrs;
+Level *level = new Level("AUNTY'S_HOUSE_LEVEL.txt");
 
-// stores grid
-Grid *grid = new Grid("AUNTY'S_ATTRIBUTES.txt", "AUNTY'S_HOUSE_1st_STOREY.txt");
-
-// players
-Player *player1 = new Player('#', Position(), red, white);
-Player *player2 = new Player('#', Position(), blue, white);
-Enemy *guard = new Enemy('=', "Guard_1.txt", black, white);
+Player** players() { return level->players; }
+Player* player1() { return level->players[0]; }
+Player* player2() { return level->players[1]; }
+Grid* grid() { return level->storeys[level->currentStorey]; }
+unsigned int numberOfEnemies() { return level->numberOfEnemies[level->currentStorey]; }
+Enemy** enemies() { return level->enemies[level->currentStorey]; }
+std::map<char, std::string> attrs() { return level->attrs; };
 
 //--------------------------------------------------------------
 // Purpose  : Initialisation function
@@ -49,41 +48,8 @@ void init( void )
     // sets the initial state for the game
     g_eGameState = S_SPLASHSCREEN;
 
-	COORD c1;
-	c1.X = 1;
-	c1.Y = 1;
-	player1->position = Position(c1, up);
-
-	COORD c2;
-	c2.X = 1;
-	c2.Y = 9;
-	player2->position = Position(c2, up);
-
-	initAttrs();
-
     // sets the width, height and the font name to use in the console
 	g_Console.setConsoleFont(0, 16, L"Consolas");
-}
-
-//--------------------------------------------------------------
-// Purpose  : Initialisation function for attributes
-//            Initialize map with char and its name
-// Input    : void
-// Output   : void
-//--------------------------------------------------------------
-void initAttrs() 
-{
-	std::ifstream ifs("AUNTY'S_ATTRIBUTES_NAME.txt");
-	int count;
-	ifs >> count;
-	for (int i = 0; i < count; ++i)
-	{
-		int key;
-		std::string value;
-		ifs >> key >> value;
-		std::replace(value.begin(), value.end(), '_', ' ');
-		attrs[key] = value;
-	}
 }
 
 //--------------------------------------------------------------
@@ -193,230 +159,94 @@ void gameplay()            // gameplay logic
 
 void moveCharacter()
 {
-	player1->somethingHappened = false;
-	player2->somethingHappened = false;
+	player1()->somethingHappened = false;
+	player2()->somethingHappened = false;
 
 	if ((int)(g_dElapsedTime * 5) != prevTime)
 	{
 		prevTime = g_dElapsedTime * 5;
-		guard->move();
-	}
-    if (g_dBounceTime > g_dElapsedTime)
-        return;
-
-    // Updating the location of the character based on the key press
-    // providing a beep sound whenver we shift the character
-	if (player1->bounceTime < g_dElapsedTime)
-	{
-		// player 1 actions
-		if (g_abKeyPressed[K_W])
-		{
-			if (player1->position.facing == up)
-			{
-				if (player1->canMoveIn(grid))
-				{
-					//Beep(1440, 30);
-					player1->move();
-				}
-			}
-			else
-			{
-				player1->position.facing = up;
-			}
-			player1->somethingHappened = true;
-		}
-		if (g_abKeyPressed[K_A])
-		{
-			if (player1->position.facing == left)
-			{
-				if (player1->canMoveIn(grid))
-				{
-					//Beep(1440, 30);
-					player1->move();
-				}
-			}
-			else
-			{
-				player1->position.facing = left;
-			}
-			player1->somethingHappened = true;
-		}
-		if (g_abKeyPressed[K_S])
-		{
-			if (player1->position.facing == down)
-			{
-				if (player1->canMoveIn(grid))
-				{
-					//Beep(1440, 30);
-					player1->move();
-				}
-			}
-			else
-			{
-				player1->position.facing = down;
-			}
-			player1->somethingHappened = true;
-		}
-		if (g_abKeyPressed[K_D])
-		{
-			if (player1->position.facing == right)
-			{
-				if (player1->canMoveIn(grid))
-				{
-					//Beep(1440, 30);
-					player1->move();
-				}
-			}
-			else
-			{
-				player1->position.facing = right;
-			}
-			player1->somethingHappened = true;
-		}
-
-		if (g_abKeyPressed[K_SPACE])
-		{
-			Node* item = player1->facingIn(grid);
-			if (item->icon == (char)178)
-			{
-				open(item, 176);
-				player1->somethingHappened = true;
-			}
-			else if (item->icon == (char)176)
-			{
-				close(item, 178);
-				player1->somethingHappened = true;
-			}
-
-			if (item->icon == (char)47)
-			{
-				open(item, 96);
-				player1->somethingHappened = true;
-			}
-			else if (item->icon == (char)96)
-			{
-				close(item, 47);
-				player1->somethingHappened = true;
-			}
-		}
+		for (int i = 0; i < numberOfEnemies(); ++i)
+			enemies()[i]->move();
 	}
 
-	if (player2->bounceTime < g_dElapsedTime)
+	for (int i = 0; i < 2; ++i)
 	{
-		if (g_abKeyPressed[K_UP])
+		Player *player = players()[i];
+		if (player->bounceTime < g_dElapsedTime)
 		{
-			if (player2->position.facing == up)
-			{
-				if (player2->canMoveIn(grid))
-				{
-					player2->move();
-				}
-			}
-			else
-			{
-				player2->position.facing = up;
-			}
-			player2->somethingHappened = true;
-		}
-		if (g_abKeyPressed[K_LEFT])
-		{
-			if (player2->position.facing == left)
-			{
-				if (player2->canMoveIn(grid))
-				{
-					player2->move();
-				}
-			}
-			else
-			{
-				player2->position.facing = left;
-			}
-			player2->somethingHappened = true;
-		}
-		if (g_abKeyPressed[K_DOWN])
-		{
-			if (player2->position.facing == down)
-			{
-				if (player2->canMoveIn(grid))
-				{
-					player2->move();
-				}
-			}
-			else
-			{
-				player2->position.facing = down;
-			}
-			player2->somethingHappened = true;
-		}
-		if (g_abKeyPressed[K_RIGHT])
-		{
-			if (player2->position.facing == right)
-			{
-				if (player2->canMoveIn(grid))
-				{
-					player2->move();
-				}
-			}
-			else
-			{
-				player2->position.facing = right;
-			}
-			player2->somethingHappened = true;
-		}
+			if (g_abKeyPressed[i % 2 ? K_UP : K_W])
+				movePlayer(player, up);
 
-		if (g_abKeyPressed[K_RETURN])
-		{
-			Node* item = player2->facingIn(grid);
-			if (item->icon == (char)178)
-			{
-				open(item, 176);
-				player2->somethingHappened = true;
-			}
-			else if (item->icon == (char)176)
-			{
-				close(item, 178);
-				player2->somethingHappened = true;
-			}
+			if (g_abKeyPressed[i % 2 ? K_LEFT : K_A])
+				movePlayer(player, left);
 
-			if (item->icon == (char)47)
-			{
-				open(item, 96);
-				player2->somethingHappened = true;
-			}
-			else if (item->icon == (char)96)
-			{
-				close(item, 47);
-				player2->somethingHappened = true;
-			}
+			if (g_abKeyPressed[i % 2 ? K_DOWN : K_S])
+				movePlayer(player, down);
+
+			if (g_abKeyPressed[i % 2 ? K_RIGHT : K_D])
+				movePlayer(player, right);
+
+			if (g_abKeyPressed[i % 2 ? K_RETURN : K_SPACE])
+				playerAction(player);
 		}
+		if (player->somethingHappened)
+			player->bounceTime = g_dElapsedTime + 0.125;
 	}
 
-    if (player1->somethingHappened)
-    {
-        // set the bounce time to some time in the future to prevent accidental triggers
-        player1->bounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
-    }
-
-	if (player2->somethingHappened)
+	if (player1()->somethingHappened || player2()->somethingHappened)
 	{
-		// set the bounce time to some time in the future to prevent accidental triggers
-		player2->bounceTime = g_dElapsedTime + 0.125; // 125ms should be enough
-	}
-
-	if (player1->somethingHappened || player2->somethingHappened)
-	{
-		if (player1->standingOn(grid)->icon == (char)186 && player2->standingOn(grid)->icon == (char)186)
+		if (player1()->standingOn(grid())->icon == (char)186 && player2()->standingOn(grid())->icon == (char)186)
 		{
-			delete grid;
-			grid = new Grid("AUNTY'S_ATTRIBUTES.txt", "AUNTY'S_HOUSE_2ND_STOREY.txt");
-		}
-		if (player1->standingOn(grid)->icon == (char)186 && player2->standingOn(grid)->icon == (char)186)
-		{
-			delete grid;
-			grid = new Grid("AUNTY'S_ATTRIBUTES.txt", "AUNTY'S_HOUSE_1ST_STOREY.txt");
+			if (level->currentStorey + 1 < level->numberOfStoreys)
+				level->currentStorey++;
+			else
+				level->currentStorey = 0;
 		}
 	}
 }
+
+void movePlayer(Player* player, Direction dir) 
+{
+	if (player->position.facing == dir)
+	{
+		if (player->canMoveIn(grid()))
+		{
+			player->move();
+		}
+	}
+	else
+	{
+		player->position.facing = dir;
+	}
+	player->somethingHappened = true;
+}
+
+void playerAction(Player* player)
+{
+	Node* item = player->facingIn(grid());
+	if (item->icon == (char)178)
+	{
+		open(item, 176);
+		player->somethingHappened = true;
+	}
+	else if (item->icon == (char)176)
+	{
+		close(item, 178);
+		player->somethingHappened = true;
+	}
+
+	if (item->icon == (char)47)
+	{
+		open(item, 96);
+		player->somethingHappened = true;
+	}
+	else if (item->icon == (char)96)
+	{
+		close(item, 47);
+		player->somethingHappened = true;
+	}
+}
+
 void processUserInput()
 {
     // quits the game if player hits the escape key
@@ -448,22 +278,22 @@ void renderGame()
 {
     renderMap();        // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
-	renderMessage(attrs[player1->facingIn(grid)->icon], player1);
-	renderMessage(attrs[player2->facingIn(grid)->icon], player2);
+	renderMessage(attrs()[player1()->facingIn(grid())->icon], player1());
+	renderMessage(attrs()[player2()->facingIn(grid())->icon], player2());
 }
 
 void renderMap()
 {
-	unsigned int offsetX = (g_Console.getConsoleSize().X - grid->size.X) / 2;
-	unsigned int offsetY = (g_Console.getConsoleSize().Y - grid->size.Y) / 2;
+	unsigned int offsetX = (g_Console.getConsoleSize().X - grid()->size.X) / 2;
+	unsigned int offsetY = (g_Console.getConsoleSize().Y - grid()->size.Y) / 2;
 
 	COORD coord;
-	for (int r = 0; r < grid->size.Y; ++r) 
+	for (int r = 0; r < grid()->size.Y; ++r) 
 	{
 		coord.Y = r + offsetY;
-		for (int c = 0; c < grid->size.X; ++c)
+		for (int c = 0; c < grid()->size.X; ++c)
 		{
-			Node &n = grid->nodes[r][c];
+			Node &n = grid()->nodes[r][c];
 			coord.X = c + offsetX;
 			g_Console.writeToBuffer(coord, n.icon, n.getAttribute());
 		}
@@ -472,33 +302,35 @@ void renderMap()
 
 void renderCharacter()
 {
-	unsigned int offsetX = (g_Console.getConsoleSize().X - grid->size.X) / 2;
-	unsigned int offsetY = (g_Console.getConsoleSize().Y - grid->size.Y) / 2;
+	unsigned int offsetX = (g_Console.getConsoleSize().X - grid()->size.X) / 2;
+	unsigned int offsetY = (g_Console.getConsoleSize().Y - grid()->size.Y) / 2;
     
-	COORD c1;
-	c1.X = player1->position.coord.X + offsetX;
-	c1.Y = player1->position.coord.Y + offsetY;
+	for (int i = 0; i < 2; ++i)
+	{
+		Player *player = players()[i];
+		COORD c1;
+		c1.X = player->position.coord.X + offsetX;
+		c1.Y = player->position.coord.Y + offsetY;
 
-	g_Console.writeToBuffer(c1, player1->icon, player1->getAttribute());
+		g_Console.writeToBuffer(c1, player->icon, player->getAttribute());
+	}
 
-	COORD c2;
-	c2.X = player2->position.coord.X + offsetX;
-	c2.Y = player2->position.coord.Y + offsetY;
+	for (int i = 0; i < numberOfEnemies(); ++i)
+	{
+		Enemy *enemy = enemies()[i];
+		COORD c1;
+		c1.X = enemy->position.coord.X + offsetX;
+		c1.Y = enemy->position.coord.Y + offsetY;
 
-	g_Console.writeToBuffer(c2, player2->icon, player2->getAttribute());
-
-	COORD enemy;
-	enemy.X = guard->position.coord.X + offsetX;
-	enemy.Y = guard->position.coord.Y + offsetY;
-
-	g_Console.writeToBuffer(enemy, guard->icon, guard->getAttribute());
+		g_Console.writeToBuffer(c1, enemy->icon, enemy->getAttribute());
+	}
 }
 
 void renderMessage(std::string str, Player *p)
 {	
 	COORD c;
-	c.Y = (g_Console.getConsoleSize().Y - grid->size.Y) / 4;
-	if (p == player2)
+	c.Y = (g_Console.getConsoleSize().Y - grid()->size.Y) / 4;
+	if (p == player2())
 	{
 		c.Y = g_Console.getConsoleSize().Y - c.Y;
 		if (str[0] == ']') str = "[enter" + str;
