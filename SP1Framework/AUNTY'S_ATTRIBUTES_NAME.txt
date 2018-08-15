@@ -1,4 +1,4 @@
-24
+23
 87 _
 45 _
 64 ]_toggle_stove
@@ -16,7 +16,6 @@
 188 bed
 205 bed
 186 stairs
-254 closet
 228 fridge
 154 ]_flush_toilet
 234 basin

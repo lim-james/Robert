@@ -1,4 +1,4 @@
-#ifndef POSITION_H
+ #ifndef POSITION_H
 #define POSITION_H
 
 #include <Windows.h>

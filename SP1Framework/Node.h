@@ -8,8 +8,8 @@ struct Node
 {
 	char icon;					// stores the icon of the node
 	bool isBlocked;				// if true the player cannot walk through
-	Colour foregroundColor;		// colour of icon
-	Colour backgroundColor;		// colour of background
+	Colour foregroundColour;	// colour of icon
+	Colour backgroundColour;	// colour of background
 
 	Node();										// default constructor
 	Node(const char, bool, Colour, Colour);		// comprehensive constructor
