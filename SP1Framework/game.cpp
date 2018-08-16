@@ -22,10 +22,11 @@ int prevTime = 0;
 // Console object
 Console g_Console(150, 40, "SP1 Framework");
 
-Level *levels[2] = 
+Level *levels[3] = 
 {
 	new Level("SPLASHSCREEN_LEVEL.txt"),
-	new Level("AUNTY'S_HOUSE_LEVEL.txt")
+	new Level("AUNTY'S_HOUSE_LEVEL.txt"),
+	new Level("LOSESCREEN_LEVEL.txt")
 };
 //Level *level = new Level("AUNTY'S_HOUSE_LEVEL.txt");
 
