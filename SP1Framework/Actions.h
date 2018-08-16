@@ -5,5 +5,6 @@
 
 void open(Node*, char);		// opens door / window
 void close(Node*, char);	// closes door / window
+void remove(Node*);
 
 #endif

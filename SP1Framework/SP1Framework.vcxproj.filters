@@ -112,13 +112,13 @@
     <Text Include="AUNTY%27S_ATTRIBUTES_NAME.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="AUNTY%27S_HOUSE_LEVEL.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
     <Text Include="AUNTY%27S_HOUSE_GUARD_1.txt">
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="AUNTY%27S_HOUSE_PLAYERS.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="AUNTY%27S_HOUSE_LEVEL.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
