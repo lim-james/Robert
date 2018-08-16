@@ -25,9 +25,8 @@ Enemy::Enemy(const char i, std::string file, Colour fc, Colour bc)
 				positions[p].facing = left;
 				break;
 			case 'R':
-				positions[p].facing = right;
-				break;
 			default:
+				positions[p].facing = right;
 				break;
 		}
 	}
