@@ -10,6 +10,7 @@ struct Node
 	bool isBlocked;				// if true the player cannot walk through
 	Colour foregroundColour;	// colour of icon
 	Colour backgroundColour;	// colour of background
+	bool seen;
 
 	Node();										// default constructor
 	Node(const char, bool, Colour, Colour);		// comprehensive constructor

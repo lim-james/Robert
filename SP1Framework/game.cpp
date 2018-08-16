@@ -309,8 +309,7 @@ void renderSplashScreen()  // renders the splash screen
 
 void renderGame()
 {
-	if (currentLevel == START_LEVEL || currentLevel == LOSE_LEVEL)
-		renderMap();        // renders the map to the buffer first
+	renderMap();        // renders the map to the buffer first
 	if (currentLevel != START_LEVEL && currentLevel != LOSE_LEVEL)
 	{
 		renderPlayerVision(player1());
@@ -333,7 +332,8 @@ void renderMap()
 		{
 			Node &n = grid()->nodes[r][c];
 			coord.X = c;
-			renderPoint(coord, n.icon, n.getAttribute());
+			if (n.seen)
+				renderPoint(coord, n.icon, n.getAttribute());
 		}
 	}
 }
@@ -460,6 +460,7 @@ void renderPlayerVisionPoint(float x, float y, float xDiff, float yDiff)
 		c.Y < 0 || c.Y >= grid()->size.Y)
 		return;
 	renderPoint(c, n.icon, n.getAttribute());
+	n.seen = true;
 	if (n.isBlocked)
 		return;
 	renderPlayerVisionPoint(x + xDiff, y + yDiff, xDiff, yDiff);

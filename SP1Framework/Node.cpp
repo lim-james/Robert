@@ -1,12 +1,12 @@
 #include "Node.h"
 
 Node::Node() 
-	: icon(' '), isBlocked(false), foregroundColour(white), backgroundColour(black)
+	: icon(' '), isBlocked(false), foregroundColour(white), backgroundColour(black), seen(false)
 {
 }
 
 Node::Node(const char i, bool b, Colour fc, Colour bc) 
-	: icon(i), isBlocked(b), foregroundColour(fc), backgroundColour(bc)
+	: icon(i), isBlocked(b), foregroundColour(fc), backgroundColour(bc), seen(false)
 {
 }
 
