@@ -308,7 +308,9 @@ void renderGame()
 {
     renderMap();        // renders the map to the buffer first
 	for (int i = 0; i < numberOfEnemies(); ++i)
-		renderEnemyVision(enemies()[i]);
+		renderPersonVision(enemies()[i]);
+	renderPersonVision(player1());
+	renderPersonVision(player2());
     renderCharacter();  // renders the character into the buffer
 	renderMessage(attrs()[player1()->facingIn(grid())->icon], player1());
 	renderMessage(attrs()[player2()->facingIn(grid())->icon], player2());
@@ -366,29 +368,29 @@ void renderMessage(std::string str, Player *p)
 	g_Console.writeToBuffer(c, str, 0xf0);
 }
 
-void renderEnemyVision(Enemy* e)
+void renderPersonVision(Person* p)
 {
-	switch (e->position.facing){
+	switch (p->position.facing){
 	case up:
-		renderEnemyVisionPoint(e->position.coord, -1, -1);
-		renderEnemyVisionPoint(e->position.coord, -1, +1);
+		renderPersonVisionPoint(p->position.coord, -1, -1);
+		renderPersonVisionPoint(p->position.coord, -1, +1);
 		break;
 	case down:
-		renderEnemyVisionPoint(e->position.coord, +1, +1);
-		renderEnemyVisionPoint(e->position.coord, +1, -1);
+		renderPersonVisionPoint(p->position.coord, +1, +1);
+		renderPersonVisionPoint(p->position.coord, +1, -1);
 		break;
 	case left:
-		renderEnemyVisionPoint(e->position.coord, +1, -1);
-		renderEnemyVisionPoint(e->position.coord, -1, -1);
+		renderPersonVisionPoint(p->position.coord, +1, -1);
+		renderPersonVisionPoint(p->position.coord, -1, -1);
 		break;
 	case right:
-		renderEnemyVisionPoint(e->position.coord, -1, +1);
-		renderEnemyVisionPoint(e->position.coord, +1, +1);
+		renderPersonVisionPoint(p->position.coord, -1, +1);
+		renderPersonVisionPoint(p->position.coord, +1, +1);
 		break;
 	}
 }
 
-void renderEnemyVisionPoint(COORD c, short y, short x)
+void renderPersonVisionPoint(COORD c, short y, short x)
 {
 	c.Y += y;
 	c.X += x;
@@ -396,8 +398,8 @@ void renderEnemyVisionPoint(COORD c, short y, short x)
 		c.Y < 0 || c.Y >= grid()->size.Y ||
 		grid()->nodes[c.Y][c.X].isBlocked)
 		return;
-	renderPoint(c, ' ', lightGrey);
-	renderEnemyVisionPoint(c, y, x);
+	renderPoint(c, ' ',lightGrey + lightGrey * 16);
+	renderPersonVisionPoint(c, y, x);
 }
 
 void renderPoint(COORD c, char i, WORD attr)
