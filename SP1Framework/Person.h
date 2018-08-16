@@ -18,6 +18,8 @@ struct Person
 	Person(const char, Position, Colour, Colour);		// comprehensive constructor
 	~Person();										// default deconstructor
 
+	void view();
+
 	WORD getAttribute();							// returns attribute
 	bool canMoveIn(Grid*);							// moves player in a specified direction
 	void move();									// moves player in a specified direction
