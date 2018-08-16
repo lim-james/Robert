@@ -33,6 +33,7 @@ enum EGAMESTATES
     S_COUNT
 };
 
+Level* level();
 Player** players();
 Player* player1();
 Player* player2();

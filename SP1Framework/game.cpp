@@ -22,15 +22,23 @@ int prevTime = 0;
 // Console object
 Console g_Console(256, 64, "SP1 Framework");
 
-Level *level = new Level("AUNTY'S_HOUSE_LEVEL.txt");
+Level *levels[2] = 
+{
+	new Level("SPLASHSCREEN_LEVEL.txt"),
+	new Level("AUNTY'S_HOUSE_LEVEL.txt")
+};
+//Level *level = new Level("AUNTY'S_HOUSE_LEVEL.txt");
 
-Player** players() { return level->players; }
-Player* player1() { return level->players[0]; }
-Player* player2() { return level->players[1]; }
-Grid* grid() { return level->storeys[level->currentStorey]; }
-unsigned int numberOfEnemies() { return level->numberOfEnemies[level->currentStorey]; }
-Enemy** enemies() { return level->enemies[level->currentStorey]; }
-std::map<char, std::string> attrs() { return level->attrs; };
+unsigned short currentLevel = 0;
+
+Level* level() { return levels[currentLevel]; }
+Player** players() { return level()->players; }
+Player* player1() { return level()->players[0]; }
+Player* player2() { return level()->players[1]; }
+Grid* grid() { return level()->storeys[level()->currentStorey]; }
+unsigned int numberOfEnemies() { return level()->numberOfEnemies[level()->currentStorey]; }
+Enemy** enemies() { return level()->enemies[level()->currentStorey]; }
+std::map<char, std::string> attrs() { return level()->attrs; };
 
 //--------------------------------------------------------------
 // Purpose  : Initialisation function
@@ -187,7 +195,9 @@ void moveCharacter()
 				movePlayer(player, right);
 
 			if (g_abKeyPressed[i % 2 ? K_RETURN : K_SPACE])
+			{
 				playerAction(player);
+			}
 		}
 		if (player->somethingHappened)
 			player->bounceTime = g_dElapsedTime + 0.125;
@@ -197,10 +207,10 @@ void moveCharacter()
 	{
 		if (player1()->standingOn(grid())->icon == (char)186 && player2()->standingOn(grid())->icon == (char)186)
 		{
-			if (level->currentStorey + 1 < level->numberOfStoreys)
-				level->currentStorey++;
+			if (level()->currentStorey + 1 < level()->numberOfStoreys)
+				level()->currentStorey++;
 			else
-				level->currentStorey = 0;
+				level()->currentStorey = 0;
 		}
 	}
 }
@@ -228,6 +238,10 @@ void playerAction(Player* player)
 	{
 		open(item, 176);
 		player->somethingHappened = true;
+		if (levels[0])
+		{
+			currentLevel = 1;
+		}
 	}
 	else if (item->icon == (char)176)
 	{
