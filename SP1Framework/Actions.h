@@ -2,9 +2,10 @@
 #define ACTIONS_H
 
 #include "Node.h"
+#include "Person.h"
 
 void open(Node*, char);		// opens door / window
 void close(Node*, char);	// closes door / window
-void remove(Node*);
+void removeNode(Node*);
 
 #endif

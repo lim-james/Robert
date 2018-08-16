@@ -1,17 +1,27 @@
 #include "Person.h"
 
 Person::Person() 
-	: position(Position()), icon(' '), foregroundColor(black), backgroundColor(white)
+	: position(Position()), icon(' '), foregroundColor(black), backgroundColor(white), isHidden(false)
 {
 }
 
 Person::Person(const char i, Position p, Colour fc, Colour bc)
-	: icon(i), position(p), foregroundColor(fc), backgroundColor(bc)
+	: icon(i), position(p), foregroundColor(fc), backgroundColor(bc), isHidden(false)
 {
 }
 
 Person::~Person()
 {
+}
+
+//--------------------------------------------------------------
+// Purpose  : When called it returns the icon
+// Input    : void
+// Output   : char
+//--------------------------------------------------------------
+char Person::getIcon()
+{
+	return isHidden ? ' ' : icon;
 }
 
 //--------------------------------------------------------------
