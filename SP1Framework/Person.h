@@ -13,11 +13,13 @@ struct Person
 	Position position;				// position and facing direction of player
 	Colour foregroundColor;		// colour of icon
 	Colour backgroundColor;		// colour of background
+	bool isHidden;
 
 	Person();										// default constructor
 	Person(const char, Position, Colour, Colour);		// comprehensive constructor
 	~Person();										// default deconstructor
 
+	char getIcon();
 	WORD getAttribute();							// returns attribute
 	bool canMoveIn(Grid*);							// moves player in a specified direction
 	void move();									// moves player in a specified direction

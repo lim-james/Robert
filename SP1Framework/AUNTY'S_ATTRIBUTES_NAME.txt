@@ -20,5 +20,5 @@
 154 ]_flush_toilet
 234 basin
 157 ]_get_key
-254 ]_toggle_circuit_breaker
+254 ]_hide_in_closet
 240 ]_unlock_safe

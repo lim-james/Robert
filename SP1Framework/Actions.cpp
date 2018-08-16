@@ -1,11 +1,18 @@
 #include "Actions.h"
 
-void open(Node *n, char i) {
+void open(Node *n, char i) 
+{
 	n->icon = i;
 	n->isBlocked = false;
 }
 
-void close(Node *n, char i) {
+void close(Node *n, char i) 
+{
 	n->icon = i;
 	n->isBlocked = true;
+}
+
+void removeNode(Node *n)
+{
+	n->icon = ' ';
 }

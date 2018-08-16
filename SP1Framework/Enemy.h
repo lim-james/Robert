@@ -15,6 +15,7 @@ struct Enemy : Person
 	~Enemy();										// default 
 
 	void move();
+	
 };
 
 #endif
