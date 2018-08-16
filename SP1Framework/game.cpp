@@ -20,17 +20,25 @@ double  g_dBounceTime; // this is to prevent key bouncing, so we won't trigger k
 int prevTime = 0;
 
 // Console object
-Console g_Console(256, 64, "SP1 Framework");
+Console g_Console(150, 40, "SP1 Framework");
 
-Level *level = new Level("AUNTY'S_HOUSE_LEVEL.txt");
+Level *levels[2] = 
+{
+	new Level("SPLASHSCREEN_LEVEL.txt"),
+	new Level("AUNTY'S_HOUSE_LEVEL.txt")
+};
+//Level *level = new Level("AUNTY'S_HOUSE_LEVEL.txt");
 
-Player** players() { return level->players; }
-Player* player1() { return level->players[0]; }
-Player* player2() { return level->players[1]; }
-Grid* grid() { return level->storeys[level->currentStorey]; }
-unsigned int numberOfEnemies() { return level->numberOfEnemies[level->currentStorey]; }
-Enemy** enemies() { return level->enemies[level->currentStorey]; }
-std::map<char, std::string> attrs() { return level->attrs; };
+unsigned short currentLevel = 0;
+
+Level* level() { return levels[currentLevel]; }
+Player** players() { return level()->players; }
+Player* player1() { return level()->players[0]; }
+Player* player2() { return level()->players[1]; }
+Grid* grid() { return level()->storeys[level()->currentStorey]; }
+unsigned int numberOfEnemies() { return level()->numberOfEnemies[level()->currentStorey]; }
+Enemy** enemies() { return level()->enemies[level()->currentStorey]; }
+std::map<char, std::string> attrs() { return level()->attrs; };
 
 //--------------------------------------------------------------
 // Purpose  : Initialisation function
@@ -49,7 +57,7 @@ void init( void )
     g_eGameState = S_SPLASHSCREEN;
 
     // sets the width, height and the font name to use in the console
-	g_Console.setConsoleFont(0, 16, L"Consolas");
+	g_Console.setConsoleFont(0, 25, L"Consolas");
 }
 
 //--------------------------------------------------------------
@@ -187,7 +195,9 @@ void moveCharacter()
 				movePlayer(player, right);
 
 			if (g_abKeyPressed[i % 2 ? K_RETURN : K_SPACE])
+			{
 				playerAction(player);
+			}
 		}
 		if (player->somethingHappened)
 			player->bounceTime = g_dElapsedTime + 0.125;
@@ -197,13 +207,14 @@ void moveCharacter()
 	{
 		if (player1()->standingOn(grid())->icon == (char)186 && player2()->standingOn(grid())->icon == (char)186)
 		{
-			if (level->currentStorey + 1 < level->numberOfStoreys)
-				level->currentStorey++;
+			if (level()->currentStorey + 1 < level()->numberOfStoreys)
+				level()->currentStorey++;
 			else
-				level->currentStorey = 0;
+				level()->currentStorey = 0;
 		}
 	}
 }
+
 
 void movePlayer(Player* player, Direction dir) 
 {
@@ -231,6 +242,10 @@ void playerAction(Player* player)
 	{
 		open(item, 176);
 		player->somethingHappened = true;
+		if (levels[0])
+		{
+			currentLevel = 1;
+		}
 	}
 	else if (item->icon == (char)176)
 	{
@@ -291,6 +306,8 @@ void renderSplashScreen()  // renders the splash screen
 void renderGame()
 {
     renderMap();        // renders the map to the buffer first
+	for (int i = 0; i < numberOfEnemies(); ++i)
+		renderEnemyVision(enemies()[i]);
     renderCharacter();  // renders the character into the buffer
 	renderMessage(attrs()[player1()->facingIn(grid())->icon], player1());
 	renderMessage(attrs()[player2()->facingIn(grid())->icon], player2());
@@ -298,45 +315,31 @@ void renderGame()
 
 void renderMap()
 {
-	unsigned int offsetX = (g_Console.getConsoleSize().X - grid()->size.X) / 2;
-	unsigned int offsetY = (g_Console.getConsoleSize().Y - grid()->size.Y) / 2;
-
 	COORD coord;
 	for (int r = 0; r < grid()->size.Y; ++r) 
 	{
-		coord.Y = r + offsetY;
+		coord.Y = r;
 		for (int c = 0; c < grid()->size.X; ++c)
 		{
 			Node &n = grid()->nodes[r][c];
-			coord.X = c + offsetX;
-			g_Console.writeToBuffer(coord, n.icon, n.getAttribute());
+			coord.X = c;
+			renderPoint(coord, n.icon, n.getAttribute());
 		}
 	}
 }
 
 void renderCharacter()
 {
-	unsigned int offsetX = (g_Console.getConsoleSize().X - grid()->size.X) / 2;
-	unsigned int offsetY = (g_Console.getConsoleSize().Y - grid()->size.Y) / 2;
-    
 	for (int i = 0; i < 2; ++i)
 	{
 		Player *player = players()[i];
-		COORD c1;
-		c1.X = player->position.coord.X + offsetX;
-		c1.Y = player->position.coord.Y + offsetY;
-
-		g_Console.writeToBuffer(c1, player->getIcon(), player->getAttribute());
+		renderPoint(player->position.coord, player->getIcon(), player->getAttribute());
 	}
 
 	for (int i = 0; i < numberOfEnemies(); ++i)
 	{
 		Enemy *enemy = enemies()[i];
-		COORD c1;
-		c1.X = enemy->position.coord.X + offsetX;
-		c1.Y = enemy->position.coord.Y + offsetY;
-
-		g_Console.writeToBuffer(c1, enemy->icon, enemy->getAttribute());
+		renderPoint(enemy->position.coord, enemy->icon, enemy->getAttribute());
 	}
 }
 
@@ -360,6 +363,51 @@ void renderMessage(std::string str, Player *p)
 	int length = str.length();
 	c.X = (g_Console.getConsoleSize().X - str.length()) / 2;
 	g_Console.writeToBuffer(c, str, 0xf0);
+}
+
+void renderEnemyVision(Enemy* e)
+{
+	switch (e->position.facing){
+	case up:
+		renderEnemyVisionPoint(e->position.coord, -1, -1);
+		renderEnemyVisionPoint(e->position.coord, -1, +1);
+		break;
+	case down:
+		renderEnemyVisionPoint(e->position.coord, +1, +1);
+		renderEnemyVisionPoint(e->position.coord, +1, -1);
+		break;
+	case left:
+		renderEnemyVisionPoint(e->position.coord, +1, -1);
+		renderEnemyVisionPoint(e->position.coord, -1, -1);
+		break;
+	case right:
+		renderEnemyVisionPoint(e->position.coord, -1, +1);
+		renderEnemyVisionPoint(e->position.coord, +1, +1);
+		break;
+	}
+}
+
+void renderEnemyVisionPoint(COORD c, short y, short x)
+{
+	c.Y += y;
+	c.X += x;
+	if (c.X < 0 || c.X >= grid()->size.X ||
+		c.Y < 0 || c.Y >= grid()->size.Y ||
+		grid()->nodes[c.Y][c.X].isBlocked)
+		return;
+	renderPoint(c, ' ', lightGrey);
+	renderEnemyVisionPoint(c, y, x);
+}
+
+void renderPoint(COORD c, char i, WORD attr)
+{
+	unsigned int offsetX = (g_Console.getConsoleSize().X - grid()->size.X) / 2;
+	unsigned int offsetY = (g_Console.getConsoleSize().Y - grid()->size.Y) / 2;
+
+	c.X += offsetX;
+	c.Y += offsetY;
+
+	g_Console.writeToBuffer(c, i, attr);
 }
 
 void renderFramerate()

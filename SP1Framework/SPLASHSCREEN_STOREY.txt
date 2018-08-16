@@ -1,0 +1,12 @@
+44 11
+a h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h c
+v - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - v
+v - a h h h c - - a h h h c - - a h h c - - - a h h h h - - a h h h c - - h h t h h - v
+v - v - - - v - - v - - - v - - v - - v - - - v - - - - - - v - - - v - - - - v - - - v
+v - v - - - v - - v - - - v - - v - - v - - - v - - - - - - v - - - v - - - - v - - - v
+v - k h h t d - - v - - - v - - k h h o c - - k h h h h - - k h h t d - - - - v - - - D
+v - v - - v - - - v - - - v - - v - - - v - - v - - - - - - v - - v - - - - - v - - - v
+v - v - - v - - - v - - - v - - v - - - v - - v - - - - - - v - - v - - - - - v - - - v
+v - v - - v - - - b h h h d - - v h h h v - - b h h h h - - v - - v - - - - - v - - - v
+v - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - v
+b h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h d
