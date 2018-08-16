@@ -91,7 +91,6 @@
     <ClCompile Include="Person.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Position.cpp" />
-    <ClCompile Include="Vision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Colours.h" />
@@ -106,7 +105,6 @@
     <ClInclude Include="Person.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Position.h" />
-    <ClInclude Include="Vision.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="AUNTY%27S_ATTRIBUTES_NAME.txt" />

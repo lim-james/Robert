@@ -205,7 +205,6 @@ void moveCharacter()
 	}
 }
 
-
 void movePlayer(Player* player, Direction dir) 
 {
 	if (player->isHidden) 
@@ -292,8 +291,6 @@ void renderSplashScreen()  // renders the splash screen
 void renderGame()
 {
     renderMap();        // renders the map to the buffer first
-	for (int i = 0; i < numberOfEnemies(); ++i)
-		renderEnemyVision(enemies()[i]);
     renderCharacter();  // renders the character into the buffer
 	renderMessage(attrs()[player1()->facingIn(grid())->icon], player1());
 	renderMessage(attrs()[player2()->facingIn(grid())->icon], player2());
@@ -301,31 +298,45 @@ void renderGame()
 
 void renderMap()
 {
+	unsigned int offsetX = (g_Console.getConsoleSize().X - grid()->size.X) / 2;
+	unsigned int offsetY = (g_Console.getConsoleSize().Y - grid()->size.Y) / 2;
+
 	COORD coord;
 	for (int r = 0; r < grid()->size.Y; ++r) 
 	{
-		coord.Y = r;
+		coord.Y = r + offsetY;
 		for (int c = 0; c < grid()->size.X; ++c)
 		{
 			Node &n = grid()->nodes[r][c];
-			coord.X = c;
-			renderPoint(coord, n.icon, n.getAttribute());
+			coord.X = c + offsetX;
+			g_Console.writeToBuffer(coord, n.icon, n.getAttribute());
 		}
 	}
 }
 
 void renderCharacter()
 {
+	unsigned int offsetX = (g_Console.getConsoleSize().X - grid()->size.X) / 2;
+	unsigned int offsetY = (g_Console.getConsoleSize().Y - grid()->size.Y) / 2;
+    
 	for (int i = 0; i < 2; ++i)
 	{
 		Player *player = players()[i];
-		renderPoint(player->position.coord, player->getIcon(), player->getAttribute());
+		COORD c1;
+		c1.X = player->position.coord.X + offsetX;
+		c1.Y = player->position.coord.Y + offsetY;
+
+		g_Console.writeToBuffer(c1, player->getIcon(), player->getAttribute());
 	}
 
 	for (int i = 0; i < numberOfEnemies(); ++i)
 	{
 		Enemy *enemy = enemies()[i];
-		renderPoint(enemy->position.coord, enemy->icon, enemy->getAttribute());
+		COORD c1;
+		c1.X = enemy->position.coord.X + offsetX;
+		c1.Y = enemy->position.coord.Y + offsetY;
+
+		g_Console.writeToBuffer(c1, enemy->icon, enemy->getAttribute());
 	}
 }
 
@@ -349,49 +360,6 @@ void renderMessage(std::string str, Player *p)
 	int length = str.length();
 	c.X = (g_Console.getConsoleSize().X - str.length()) / 2;
 	g_Console.writeToBuffer(c, str, 0xf0);
-}
-
-void renderEnemyVision(Enemy* e)
-{
-	switch (e->position.facing){
-	case up:
-		renderEnemyVisionPoint(e->position.coord, -1, -1);
-		renderEnemyVisionPoint(e->position.coord, -1, +1);
-		break;
-	case down:
-		renderEnemyVisionPoint(e->position.coord, +1, +1);
-		renderEnemyVisionPoint(e->position.coord, +1, -1);
-		break;
-	case left:
-		renderEnemyVisionPoint(e->position.coord, +1, -1);
-		renderEnemyVisionPoint(e->position.coord, -1, -1);
-		break;
-	case right:
-		renderEnemyVisionPoint(e->position.coord, -1, +1);
-		renderEnemyVisionPoint(e->position.coord, +1, +1);
-		break;
-	}
-}
-
-void renderEnemyVisionPoint(COORD c, short y, short x)
-{
-	c.Y += y;
-	c.X += x;
-	if (grid()->nodes[c.Y][c.X].isBlocked)
-		return;
-	renderPoint(c, ' ', lightGrey);
-	renderEnemyVisionPoint(c, y, x);
-}
-
-void renderPoint(COORD c, char i, WORD attr)
-{
-	unsigned int offsetX = (g_Console.getConsoleSize().X - grid()->size.X) / 2;
-	unsigned int offsetY = (g_Console.getConsoleSize().Y - grid()->size.Y) / 2;
-
-	c.X += offsetX;
-	c.Y += offsetY;
-
-	g_Console.writeToBuffer(c, i, attr);
 }
 
 void renderFramerate()

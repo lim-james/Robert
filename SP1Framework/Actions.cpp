@@ -12,7 +12,7 @@ void close(Node *n, char i)
 	n->isBlocked = true;
 }
 
-void remove(Node *n)
+void removeNode(Node *n)
 {
 	n->icon = ' ';
 }
