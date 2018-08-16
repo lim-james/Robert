@@ -20,7 +20,7 @@ double  g_dBounceTime; // this is to prevent key bouncing, so we won't trigger k
 int prevTime = 0;
 
 // Console object
-Console g_Console(256, 64, "SP1 Framework");
+Console g_Console(150, 40, "SP1 Framework");
 
 Level *levels[2] = 
 {
@@ -57,7 +57,7 @@ void init( void )
     g_eGameState = S_SPLASHSCREEN;
 
     // sets the width, height and the font name to use in the console
-	g_Console.setConsoleFont(0, 16, L"Consolas");
+	g_Console.setConsoleFont(0, 25, L"Consolas");
 }
 
 //--------------------------------------------------------------
@@ -391,7 +391,9 @@ void renderEnemyVisionPoint(COORD c, short y, short x)
 {
 	c.Y += y;
 	c.X += x;
-	if (grid()->nodes[c.Y][c.X].isBlocked)
+	if (c.X < 0 || c.X >= grid()->size.X ||
+		c.Y < 0 || c.Y >= grid()->size.Y ||
+		grid()->nodes[c.Y][c.X].isBlocked)
 		return;
 	renderPoint(c, ' ', lightGrey);
 	renderEnemyVisionPoint(c, y, x);
