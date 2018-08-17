@@ -47,14 +47,13 @@ bool Person::canMoveIn(Grid* grid)
 	switch (position.facing)
 	{
 		case up:
-			return p.Y > 0 && !grid->nodes[p.Y - 1][p.X].isBlocked;
+			return p.Y > 0 && !grid->nodes[p.Y - 1][p.X].getIsBlocked();
 		case down:
-			return p.Y < grid->size.Y - 1 && !grid->nodes[p.Y + 1][p.X].isBlocked;
+			return p.Y < grid->size.Y - 1 && !grid->nodes[p.Y + 1][p.X].getIsBlocked();
 		case left:
-			return p.X > 0 && !grid->nodes[p.Y][p.X - 1].isBlocked;
-			break;
+			return p.X > 0 && !grid->nodes[p.Y][p.X - 1].getIsBlocked();
 		case right:
-			return p.X < grid->size.X - 1 && !grid->nodes[p.Y][p.X + 1].isBlocked;
+			return p.X < grid->size.X - 1 && !grid->nodes[p.Y][p.X + 1].getIsBlocked();
 		default:
 			return false;
 	}
@@ -138,7 +137,7 @@ bool Person::isInView(Person* p, Grid* grid)
 				x = xDiff * i / d + position.coord.X;
 				y = m * x + c;
 			}
-			if (grid->nodes[(int)y][(int)x].isBlocked)
+			if (grid->nodes[(int)y][(int)x].getIsBlocked())
 				return false;
 		}
 		return true;

@@ -2,20 +2,21 @@
 #define NODE_H
 
 #include <Windows.h>
-#include "Colours.h"
+#include "State.h"
 
 struct Node
 {
-	char icon;					// stores the icon of the node
-	bool isBlocked;				// if true the player cannot walk through
-	Colour foregroundColour;	// colour of icon
-	Colour backgroundColour;	// colour of background
-	bool seen;
+	State onState;
+	State offState;
+	bool isBlocked, seen, toggled, isPickable;				// if true the player cannot walk through
 
 	Node();										// default constructor
-	Node(const char, bool, Colour, Colour);		// comprehensive constructor
+	Node(State, State, bool, bool, bool);		// comprehensive constructor
 	~Node();									// default deconstructor
 
+	State getState();
+	char getIcon();
+	bool getIsBlocked();
 	WORD getAttribute();						// returns attribute
 };
 

@@ -1,18 +1,34 @@
 #include "Node.h"
 
 Node::Node() 
-	: icon(' '), isBlocked(false), foregroundColour(white), backgroundColour(black), seen(false)
+	: onState(State()), offState(State()), seen(false), toggled(false), isPickable(false)
 {
 }
 
-Node::Node(const char i, bool b, Colour fc, Colour bc) 
-	: icon(i), isBlocked(b), foregroundColour(fc), backgroundColour(bc), seen(false)
+Node::Node(State on, State off, bool s, bool t, bool isP) 
+	: onState(on), offState(off), seen(s), toggled(t), isPickable(isP)
 {
+	
 }
 
 
 Node::~Node()
 {
+}
+
+State Node::getState()
+{
+	return toggled ? onState : offState;
+}
+
+char Node::getIcon()
+{
+	return getState().icon;
+}
+
+bool Node::getIsBlocked()
+{
+	return getState().isBlocked;
 }
 
 //--------------------------------------------------------------
@@ -23,5 +39,7 @@ Node::~Node()
 //--------------------------------------------------------------
 WORD Node::getAttribute()
 {
-	return this->foregroundColour + this->backgroundColour * 16;
+	return getState().foregroundColour + getState().backgroundColour * 16;
+
 }
+

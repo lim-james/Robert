@@ -23,11 +23,26 @@ Grid::Grid(std::string attr, std::string file)
 	for (int i = 0; i < count; ++i)
 	{
 		char item;
-		int icon;
-		bool isBlocked;
-		int fc, bc;
-		ifs >> item >> icon >> isBlocked >> fc >> bc;
-		attrs[item] = Node(icon, isBlocked, (Colour)fc, (Colour)bc);
+		State onState, offState;
+		onState = offState = State();
+		bool isBlocked, seen, toggled, isPickable;
+		int onForegroundColour;
+		int onBackgroundColour;
+		int offForegroundColour;
+		int offBackgroundColour;
+		
+		ifs >> item
+			>> onState.icon >> onState.isBlocked >> onForegroundColour >> onBackgroundColour
+			>> offState.icon >> offState.isBlocked >> offForegroundColour >> offBackgroundColour
+			>> seen >> toggled >> isPickable;
+
+		onState.foregroundColour = (Colour)onForegroundColour;
+		onState.backgroundColour = (Colour)onBackgroundColour;
+		offState.foregroundColour = (Colour)offForegroundColour;
+		offState.backgroundColour = (Colour)offBackgroundColour;
+
+		attrs[item] = Node(onState, offState, seen, toggled, isPickable);
+
 	}
 
 	ifs.close();

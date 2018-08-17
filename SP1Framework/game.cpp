@@ -199,9 +199,7 @@ void moveCharacter()
 				movePlayer(player, right);
 
 			if (g_abKeyPressed[i % 2 ? K_RETURN : K_SPACE])
-			{
 				playerAction(player);
-			}
 		}
 		if (player->somethingHappened)
 			player->bounceTime = g_dElapsedTime + 0.125;
@@ -209,7 +207,7 @@ void moveCharacter()
 
 	if (player1()->somethingHappened || player2()->somethingHappened)
 	{
-		if (player1()->standingOn(grid())->icon == (char)186 && player2()->standingOn(grid())->icon == (char)186)
+		if (player1()->standingOn(grid())->getIcon() == (char)186 && player2()->standingOn(grid())->getIcon() == (char)186)
 		{
 			if (level()->currentStorey + 1 < level()->numberOfStoreys)
 				level()->currentStorey++;
@@ -241,53 +239,8 @@ void movePlayer(Player* player, Direction dir)
 void playerAction(Player* player)
 {
 	Node* item = player->facingIn(grid());
-	if (item->icon == (char)178)
-	{
-		open(item, 176);
-		player->somethingHappened = true;
-		if (currentLevel == START_LEVEL || currentLevel == LOSE_LEVEL)
-		{
-			currentLevel = 1;
-		}
-	}
-	else if (item->icon == (char)176)
-	{
-		close(item, 178);
-		player->somethingHappened = true;
-	}
-
-	if (item->icon == (char)47)
-	{
-		open(item, 96);
-		player->somethingHappened = true;
-	}
-	else if (item->icon == (char)96)
-	{
-		close(item, 47);
-		player->somethingHappened = true;
-	}
-	if (item->icon == (char)157)
-	{
-		removeNode(item);
-		player->somethingHappened = true;
-	}
-
-	if (item->icon == (char)254)
-	{
-		player->isHidden = !player->isHidden;
-		player->somethingHappened = true;
-	}
-
-	if ((item->icon == (char)64) && (item->foregroundColour == black))
-	{
-		onStove(item);
-		player->somethingHappened = true;
-	}
-	else if ((item->icon == (char)64) && (item->foregroundColour == red))
-	{
-		offStove(item);
-		player->somethingHappened = true;
-	}
+	item->toggled = !item->toggled;
+	player->somethingHappened = true;
 }
 
 void processUserInput()
@@ -328,8 +281,8 @@ void renderGame()
 	for (int i = 0; i < numberOfEnemies(); ++i)
 		renderEnemyVision(enemies()[i]);
     renderCharacter();  // renders the character into the buffer
-	renderMessage(attrs()[player1()->facingIn(grid())->icon], player1());
-	renderMessage(attrs()[player2()->facingIn(grid())->icon], player2());
+	renderMessage(attrs()[player1()->facingIn(grid())->getIcon()], player1());
+	renderMessage(attrs()[player2()->facingIn(grid())->getIcon()], player2());
 }
 
 void renderMap()
@@ -343,7 +296,7 @@ void renderMap()
 			Node &n = grid()->nodes[r][c];
 			coord.X = c;
 			if (n.seen || currentLevel == START_LEVEL || currentLevel == LOSE_LEVEL)
-				renderPoint(coord, n.icon, n.getAttribute());
+				renderPoint(coord, n.getIcon(), n.getAttribute());
 		}
 	}
 }
@@ -353,7 +306,7 @@ void renderCharacter()
 	for (int i = 0; i < 2; ++i)
 	{
 		Player *player = players()[i];
-		renderPoint(player->position.coord, player->getIcon(), player->getAttribute());
+		renderPoint(player->position.coord, player->icon, player->getAttribute());
 	}
 
 	for (int i = 0; i < numberOfEnemies(); ++i)
@@ -417,9 +370,9 @@ void renderEnemyVisionPoint(COORD c, short x, short y)
 	c.X += x;
 	if (c.X < 0 || c.X >= grid()->size.X ||
 		c.Y < 0 || c.Y >= grid()->size.Y ||
-		grid()->nodes[c.Y][c.X].isBlocked)
+		grid()->nodes[c.Y][c.X].getIsBlocked())
 		return;
-	renderPoint(c, ' ',lightGrey + lightGrey * 16);
+	renderPoint(c, ' ',lightGrey * 17);
 	renderEnemyVisionPoint(c, x, y);
 }
 
@@ -469,9 +422,9 @@ void renderPlayerVisionPoint(float x, float y, float xDiff, float yDiff)
 	if (c.X < 0 || c.X >= grid()->size.X ||
 		c.Y < 0 || c.Y >= grid()->size.Y)
 		return;
-	renderPoint(c, n.icon, n.getAttribute());
+	renderPoint(c, n.getIcon(), n.getAttribute());
 	n.seen = true;
-	if (n.isBlocked)
+	if (n.getIsBlocked())
 		return;
 	renderPlayerVisionPoint(x + xDiff, y + yDiff, xDiff, yDiff);
 }
@@ -521,9 +474,8 @@ void checkGamestate()
 			Sleep(1000);
 			currentLevel = LOSE_LEVEL;
 		}
-		
-		Colour c = player2()->foregroundColor;
-		if (enemies()[i]->isInView(player2(), grid()) && c)
+	
+		if (enemies()[i]->isInView(player2(), grid()))
 		{
 			Sleep(1000);
 			currentLevel = LOSE_LEVEL;
