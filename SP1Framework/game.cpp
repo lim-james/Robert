@@ -275,6 +275,17 @@ void playerAction(Player* player)
 		player->isHidden = !player->isHidden;
 		player->somethingHappened = true;
 	}
+
+	if ((item->icon == (char)64) && (item->foregroundColour == black))
+	{
+		onStove(item);
+		player->somethingHappened = true;
+	}
+	else if ((item->icon == (char)64) && (item->foregroundColour == red))
+	{
+		offStove(item);
+		player->somethingHappened = true;
+	}
 }
 
 void processUserInput()

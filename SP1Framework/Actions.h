@@ -7,5 +7,7 @@
 void open(Node*, char);		// opens door / window
 void close(Node*, char);	// closes door / window
 void removeNode(Node*);
+void onStove(Node*);
+void offStove(Node*);
 
 #endif
