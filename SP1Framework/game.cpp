@@ -20,7 +20,7 @@ double  g_dBounceTime; // this is to prevent key bouncing, so we won't trigger k
 int prevTime = 0;
 
 // Console object
-Console g_Console(150, 40, "SP1 Framework");
+Console g_Console(150, 40, "ROBERT");
 
 #define START_LEVEL 0
 #define LOSE_LEVEL 2
@@ -219,7 +219,6 @@ void moveCharacter()
 	}
 }
 
-
 void movePlayer(Player* player, Direction dir) 
 {
 	if (player->isHidden) 
@@ -332,7 +331,7 @@ void renderMap()
 		{
 			Node &n = grid()->nodes[r][c];
 			coord.X = c;
-			if (n.seen)
+			if (n.seen || currentLevel == START_LEVEL || currentLevel == LOSE_LEVEL)
 				renderPoint(coord, n.icon, n.getAttribute());
 		}
 	}
@@ -502,3 +501,21 @@ void renderToScreen()
     g_Console.flushBufferToConsole();
 }
 
+void checkGamestate()
+{
+	for (int i = 0; i < numberOfEnemies(); ++i)
+	{
+		if (enemies()[i]->isInView(player1(), grid()))
+		{
+			Sleep(1000);
+			currentLevel = LOSE_LEVEL;
+		}
+		
+		Colour c = player2()->foregroundColor;
+		if (enemies()[i]->isInView(player2(), grid()) && c)
+		{
+			Sleep(1000);
+			currentLevel = LOSE_LEVEL;
+		}
+	}
+}
