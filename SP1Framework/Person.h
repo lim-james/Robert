@@ -1,8 +1,6 @@
 #ifndef PERSON_H
 #define PERSON_H
 
-# define M_PI 3.14159265358979323846
-
 #include <Windows.h>
 #include "Grid.h"
 #include "Position.h"
@@ -25,6 +23,7 @@ struct Person
 	void move();									// moves player in a specified direction
 	Node* facingIn(Grid*);
 	Node* standingOn(Grid*);
+	bool isInView(Person*, Grid*);
 };
 
 #endif

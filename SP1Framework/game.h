@@ -58,11 +58,15 @@ void renderSplashScreen();  // renders the splash screen
 void renderGame();          // renders the game stuff
 void renderMap();           // renders the map to the buffer first
 void renderCharacter();// renders the character into the buffer
-void renderPersonVision(Person*);	// renders enemy's vision
-void renderPersonVisionPoint(COORD, short, short);	// renders enemy's view points
+void renderEnemyVision(Enemy*);	// renders enemy's vision
+void renderEnemyVisionPoint(COORD, short, short);	// renders enemy's view points
+void renderPlayerVision(Player*);	// renders enemy's vision
+void renderPlayerVisionPoint(float, float, float, float);	// renders enemy's view points
 void renderPoint(COORD, char, WORD);
 void renderMessage(std::string, Player*); // renders a short message for player
 void renderFramerate();     // renders debug information, frame rate, elapsed time, etc
 void renderToScreen();      // dump the contents of the buffer to the screen, one frame worth of game
+
+void checkGamestate();
 
 #endif // _GAME_H

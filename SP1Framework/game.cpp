@@ -20,7 +20,10 @@ double  g_dBounceTime; // this is to prevent key bouncing, so we won't trigger k
 int prevTime = 0;
 
 // Console object
-Console g_Console(150, 40, "SP1 Framework");
+Console g_Console(150, 40, "ROBERT");
+
+#define START_LEVEL 0
+#define LOSE_LEVEL 2
 
 Level *levels[3] = 
 {
@@ -216,7 +219,6 @@ void moveCharacter()
 	}
 }
 
-
 void movePlayer(Player* player, Direction dir) 
 {
 	if (player->isHidden) 
@@ -243,7 +245,7 @@ void playerAction(Player* player)
 	{
 		open(item, 176);
 		player->somethingHappened = true;
-		if (levels[0])
+		if (currentLevel == START_LEVEL || currentLevel == LOSE_LEVEL)
 		{
 			currentLevel = 1;
 		}
@@ -298,7 +300,7 @@ void processUserInput()
 void clearScreen()
 {
     // Clears the buffer with this colour attribute
-    g_Console.clearBuffer(0xFF);
+    g_Console.clearBuffer(black * 17);
 }
 
 void renderSplashScreen()  // renders the splash screen
@@ -317,11 +319,14 @@ void renderSplashScreen()  // renders the splash screen
 
 void renderGame()
 {
-    renderMap();        // renders the map to the buffer first
+	renderMap();        // renders the map to the buffer first
+	if (currentLevel != START_LEVEL && currentLevel != LOSE_LEVEL)
+	{
+		renderPlayerVision(player1());
+		renderPlayerVision(player2());
+	}
 	for (int i = 0; i < numberOfEnemies(); ++i)
-		renderPersonVision(enemies()[i]);
-	renderPersonVision(player1());
-	renderPersonVision(player2());
+		renderEnemyVision(enemies()[i]);
     renderCharacter();  // renders the character into the buffer
 	renderMessage(attrs()[player1()->facingIn(grid())->icon], player1());
 	renderMessage(attrs()[player2()->facingIn(grid())->icon], player2());
@@ -337,7 +342,8 @@ void renderMap()
 		{
 			Node &n = grid()->nodes[r][c];
 			coord.X = c;
-			renderPoint(coord, n.icon, n.getAttribute());
+			if (n.seen || currentLevel == START_LEVEL || currentLevel == LOSE_LEVEL)
+				renderPoint(coord, n.icon, n.getAttribute());
 		}
 	}
 }
@@ -372,36 +378,40 @@ void renderMessage(std::string str, Player *p)
 	}
 
 	for (c.X = 0; c.X < g_Console.getConsoleSize().X; ++c.X)
-		g_Console.writeToBuffer(c, ' ', 0xff);
+		g_Console.writeToBuffer(c, ' ', 0x00);
 
 	int length = str.length();
 	c.X = (g_Console.getConsoleSize().X - str.length()) / 2;
-	g_Console.writeToBuffer(c, str, 0xf0);
+	g_Console.writeToBuffer(c, str, 0x0f);
 }
 
-void renderPersonVision(Person* p)
+void renderEnemyVision(Enemy* e)
 {
-	switch (p->position.facing){
+	short x1, y1, x2, y2;
+	switch (e->position.facing)
+	{
 	case up:
-		renderPersonVisionPoint(p->position.coord, -1, -1);
-		renderPersonVisionPoint(p->position.coord, -1, +1);
+		x1 = +1; y1 = -1;
+		x2 = -1; y2 = -1;
 		break;
 	case down:
-		renderPersonVisionPoint(p->position.coord, +1, +1);
-		renderPersonVisionPoint(p->position.coord, +1, -1);
+		x1 = +1; y1 = +1;
+		x2 = -1; y2 = +1;
 		break;
 	case left:
-		renderPersonVisionPoint(p->position.coord, +1, -1);
-		renderPersonVisionPoint(p->position.coord, -1, -1);
+		x1 = -1; y1 = +1;
+		x2 = -1; y2 = -1;
 		break;
 	case right:
-		renderPersonVisionPoint(p->position.coord, -1, +1);
-		renderPersonVisionPoint(p->position.coord, +1, +1);
+		x1 = +1; y1 = +1;
+		x2 = +1; y2 = -1;
 		break;
 	}
+	renderEnemyVisionPoint(e->position.coord, x1, y1);
+	renderEnemyVisionPoint(e->position.coord, x2, y2);
 }
 
-void renderPersonVisionPoint(COORD c, short y, short x)
+void renderEnemyVisionPoint(COORD c, short x, short y)
 {
 	c.Y += y;
 	c.X += x;
@@ -410,7 +420,60 @@ void renderPersonVisionPoint(COORD c, short y, short x)
 		grid()->nodes[c.Y][c.X].isBlocked)
 		return;
 	renderPoint(c, ' ',lightGrey + lightGrey * 16);
-	renderPersonVisionPoint(c, y, x);
+	renderEnemyVisionPoint(c, x, y);
+}
+
+void renderPlayerVision(Player* p)
+{
+	float x1, y1, x2, y2;
+	for (float a = 1; a <= 45; ++a)
+	{
+		double angle = a / 180.0 * M_PI;
+		switch (p->position.facing)
+		{
+		case up:
+			x1 = +1; y1 = -1;
+			x2 = -1; y2 = -1;
+			renderPlayerVisionPoint(p->position.coord.X, p->position.coord.Y, x1 * sin(angle), y1 * cos(angle));
+			renderPlayerVisionPoint(p->position.coord.X, p->position.coord.Y, x2 * sin(angle), y2 * cos(angle));
+			break;
+		case down:
+			x1 = +1; y1 = +1;
+			x2 = -1; y2 = +1;
+			renderPlayerVisionPoint(p->position.coord.X, p->position.coord.Y, x1 * sin(angle), y1 * cos(angle));
+			renderPlayerVisionPoint(p->position.coord.X, p->position.coord.Y, x2 * sin(angle), y2 * cos(angle));
+			break;
+		case left:
+			x1 = -1; y1 = +1;
+			x2 = -1; y2 = -1;
+			renderPlayerVisionPoint(p->position.coord.X, p->position.coord.Y, x1 * cos(angle), y1 * sin(angle));
+			renderPlayerVisionPoint(p->position.coord.X, p->position.coord.Y, x2 * cos(angle), y2 * sin(angle));
+			break;
+		case right:
+			x1 = +1; y1 = +1;
+			x2 = +1; y2 = -1;
+			renderPlayerVisionPoint(p->position.coord.X, p->position.coord.Y, x1 * cos(angle), y1 * sin(angle));
+			renderPlayerVisionPoint(p->position.coord.X, p->position.coord.Y, x2 * cos(angle), y2 * sin(angle));
+			break;
+		}
+		
+	}
+}
+
+void renderPlayerVisionPoint(float x, float y, float xDiff, float yDiff)
+{
+	COORD c;
+	c.X = x + xDiff;
+	c.Y = y + yDiff;
+	Node &n = grid()->nodes[c.Y][c.X];
+	if (c.X < 0 || c.X >= grid()->size.X ||
+		c.Y < 0 || c.Y >= grid()->size.Y)
+		return;
+	renderPoint(c, n.icon, n.getAttribute());
+	n.seen = true;
+	if (n.isBlocked)
+		return;
+	renderPlayerVisionPoint(x + xDiff, y + yDiff, xDiff, yDiff);
 }
 
 void renderPoint(COORD c, char i, WORD attr)
@@ -449,3 +512,21 @@ void renderToScreen()
     g_Console.flushBufferToConsole();
 }
 
+void checkGamestate()
+{
+	for (int i = 0; i < numberOfEnemies(); ++i)
+	{
+		if (enemies()[i]->isInView(player1(), grid()))
+		{
+			Sleep(1000);
+			currentLevel = LOSE_LEVEL;
+		}
+		
+		Colour c = player2()->foregroundColor;
+		if (enemies()[i]->isInView(player2(), grid()) && c)
+		{
+			Sleep(1000);
+			currentLevel = LOSE_LEVEL;
+		}
+	}
+}

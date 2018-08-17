@@ -116,3 +116,32 @@ Node* Person::standingOn(Grid* grid)
 {
 	return grid->nodes[position.coord.Y] + position.coord.X;
 }
+
+bool Person::isInView(Person* p, Grid* grid)
+{
+	if (position.directionOf(p->position) == position.facing)
+	{
+		double d = position.distance(p->position);
+		double xDiff = p->position.coord.X - position.coord.X;
+		double yDiff = p->position.coord.Y - position.coord.Y;
+		double m = yDiff / xDiff;
+		double c = m * -position.coord.X + position.coord.Y;
+
+		for (double i = 0; i < d; ++i) {
+			double x, y;
+			if ((int)xDiff == 0) {
+				y = i / d * yDiff + position.coord.Y;
+				x = position.coord.X;
+			}
+			else
+			{
+				x = xDiff * i / d + position.coord.X;
+				y = m * x + c;
+			}
+			if (grid->nodes[(int)y][(int)x].isBlocked)
+				return false;
+		}
+		return true;
+	}
+	return false;
+}
