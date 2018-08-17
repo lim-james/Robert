@@ -130,7 +130,7 @@ bool Person::isInView(Person* p, Grid* grid)
 		for (double i = 0; i < d; ++i) {
 			double x, y;
 			if ((int)xDiff == 0) {
-				y = i / d * yDiff + position.coord.X;
+				y = i / d * yDiff + position.coord.Y;
 				x = position.coord.X;
 			}
 			else
