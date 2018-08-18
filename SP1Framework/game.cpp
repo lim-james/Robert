@@ -33,7 +33,7 @@ Level *levels[3] =
 };
 //Level *level = new Level("AUNTY'S_HOUSE_LEVEL.txt");
 
-unsigned short currentLevel = 0;
+unsigned short currentLevel = 1;
 
 Level* level() { return levels[currentLevel]; }
 Player** players() { return level()->players; }

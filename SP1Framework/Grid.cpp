@@ -23,23 +23,31 @@ Grid::Grid(std::string attr, std::string file)
 	for (int i = 0; i < count; ++i)
 	{
 		char item;
+		bool hasTwoStates;
 		State onState, offState;
 		onState = offState = State();
 		bool isBlocked, seen, toggled, isPickable;
-		int onForegroundColour;
-		int onBackgroundColour;
-		int offForegroundColour;
-		int offBackgroundColour;
+		int onIcon, onForegroundColour, onBackgroundColour;
+		int offIcon, offForegroundColour, offBackgroundColour;
 		
-		ifs >> item
-			>> onState.icon >> onState.isBlocked >> onForegroundColour >> onBackgroundColour
-			>> offState.icon >> offState.isBlocked >> offForegroundColour >> offBackgroundColour
-			>> seen >> toggled >> isPickable;
-
+		ifs >> item >> hasTwoStates
+			>> onIcon >> onState.isBlocked >> onForegroundColour >> onBackgroundColour;
+		onState.icon = (char)onIcon;
 		onState.foregroundColour = (Colour)onForegroundColour;
 		onState.backgroundColour = (Colour)onBackgroundColour;
-		offState.foregroundColour = (Colour)offForegroundColour;
-		offState.backgroundColour = (Colour)offBackgroundColour;
+		if (hasTwoStates)
+		{
+			ifs >> offIcon >> offState.isBlocked >> offForegroundColour >> offBackgroundColour;
+			offState.icon = (char)offIcon;
+			offState.foregroundColour = (Colour)offForegroundColour;
+			offState.backgroundColour = (Colour)offBackgroundColour;
+		}
+		else
+		{
+			offState = onState;
+		}
+			
+		ifs >> seen >> toggled >> isPickable;
 
 		attrs[item] = Node(onState, offState, seen, toggled, isPickable);
 
