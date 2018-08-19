@@ -9,3 +9,7 @@ State::State(char i, bool b, Colour fc, Colour bc)
 	: icon(i), isBlocked(b), foregroundColour(fc), backgroundColour(bc)
 {
 }
+
+bool State::operator<(const State &s) const {
+	return (int)icon < (int)s.icon;
+}

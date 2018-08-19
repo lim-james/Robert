@@ -22,27 +22,31 @@ int prevTime = 0;
 // Console object
 Console g_Console(150, 40, "ROBERT");
 
-#define START_LEVEL 0
-#define LOSE_LEVEL 2
-
-Level *levels[3] = 
-{
-	new Level("SPLASHSCREEN_LEVEL.txt"),
-	new Level("AUNTY'S_HOUSE_LEVEL.txt"),
-	new Level("LOSESCREEN_LEVEL.txt")
+std::string levelFiles[L_COUNT] = {
+	"SPLASHSCREEN_LEVEL.txt",
+	"AUNTY'S_HOUSE_LEVEL.txt",
+	"LOSESCREEN_LEVEL.txt"
 };
 //Level *level = new Level("AUNTY'S_HOUSE_LEVEL.txt");
 
-unsigned short currentLevel = 1;
+LEVELSTATES currentLevel = L_START;
 
-Level* level() { return levels[currentLevel]; }
-Player** players() { return level()->players; }
-Player* player1() { return level()->players[0]; }
-Player* player2() { return level()->players[1]; }
-Grid* grid() { return level()->storeys[level()->currentStorey]; }
-unsigned int numberOfEnemies() { return level()->numberOfEnemies[level()->currentStorey]; }
-Enemy** enemies() { return level()->enemies[level()->currentStorey]; }
-std::map<char, std::string> attrs() { return level()->attrs; };
+Level *level = new Level("SPLASHSCREEN_LEVEL.txt");
+
+void setLevel(LEVELSTATES l)
+{
+	currentLevel = l;
+	delete level;
+	level = new Level(levelFiles[currentLevel]);
+}
+
+Player** players() { return level->players; }
+Player* player1() { return level->players[0]; }
+Player* player2() { return level->players[1]; }
+Grid* grid() { return level->storeys[level->currentStorey]; }
+unsigned int numberOfEnemies() { return level->numberOfEnemies[level->currentStorey]; }
+Enemy** enemies() { return level->enemies[level->currentStorey]; }
+std::map<State, std::string> attrs() { return level->attrs; };
 
 //--------------------------------------------------------------
 // Purpose  : Initialisation function
@@ -209,10 +213,10 @@ void moveCharacter()
 	{
 		if (player1()->standingOn(grid())->getIcon() == (char)186 && player2()->standingOn(grid())->getIcon() == (char)186)
 		{
-			if (level()->currentStorey + 1 < level()->numberOfStoreys)
-				level()->currentStorey++;
+			if (level->currentStorey + 1 < level->numberOfStoreys)
+				level->currentStorey++;
 			else
-				level()->currentStorey = 0;
+				level->currentStorey = 0;
 		}
 	}
 }
@@ -239,7 +243,7 @@ void movePlayer(Player* player, Direction dir)
 void playerAction(Player* player)
 {
 	Node* item = player->facingIn(grid());
-	item->toggled = !item->toggled;
+	item->toggle();
 	player->somethingHappened = true;
 }
 
@@ -273,7 +277,7 @@ void renderSplashScreen()  // renders the splash screen
 void renderGame()
 {
 	renderMap();        // renders the map to the buffer first
-	if (currentLevel != START_LEVEL && currentLevel != LOSE_LEVEL)
+	if (currentLevel != L_START && currentLevel != L_LOSE)
 	{
 		renderPlayerVision(player1());
 		renderPlayerVision(player2());
@@ -281,8 +285,8 @@ void renderGame()
 	for (int i = 0; i < numberOfEnemies(); ++i)
 		renderEnemyVision(enemies()[i]);
     renderCharacter();  // renders the character into the buffer
-	renderMessage(attrs()[player1()->facingIn(grid())->getIcon()], player1());
-	renderMessage(attrs()[player2()->facingIn(grid())->getIcon()], player2());
+	renderMessage(attrs()[player1()->facingIn(grid())->getState()], player1());
+	renderMessage(attrs()[player2()->facingIn(grid())->getState()], player2());
 }
 
 void renderMap()
@@ -295,8 +299,7 @@ void renderMap()
 		{
 			Node &n = grid()->nodes[r][c];
 			coord.X = c;
-			if (n.seen || currentLevel == START_LEVEL || currentLevel == LOSE_LEVEL)
-				renderPoint(coord, n.getIcon(), n.getAttribute());
+			if (n.seen) renderPoint(coord, n.getIcon(), n.getAttribute());
 		}
 	}
 }
@@ -469,16 +472,10 @@ void checkGamestate()
 {
 	for (int i = 0; i < numberOfEnemies(); ++i)
 	{
-		if (enemies()[i]->isInView(player1(), grid()))
+		if (enemies()[i]->isInView(player1(), grid()) || enemies()[i]->isInView(player2(), grid()))
 		{
 			Sleep(1000);
-			currentLevel = LOSE_LEVEL;
-		}
-	
-		if (enemies()[i]->isInView(player2(), grid()))
-		{
-			Sleep(1000);
-			currentLevel = LOSE_LEVEL;
+			currentLevel = L_LOSE;
 		}
 	}
 }

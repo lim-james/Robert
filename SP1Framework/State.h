@@ -12,6 +12,8 @@ struct State
 	
 	State();
 	State(char, bool, Colour, Colour);
+
+	bool operator<(const State &s) const;
 };
 
 #endif

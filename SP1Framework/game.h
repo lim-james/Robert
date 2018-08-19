@@ -32,14 +32,22 @@ enum EGAMESTATES
     S_COUNT
 };
 
-Level* level();
+enum LEVELSTATES
+{
+	L_START,
+	L_AUNTYS_HOUSE,
+	L_LOSE,
+	L_COUNT
+};
+
+void setLevel(LEVELSTATES);
 Player** players();
 Player* player1();
 Player* player2();
 Grid* grid();
 unsigned int numberOfEnemies();
 Enemy** enemies();
-std::map<char, std::string> attrs();
+std::map<State, std::string> attrs();
 
 void init        ( void );      // initialize your variables, allocate memory, etc
 void getInput    ( void );      // get input from player

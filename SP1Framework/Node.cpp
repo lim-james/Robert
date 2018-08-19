@@ -43,3 +43,7 @@ WORD Node::getAttribute()
 
 }
 
+void Node::toggle()
+{
+	toggled = !toggled;
+}

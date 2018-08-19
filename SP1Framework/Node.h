@@ -17,7 +17,9 @@ struct Node
 	State getState();
 	char getIcon();
 	bool getIsBlocked();
-	WORD getAttribute();						// returns attribute
+	WORD getAttribute();
+
+	void toggle();
 };
 
 #endif

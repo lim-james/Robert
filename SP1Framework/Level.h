@@ -18,7 +18,7 @@ struct Level {
 	Player *players[2];
 
 	// stores attributes of nodes
-	std::map<char, std::string> attrs;
+	std::map<State, std::string> attrs;
 
 	Level(std::string);
 
