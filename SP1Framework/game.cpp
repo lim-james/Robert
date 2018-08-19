@@ -245,6 +245,11 @@ void playerAction(Player* player)
 	Node* item = player->facingIn(grid());
 	item->toggle();
 	player->somethingHappened = true;
+
+	if (item->getState() == State((char)178, true, (Colour)8, (Colour)15) && (currentLevel == L_START || currentLevel == L_LOSE))
+	{
+		setLevel(L_AUNTYS_HOUSE);
+	}
 }
 
 void processUserInput()

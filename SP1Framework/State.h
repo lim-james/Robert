@@ -13,6 +13,7 @@ struct State
 	State();
 	State(char, bool, Colour, Colour);
 
+	bool operator==(const State &s) const;
 	bool operator<(const State &s) const;
 };
 

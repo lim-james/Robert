@@ -10,6 +10,12 @@ State::State(char i, bool b, Colour fc, Colour bc)
 {
 }
 
-bool State::operator<(const State &s) const {
+bool State::operator==(const State &s) const
+{
+	return icon == s.icon && isBlocked == s.isBlocked && foregroundColour == s.foregroundColour && backgroundColour == s.backgroundColour;
+}
+
+bool State::operator<(const State &s) const 
+{
 	return (int)icon < (int)s.icon;
 }
