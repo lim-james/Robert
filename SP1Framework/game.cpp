@@ -256,17 +256,13 @@ void playerAction(Player* player)
 	player->somethingHappened = true;
 
 	if (item->getState() == State((char)178, true, true, (Colour)8, (Colour)15) && (currentLevel == L_START || currentLevel == L_LOSE))
-	{
 		setLevel(L_AUNTYS_HOUSE);
-	}
 	if (item->getState() == State((char)157, true, false, (Colour)11, (Colour)5) && (currentLevel == L_AUNTYS_HOUSE))
-	{
 		item->toggle();
-	}
 	if (item->getState() == State((char)254, true, false, (Colour)3, (Colour)15) && (currentLevel == L_AUNTYS_HOUSE))
-	{
 		player->isHidden = !player->isHidden;
-	}
+	if (attrs()[item->getState()] == "bed")
+		player->isHidden = !player->isHidden;
 }
 
 void processUserInput()
