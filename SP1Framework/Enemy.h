@@ -5,8 +5,9 @@
 #include <string>
 #include "Person.h"
 
-struct Enemy : Person
+class Enemy : Person
 {
+public:
 	int nextIndex, numberOfPositions;
 	Position *positions;
 

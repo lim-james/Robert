@@ -5,8 +5,9 @@
 #include "Grid.h"
 #include "Position.h"
 
-struct Person
+class Person
 {
+public:
 	char icon;					// stores the icon of the node
 	Position position;				// position and facing direction of player
 	Colour foregroundColor;		// colour of icon

@@ -7,8 +7,9 @@
 
 #include "Node.h"
 
-struct Grid
+class Grid
 {
+public:
 	COORD size;				// size of grid X and Y
 	Node **nodes;			// dynamic array based on the size to store each node
 

@@ -3,7 +3,9 @@
 
 #include "Person.h"
 
-struct Player : Person {
+class Player : Person 
+{
+public:
 	bool somethingHappened, openedInventory;
 	double bounceTime = 0;
 

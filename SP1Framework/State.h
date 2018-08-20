@@ -3,8 +3,9 @@
 
 #include "Colours.h"
 
-struct State
+class State
 {
+public:
 	char icon;					// stores the icon of the node
 	bool isBlocked;
 	bool isSeeThrough;

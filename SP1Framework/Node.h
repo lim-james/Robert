@@ -4,8 +4,9 @@
 #include <Windows.h>
 #include "State.h"
 
-struct Node
+class Node
 {
+public:
 	State onState;
 	State offState;
 	bool seen, toggled, isPickable;				// if true the player cannot walk through

@@ -8,7 +8,8 @@
 
 enum Direction { up, down, left, right };
 
-struct Position {
+class Position {
+public:
 	COORD coord;
 	Direction facing;
 

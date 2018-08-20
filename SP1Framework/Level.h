@@ -9,7 +9,8 @@
 #include <algorithm>
 #include <map>
 
-class Level {
+class Level 
+{
 public:
 	unsigned int numberOfStoreys;
 	unsigned int currentStorey;
