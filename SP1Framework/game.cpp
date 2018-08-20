@@ -259,6 +259,14 @@ void playerAction(Player* player)
 	{
 		setLevel(L_AUNTYS_HOUSE);
 	}
+	if (item->getState() == State((char)157, true, false, (Colour)11, (Colour)5) && (currentLevel == L_AUNTYS_HOUSE))
+	{
+		item->toggle();
+	}
+	if (item->getState() == State((char)254, true, false, (Colour)3, (Colour)15) && (currentLevel == L_AUNTYS_HOUSE))
+	{
+		player->isHidden = !player->isHidden;
+	}
 }
 
 void processUserInput()
@@ -378,7 +386,7 @@ void renderCharacter()
 	for (int i = 0; i < 2; ++i)
 	{
 		Player *player = players()[i];
-		renderPoint(player->position.coord, player->icon, player->getAttribute());
+		renderPoint(player->position.coord, player->getIcon(), player->getAttribute());
 	}
 
 	for (int i = 0; i < numberOfEnemies(); ++i)
