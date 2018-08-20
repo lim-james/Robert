@@ -64,7 +64,7 @@ void Level::initPlayers(std::string file)
 			default:
 				break;
 		}
-		players[i] = new Player('X', Position(c, facing), i % 2 ? red : blue, white);
+		players[i] = new Player((char)178, Position(c, facing), i % 2 ? red : blue, white);
 	}
 }
 
@@ -86,6 +86,7 @@ void Level::initAttrs(std::string file)
 		std::string value;
 		ifs >> icon >> isBlocked >> isSeeThrough >> foregroundColour >> backgroundColour >> value;
 		State key((char)icon, isBlocked, isSeeThrough, (Colour)foregroundColour, (Colour)backgroundColour);
+
 		std::replace(value.begin(), value.end(), '_', ' ');
 		attrs[key] = value;
 	}
