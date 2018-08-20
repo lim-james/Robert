@@ -9,7 +9,8 @@
 #include <algorithm>
 #include <map>
 
-struct Level {
+class Level {
+public:
 	unsigned int numberOfStoreys;
 	unsigned int currentStorey;
 	Grid **storeys;
