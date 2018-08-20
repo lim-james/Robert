@@ -107,6 +107,8 @@ void getInput( void )
 	g_abKeyPressed[K_RETURN] = isKeyPressed(VK_RETURN);
 	g_abKeyPressed[K_SPACE] = isKeyPressed(VK_SPACE);
     g_abKeyPressed[K_ESCAPE] = isKeyPressed(VK_ESCAPE);
+	g_abKeyPressed[K_TAB] = isKeyPressed(VK_TAB);
+	g_abKeyPressed[K_BACKSLASH] = isKeyPressed(VK_OEM_5);
 }
 
 //--------------------------------------------------------------
@@ -169,11 +171,11 @@ void splashScreenWait()    // waits for time to pass in splash screen
 void gameplay()            // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    moveCharacter();    // moves the character, collision detection, physics, etc
+	playerKeyEvents();  // moves the character, collision detection, physics, etc
                         // sound can be played here too.
 }
 
-void moveCharacter()
+void playerKeyEvents()
 {
 	player1()->somethingHappened = false;
 	player2()->somethingHappened = false;
@@ -204,6 +206,13 @@ void moveCharacter()
 
 			if (g_abKeyPressed[i % 2 ? K_RETURN : K_SPACE])
 				playerAction(player);
+
+			if (g_abKeyPressed[i % 2 ? K_TAB : K_BACKSLASH])
+			{
+				player->openedInventory = !player->openedInventory;
+				player->somethingHappened = true;
+			}
+			
 		}
 		if (player->somethingHappened)
 			player->bounceTime = g_dElapsedTime + 0.125;
@@ -259,6 +268,56 @@ void processUserInput()
         g_bQuitGame = true;    
 }
 
+void renderInventory(Player* player)
+{
+	char i[7][7] = {
+		{ 201, 205, 203, 205, 203, 205, 187 },
+	{ 186, 32, 186, 32, 186, 32, 186 },
+	{ 204, 205, 206, 205, 206, 205, 185 },
+	{ 186, 32, 186, 32, 186, 32, 186 },
+	{ 204, 205, 206, 205, 206, 205, 185 },
+	{ 186, 32, 186, 32, 186, 32, 186 },
+	{ 200, 205, 202, 205, 202, 205, 188 }
+	};
+	for (int y = 0; y < 7; y++)
+	{
+		for (int x = 0; x < 7; x++)
+		{
+			COORD c = { x, y };
+			if (player == player1())
+			{
+				renderInventoryPoint1(c, i[y][x], white);
+			}
+			else
+			{
+				renderInventoryPoint2(c, i[y][x], white);
+			}
+		}
+	}
+}
+
+void renderInventoryPoint1(COORD c, char i, WORD attr)
+{
+	unsigned int offsetX = g_Console.getConsoleSize().X - ((g_Console.getConsoleSize().X - grid()->size.X - 14) / 4) - 7;
+	unsigned int offsetY = (g_Console.getConsoleSize().Y - 7) / 2;
+	c.X += offsetX;
+	c.Y += offsetY;
+
+	g_Console.writeToBuffer(c, i, attr);
+}
+
+void renderInventoryPoint2(COORD c, char i, WORD attr)
+{
+	unsigned int offsetX = (g_Console.getConsoleSize().X - grid()->size.X - 14) / 4;
+	unsigned int offsetY = (g_Console.getConsoleSize().Y - 7) / 2;
+
+
+	c.X += offsetX;
+	c.Y += offsetY;
+
+	g_Console.writeToBuffer(c, i, attr);
+}
+
 void clearScreen()
 {
     // Clears the buffer with this colour attribute
@@ -292,6 +351,11 @@ void renderGame()
     renderCharacter();  // renders the character into the buffer
 	renderMessage(attrs()[player1()->facingIn(grid())->getState()], player1());
 	renderMessage(attrs()[player2()->facingIn(grid())->getState()], player2());
+
+	if (player1()->openedInventory)
+		renderInventory(player1());
+	if (player2()->openedInventory)
+		renderInventory(player2());
 }
 
 void renderMap()
