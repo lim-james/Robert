@@ -21,6 +21,8 @@ enum EKEYS
     K_ESCAPE,
 	K_RETURN,
     K_SPACE,
+	K_TAB,
+	K_BACKSLASH,
     K_COUNT
 };
 
@@ -56,10 +58,13 @@ void render      ( void );      // renders the current state of the game to the 
 void shutdown    ( void );      // do clean up, free memory
 void splashScreenWait();    // waits for time to pass in splash screen
 void gameplay();            // gameplay logic
-void moveCharacter();       // moves the character, collision detection, physics, etc
+void playerKeyEvents();       // moves the character, collision detection, physics, etc
 void movePlayer(Player*, Direction);	// moves a player in direction
 void playerAction(Player*);	// check if player can perform action and performs it
 void processUserInput();    // checks if you should change states or do something else with the game, e.g. pause, exit
+void renderInventory(Player*);	// renders the player inventory
+void renderInventoryPoint1(COORD, char, WORD);	// renders inventory for player 1
+void renderInventoryPoint2(COORD, char, WORD);	// renders inventory for player 2
 void clearScreen();         // clears the current screen and draw from scratch 
 void renderSplashScreen();  // renders the splash screen
 void renderGame();          // renders the game stuff

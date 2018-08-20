@@ -1,11 +1,11 @@
 #include "Player.h"
 
-Player::Player()
+Player::Player() : openedInventory(false)
 {
 }
 
 Player::Player(const char i, Position p, Colour fc, Colour bc)
-	: Person(i, p, fc, bc)
+	: Person(i, p, fc, bc), openedInventory(false)
 {
 }
 

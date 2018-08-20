@@ -4,7 +4,7 @@
 #include "Person.h"
 
 struct Player : Person {
-	bool somethingHappened;
+	bool somethingHappened, openedInventory;
 	double bounceTime = 0;
 
 	Player();										// default constructor
