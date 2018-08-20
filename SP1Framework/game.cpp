@@ -57,7 +57,7 @@ std::map<State, std::string> attrs() { return level->attrs; };
 //--------------------------------------------------------------
 void init( void )
 {
-    // Set precision for floating point output
+    // Set precision for floating point outputfi
     g_dElapsedTime = 0.0;
     g_dBounceTime = 0.0;
 
@@ -480,7 +480,7 @@ void checkGamestate()
 		if (enemies()[i]->isInView(player1(), grid()) || enemies()[i]->isInView(player2(), grid()))
 		{
 			Sleep(1000);
-			currentLevel = L_LOSE;
+			setLevel(L_LOSE);
 		}
 	}
 }

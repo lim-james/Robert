@@ -1,24 +1,23 @@
-23
-87 _
-45 _
-64 ]_toggle_stove
-178 ]_open_door
-176 ]_close_door
-186 _
-70 table 
-233 chair
-222 ]_toggle_tv
-47 ]_open_window
-96 ]_close_window
-200 bed
-201 bed
-187 bed
-188 bed
-205 bed
-186 stairs
-228 fridge
-154 ]_flush_toilet
-234 basin
-157 ]_get_key
-254 ]_hide_in_closet
-240 ]_unlock_safe
+20
+64 1 4 15 ]_toggle_stove
+64 1 0 15 ]_off_stove
+178 1 8 15 ]_open_door
+176 0 8 15 ]_close_door
+70 1 5 5 table 
+233 1 6 15 chair
+222 1 2 15 ]_turn_on_TV
+222 1 0 15 ]_turn_off_TV
+47 1 0 15 ]_open_window
+96 0 0 15 ]_close_window
+200 1 12 15 bed
+201 1 12 15 bed
+187 1 12 15 bed
+188 1 12 15 bed
+205 1 12 15 bed
+186 0 1 15 stairs
+228 1 9 15 fridge
+154 1 6 15 ]_flush_toilet
+234 1 6 15 ]_toggle_basin
+157 1 11 5 ]_get_key
+254 1 3 15 ]_hide_in_closet
+240 1 13 15 ]_unlock_safe
