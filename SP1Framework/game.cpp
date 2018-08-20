@@ -140,7 +140,7 @@ void update(double dt)
     }
 }
 
-//--------------------------------------------------------------
+//--------------------------------------------------------------+
 // Purpose  : Render function is to update the console screen
 //            At this point, you should know exactly what to draw onto the screen.
 //            Just draw it!
@@ -256,9 +256,13 @@ void playerAction(Player* player)
 	player->somethingHappened = true;
 
 	if (item->getState() == State((char)178, true, true, (Colour)8, (Colour)15) && (currentLevel == L_START || currentLevel == L_LOSE))
-	{
 		setLevel(L_AUNTYS_HOUSE);
-	}
+	if (item->getState() == State((char)157, true, false, (Colour)11, (Colour)5) && (currentLevel == L_AUNTYS_HOUSE))
+		item->toggle();
+	if (item->getState() == State((char)254, true, false, (Colour)3, (Colour)15) && (currentLevel == L_AUNTYS_HOUSE))
+		player->isHidden = !player->isHidden;
+	if (attrs()[item->getState()] == "bed")
+		player->isHidden = !player->isHidden;
 }
 
 void processUserInput()
@@ -378,7 +382,7 @@ void renderCharacter()
 	for (int i = 0; i < 2; ++i)
 	{
 		Player *player = players()[i];
-		renderPoint(player->position.coord, player->icon, player->getAttribute());
+		renderPoint(player->position.coord, player->getIcon(), player->getAttribute());
 	}
 
 	for (int i = 0; i < numberOfEnemies(); ++i)

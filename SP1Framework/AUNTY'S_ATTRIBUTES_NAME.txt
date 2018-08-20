@@ -9,11 +9,11 @@
 222 1 1 0 15 ]_turn_off_TV
 47 1 1 0 15 ]_open_window
 96 0 1 0 15 ]_close_window
-200 1 0 12 15 bed
-201 1 0 12 15 bed
-187 1 0 12 15 bed
-188 1 0 12 15 bed
-205 1 0 12 15 bed
+200 1 1 12 15 bed
+201 1 1 12 15 bed
+187 1 1 12 15 bed
+188 1 1 12 15 bed
+205 1 1 12 15 bed
 186 0 1 1 15 stairs
 228 1 0 9 15 fridge
 154 1 1 6 15 ]_flush_toilet
