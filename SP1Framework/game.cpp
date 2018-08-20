@@ -207,7 +207,7 @@ void playerKeyEvents()
 			if (g_abKeyPressed[i % 2 ? K_RETURN : K_SPACE])
 				playerAction(player);
 
-			if (g_abKeyPressed[i % 2 ? K_TAB : K_BACKSLASH])
+			if (g_abKeyPressed[i % 2 ? K_BACKSLASH : K_TAB])
 			{
 				player->openedInventory = !player->openedInventory;
 				player->somethingHappened = true;
@@ -252,17 +252,39 @@ void movePlayer(Player* player, Direction dir)
 void playerAction(Player* player)
 {
 	Node* item = player->facingIn(grid());
-	item->toggle();
-	player->somethingHappened = true;
 
+	// door
 	if (item->getState() == State((char)178, true, true, (Colour)8, (Colour)15) && (currentLevel == L_START || currentLevel == L_LOSE))
+	{
 		setLevel(L_AUNTYS_HOUSE);
-	if (item->getState() == State((char)157, true, false, (Colour)11, (Colour)5) && (currentLevel == L_AUNTYS_HOUSE))
+	}
+	// key
+	else if (item->getState() == State((char)157, true, false, (Colour)11, (Colour)5) && (currentLevel == L_AUNTYS_HOUSE))
+	{
+		player->storeItem(item->getState());
 		item->toggle();
-	if (item->getState() == State((char)254, true, false, (Colour)3, (Colour)15) && (currentLevel == L_AUNTYS_HOUSE))
+	}
+	// cupboard
+	else if (item->getState() == State((char)254, true, false, (Colour)3, (Colour)15) && (currentLevel == L_AUNTYS_HOUSE))
+	{
 		player->isHidden = !player->isHidden;
-	if (attrs()[item->getState()] == "bed")
+	}
+	// bed
+	else if (attrs()[item->getState()] == "bed")
+	{
 		player->isHidden = !player->isHidden;
+	}
+	// unlock safe
+	else if ((item->getState() == State((char)240, true, true, (Colour)13, (Colour)15)) && player->hasItem(State((char)157, true, false, (Colour)11, (Colour)5)))
+	{
+		setLevel(L_START);
+	}
+	else
+	{
+		item->toggle();
+	}
+
+	player->somethingHappened = true;
 }
 
 void processUserInput()
@@ -283,6 +305,8 @@ void renderInventory(Player* player)
 	{ 186, 32, 186, 32, 186, 32, 186 },
 	{ 200, 205, 202, 205, 202, 205, 188 }
 	};
+	i[1][1] = player->items[0].icon;
+
 	for (int y = 0; y < 7; y++)
 	{
 		for (int x = 0; x < 7; x++)
@@ -302,8 +326,10 @@ void renderInventory(Player* player)
 
 void renderInventoryPoint1(COORD c, char i, WORD attr)
 {
-	unsigned int offsetX = g_Console.getConsoleSize().X - ((g_Console.getConsoleSize().X - grid()->size.X - 14) / 4) - 7;
+	unsigned int offsetX = (g_Console.getConsoleSize().X - grid()->size.X - 14) / 4;
 	unsigned int offsetY = (g_Console.getConsoleSize().Y - 7) / 2;
+
+
 	c.X += offsetX;
 	c.Y += offsetY;
 
@@ -312,10 +338,8 @@ void renderInventoryPoint1(COORD c, char i, WORD attr)
 
 void renderInventoryPoint2(COORD c, char i, WORD attr)
 {
-	unsigned int offsetX = (g_Console.getConsoleSize().X - grid()->size.X - 14) / 4;
+	unsigned int offsetX = g_Console.getConsoleSize().X - ((g_Console.getConsoleSize().X - grid()->size.X - 14) / 4) - 7;
 	unsigned int offsetY = (g_Console.getConsoleSize().Y - 7) / 2;
-
-
 	c.X += offsetX;
 	c.Y += offsetY;
 
