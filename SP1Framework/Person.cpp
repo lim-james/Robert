@@ -137,7 +137,7 @@ bool Person::isInView(Person* p, Grid* grid)
 				x = xDiff * i / d + position.coord.X;
 				y = m * x + c;
 			}
-			if (grid->nodes[(int)y][(int)x].getIsBlocked())
+			if (!grid->nodes[(int)y][(int)x].getIsSeeThrough())
 				return false;
 		}
 		return true;
