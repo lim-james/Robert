@@ -82,8 +82,7 @@ void Level::initAttrs(std::string file)
 	for (int i = 0; i < count; ++i)
 	{
 		int icon, foregroundColour, backgroundColour;
-		bool isBlocked;
-		bool isSeeThrough;
+		bool isBlocked, isSeeThrough;
 		std::string value;
 		ifs >> icon >> isBlocked >> isSeeThrough >> foregroundColour >> backgroundColour >> value;
 		State key((char)icon, isBlocked, isSeeThrough, (Colour)foregroundColour, (Colour)backgroundColour);
