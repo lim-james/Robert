@@ -140,7 +140,7 @@ void update(double dt)
     }
 }
 
-//--------------------------------------------------------------
+//--------------------------------------------------------------+
 // Purpose  : Render function is to update the console screen
 //            At this point, you should know exactly what to draw onto the screen.
 //            Just draw it!
