@@ -5,7 +5,7 @@
 #include <string>
 #include "Person.h"
 
-class Enemy : Person
+class Enemy : public Person
 {
 public:
 	int nextIndex, numberOfPositions;

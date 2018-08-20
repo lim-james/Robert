@@ -3,7 +3,7 @@
 
 #include "Person.h"
 
-class Player : Person 
+class Player : public Person 
 {
 public:
 	bool somethingHappened, openedInventory;
