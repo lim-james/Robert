@@ -5,8 +5,8 @@ State::State()
 {
 }
 
-State::State(char i, bool b, Colour fc, Colour bc)
-	: icon(i), isBlocked(b), foregroundColour(fc), backgroundColour(bc)
+State::State(char i, bool b, bool s, Colour fc, Colour bc)
+	: icon(i), isBlocked(b), isSeeThrough(s), foregroundColour(fc), backgroundColour(bc)
 {
 }
 

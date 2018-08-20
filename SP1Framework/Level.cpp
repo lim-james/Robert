@@ -82,10 +82,10 @@ void Level::initAttrs(std::string file)
 	for (int i = 0; i < count; ++i)
 	{
 		int icon, foregroundColour, backgroundColour;
-		bool isBlocked;
+		bool isBlocked, isSeeThrough;
 		std::string value;
-		ifs >> icon >> isBlocked >> foregroundColour >> backgroundColour >> value;
-		State key((char)icon, isBlocked, (Colour)foregroundColour, (Colour)backgroundColour);
+		ifs >> icon >> isBlocked >> isSeeThrough >> foregroundColour >> backgroundColour >> value;
+		State key((char)icon, isBlocked, isSeeThrough, (Colour)foregroundColour, (Colour)backgroundColour);
 		std::replace(value.begin(), value.end(), '_', ' ');
 		attrs[key] = value;
 	}

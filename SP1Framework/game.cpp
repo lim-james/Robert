@@ -255,7 +255,7 @@ void playerAction(Player* player)
 	item->toggle();
 	player->somethingHappened = true;
 
-	if (item->getState() == State((char)178, true, (Colour)8, (Colour)15) && (currentLevel == L_START || currentLevel == L_LOSE))
+	if (item->getState() == State((char)178, true, true, (Colour)8, (Colour)15) && (currentLevel == L_START || currentLevel == L_LOSE))
 	{
 		setLevel(L_AUNTYS_HOUSE);
 	}
@@ -442,7 +442,7 @@ void renderEnemyVisionPoint(COORD c, short x, short y)
 	c.X += x;
 	if (c.X < 0 || c.X >= grid()->size.X ||
 		c.Y < 0 || c.Y >= grid()->size.Y ||
-		grid()->nodes[c.Y][c.X].getIsBlocked())
+		!grid()->nodes[c.Y][c.X].getIsSeeThrough())
 		return;
 	renderPoint(c, ' ',lightGrey * 17);
 	renderEnemyVisionPoint(c, x, y);
@@ -496,7 +496,7 @@ void renderPlayerVisionPoint(float x, float y, float xDiff, float yDiff)
 		return;
 	renderPoint(c, n.getIcon(), n.getAttribute());
 	n.seen = true;
-	if (n.getIsBlocked())
+	if (!n.getIsSeeThrough())
 		return;
 	renderPlayerVisionPoint(x + xDiff, y + yDiff, xDiff, yDiff);
 }

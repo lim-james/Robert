@@ -8,7 +8,7 @@ struct Node
 {
 	State onState;
 	State offState;
-	bool isBlocked, seen, toggled, isPickable;				// if true the player cannot walk through
+	bool seen, toggled, isPickable;				// if true the player cannot walk through
 
 	Node();										// default constructor
 	Node(State, State, bool, bool, bool);		// comprehensive constructor
@@ -17,6 +17,7 @@ struct Node
 	State getState();
 	char getIcon();
 	bool getIsBlocked();
+	bool getIsSeeThrough();
 	WORD getAttribute();
 
 	void toggle();

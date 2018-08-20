@@ -31,6 +31,10 @@ bool Node::getIsBlocked()
 	return getState().isBlocked;
 }
 
+bool Node::getIsSeeThrough()
+{
+	return getState().isSeeThrough;
+}
 //--------------------------------------------------------------
 // Purpose  : When called it returns both the foreground and
 //			  background colours in one attribute
