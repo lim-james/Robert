@@ -12,7 +12,7 @@ public:
 	State items[9];
 
 	Player();										// default constructor
-	Player(const char, Position, Colour, Colour);		// comprehensive constructor
+	Player(const char, Position, Colour, Colour);	// comprehensive constructor
 	~Player();										// default deconstructor
 
 	void storeItem(State item);

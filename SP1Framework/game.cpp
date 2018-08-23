@@ -305,7 +305,7 @@ void renderInventory(Player* player)
 	{ 186, 32, 186, 32, 186, 32, 186 },
 	{ 200, 205, 202, 205, 202, 205, 188 }
 	};
-	i[1][1] = player->items[0].icon;
+	i[1][1] = player->items[0].icon; // temporary
 
 	for (int y = 0; y < 7; y++)
 	{
