@@ -203,7 +203,7 @@ void playerKeyEvents()
 			}
 			else
 			{
-				e->check();
+				e->check(grid());
 				e->movementDelay = 0.25;
 				e->move(grid());
 			}
@@ -277,7 +277,7 @@ void playerAction(Player* player)
 	Node* item = player->facingIn(grid());
 
 	// door
-	if (item->getState() == State((char)178, true, false, (Colour)8, (Colour)15, 0) && (currentLevel == L_START || currentLevel == L_LOSE))
+	if (item->getState() == State((char)178, true, false, (Colour)8, (Colour)15, 1) && (currentLevel == L_START || currentLevel == L_LOSE))
 	{
 		setLevel(L_AUNTYS_HOUSE);
 	}

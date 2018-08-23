@@ -129,9 +129,9 @@ Enemy::~Enemy()
 
 void Enemy::check(Grid* grid)
 {
-	for (int y = 0; y < grid->size.Y; y++)
+	for (SHORT y = 0; y < grid->size.Y; y++)
 	{
-		for (int x = 0; x < grid->size.X; x++)
+		for (SHORT x = 0; x < grid->size.X; x++)
 		{
 			int radius = grid->nodes[y][x].getState().soundRadius;
 			if (radius != 0)

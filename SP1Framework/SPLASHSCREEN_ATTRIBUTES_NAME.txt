@@ -1,2 +1,2 @@
 1
-178 1 0 8 15 0 ]_open_door_to_START
+178 1 0 8 15 1 ]_open_door_to_START
