@@ -203,6 +203,7 @@ void playerKeyEvents()
 			}
 			else
 			{
+				e->check();
 				e->movementDelay = 0.25;
 				e->move(grid());
 			}
@@ -276,18 +277,18 @@ void playerAction(Player* player)
 	Node* item = player->facingIn(grid());
 
 	// door
-	if (item->getState() == State((char)178, true, false, (Colour)8, (Colour)15) && (currentLevel == L_START || currentLevel == L_LOSE))
+	if (item->getState() == State((char)178, true, false, (Colour)8, (Colour)15, 0) && (currentLevel == L_START || currentLevel == L_LOSE))
 	{
 		setLevel(L_AUNTYS_HOUSE);
 	}
 	// key
-	else if (item->getState() == State((char)157, true, false, (Colour)11, (Colour)5) && (currentLevel == L_AUNTYS_HOUSE))
+	else if (item->getState() == State((char)157, true, false, (Colour)11, (Colour)5, 0) && (currentLevel == L_AUNTYS_HOUSE))
 	{
 		player->storeItem(item->getState());
 		item->toggle();
 	}
 	// cupboard
-	else if (item->getState() == State((char)254, true, false, (Colour)3, (Colour)15) && (currentLevel == L_AUNTYS_HOUSE))
+	else if (item->getState() == State((char)254, true, false, (Colour)3, (Colour)15, 0) && (currentLevel == L_AUNTYS_HOUSE))
 	{
 		player->isHidden = !player->isHidden;
 	}
@@ -297,7 +298,7 @@ void playerAction(Player* player)
 		player->isHidden = !player->isHidden;
 	}
 	// unlock safe
-	else if ((item->getState() == State((char)240, true, true, (Colour)13, (Colour)15)) && player->hasItem(State((char)157, true, false, (Colour)11, (Colour)5)))
+	else if ((item->getState() == State((char)240, true, true, (Colour)13, (Colour)15, (int)0)) && player->hasItem(State((char)157, true, false, (Colour)11, (Colour)5, (int)0)))
 	{
 		setLevel(L_START);
 	}
@@ -327,7 +328,7 @@ void renderInventory(Player* player)
 	{ 186, 32, 186, 32, 186, 32, 186 },
 	{ 200, 205, 202, 205, 202, 205, 188 }
 	};
-	i[1][1] = player->items[0].icon; // temporary
+	i[1][1] = player->items[0].icon;
 
 	for (int y = 0; y < 7; y++)
 	{

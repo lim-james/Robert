@@ -37,6 +37,7 @@ public:
 
 	void generatePath(Position, Position, Grid*);
 
+	void check(Grid*);
 	void move(Grid*);
 	bool chase(Person*, Grid*);
 	std::vector<Position>* getPath();
