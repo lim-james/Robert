@@ -12,6 +12,7 @@ public:
 	Position position;				// position and facing direction of player
 	Colour foregroundColor;		// colour of icon
 	Colour backgroundColor;		// colour of background
+	double bounceTime = 0;
 	bool isHidden;
 
 	Person();										// default constructor

@@ -8,7 +8,6 @@ class Player : public Person
 public:
 	int itemIndex = 0;
 	bool somethingHappened, openedInventory;
-	double bounceTime = 0;
 	State items[9];
 
 	Player();										// default constructor

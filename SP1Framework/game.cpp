@@ -17,7 +17,6 @@ bool    g_abKeyPressed[K_COUNT];
 // Game specific variables here
 EGAMESTATES g_eGameState = S_SPLASHSCREEN;
 double  g_dBounceTime; // this is to prevent key bouncing, so we won't trigger keypresses more than once
-int prevTime = 0;
 
 // Console object
 Console g_Console(150, 40, "ROBERT");
@@ -38,6 +37,10 @@ void setLevel(LEVELSTATES l)
 	currentLevel = l;
 	delete level;
 	level = new Level(levelFiles[currentLevel]);
+	for (int i = 0; i < numberOfEnemies(); ++i)
+	{
+		//enemies()[i]->generatePath(enemies()[i]->position, enemies()[i]->targetPosition, grid());
+	}
 }
 
 Player** players() { return level->players; }
@@ -180,11 +183,30 @@ void playerKeyEvents()
 	player1()->somethingHappened = false;
 	player2()->somethingHappened = false;
 
-	if ((int)(g_dElapsedTime * 5) != prevTime)
+	for (int i = 0; i < numberOfEnemies(); ++i)
 	{
-		prevTime = g_dElapsedTime * 5;
-		for (int i = 0; i < numberOfEnemies(); ++i)
-			enemies()[i]->move();
+		Enemy *e = enemies()[i];
+		if (g_dElapsedTime > e->bounceTime)
+		{
+			e->bounceTime = e->movementDelay + g_dElapsedTime;
+			if (e->isInView(player1(), grid()))
+			{
+				e->movementDelay = 0.1;
+				if (e->chase(player1(), grid()))
+					setLevel(L_LOSE);
+			} 
+			else if (e->isInView(player2(), grid()))
+			{
+				e->movementDelay = 0.1;
+				if (e->chase(player2(), grid()))
+					setLevel(L_LOSE);
+			}
+			else
+			{
+				e->movementDelay = 0.25;
+				e->move(grid());
+			}
+		}
 	}
 
 	for (int i = 0; i < 2; ++i)
@@ -374,8 +396,6 @@ void renderGame()
 		renderPlayerVision(player1());
 		renderPlayerVision(player2());
 	}
-	for (int i = 0; i < numberOfEnemies(); ++i)
-		renderEnemyVision(enemies()[i]);
     renderCharacter();  // renders the character into the buffer
 	renderMessage(attrs()[player1()->facingIn(grid())->getState()], player1());
 	renderMessage(attrs()[player2()->facingIn(grid())->getState()], player2());
@@ -384,6 +404,13 @@ void renderGame()
 		renderInventory(player1());
 	if (player2()->openedInventory)
 		renderInventory(player2());
+	for (int i = 0; i < numberOfEnemies(); ++i)
+	{
+		renderEnemyVision(enemies()[i]);
+		//std::vector<Position>* path = enemies()[i]->getPath();
+		//for (int p = 0; p < path->size(); ++p)
+			//renderPoint(path->at(p).coord, ' ', yellow * 17);
+	}
 }
 
 void renderMap()
