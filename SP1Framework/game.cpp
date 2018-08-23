@@ -276,7 +276,7 @@ void playerAction(Player* player)
 	Node* item = player->facingIn(grid());
 
 	// door
-	if (item->getState() == State((char)178, true, true, (Colour)8, (Colour)15) && (currentLevel == L_START || currentLevel == L_LOSE))
+	if (item->getState() == State((char)178, true, false, (Colour)8, (Colour)15) && (currentLevel == L_START || currentLevel == L_LOSE))
 	{
 		setLevel(L_AUNTYS_HOUSE);
 	}

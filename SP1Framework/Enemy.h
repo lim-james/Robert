@@ -32,7 +32,7 @@ public:
 	std::vector<Position>* chasePath;
 
 	Enemy();										// default constructor
-	Enemy(const char, std::string, Colour, Colour);	// comprehensive constructor
+	Enemy(const char, std::string, Colour, Colour);	// comprehe/nsive constructor
 	~Enemy();										// default 
 
 	void generatePath(Position, Position, Grid*);

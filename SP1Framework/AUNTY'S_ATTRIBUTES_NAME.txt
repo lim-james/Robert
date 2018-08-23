@@ -1,8 +1,8 @@
 23
-64 1 1 4 15 ]_toggle_stove
+64 1 0 4 15 ]_toggle_stove
 64 1 0 0 15 ]_off_stove
-178 1 1 8 15 ]_open_door
-176 0 0 8 15 ]_close_door
+178 1 0 8 15 ]_open_door
+176 0 1 8 15 ]_close_door
 70 1 0 5 5 table 
 233 1 1 6 15 chair
 222 1 1 2 15 ]_turn_on_TV
