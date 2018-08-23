@@ -127,6 +127,25 @@ Enemy::~Enemy()
 {
 }
 
+void Enemy::check(Grid* grid)
+{
+	for (int y = 0; y < grid->size.Y; y++)
+	{
+		for (int x = 0; x < grid->size.X; x++)
+		{
+			int radius = grid->nodes[y][x].getState().soundRadius;
+			if (radius != 0)
+			{
+				Position pos({x,y}, left);
+				if (position.distance(pos) <= radius)
+				{
+					targetPosition = pos;
+				}
+			}
+		}
+	}
+}
+
 void Enemy::move(Grid* grid) 
 {
 	if (targetPosition.coord == position.coord)

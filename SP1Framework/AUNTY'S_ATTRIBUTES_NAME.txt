@@ -1,24 +1,24 @@
 23
-64 1 1 4 15 ]_toggle_stove
-64 1 0 0 15 ]_off_stove
-178 1 1 8 15 ]_open_door
-176 0 0 8 15 ]_close_door
-70 1 0 5 5 table 
-233 1 1 6 15 chair
-222 1 1 2 15 ]_turn_on_TV
-222 1 1 0 15 ]_turn_off_TV
-47 1 1 0 15 ]_open_window
-96 0 1 0 15 ]_close_window
-200 1 1 12 15 bed
-201 1 1 12 15 bed
-187 1 1 12 15 bed
-188 1 1 12 15 bed
-205 1 1 12 15 bed
-186 0 1 1 15 stairs
-228 1 0 9 15 fridge
-154 1 1 6 15 ]_flush_toilet
-234 1 1 6 15 ]_toggle_basin
-157 1 0 11 5 ]_get_key
-254 1 0 3 15 ]_hide_in_closet
-254 1 1 10 15 ]_toggle_circuit_breaker
-240 1 1 13 15 ]_unlock_safe
+64 1 0 4 15 5 ]_off_stove
+64 1 0 0 15 0 ]_toggle_stove
+178 1 0 8 15 1 ]_open_door
+176 0 1 8 15 1 ]_close_door
+70 1 0 5 5 0 table 
+233 1 1 6 15 0 chair
+222 1 1 2 15 0 ]_turn_on_TV
+222 1 1 0 15 8 ]_turn_off_TV
+47 1 1 0 15 0 ]_open_window
+96 0 1 0 15 1 ]_close_window
+200 1 1 12 15 0 bed
+201 1 1 12 15 0 bed
+187 1 1 12 15 0 bed
+188 1 1 12 15 0 bed
+205 1 1 12 15 0 bed
+186 0 1 1 15 0 stairs
+228 1 0 9 15 0 fridge
+154 1 1 6 15 0 ]_flush_toilet
+234 1 1 6 15 0 ]_toggle_basin
+157 1 0 11 5 0 ]_get_key
+254 1 0 3 15 0 ]_hide_in_closet
+254 1 1 10 15 0 ]_toggle_circuit_breaker
+240 1 1 13 15 0 ]_unlock_safe
