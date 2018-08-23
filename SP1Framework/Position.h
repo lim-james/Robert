@@ -20,4 +20,6 @@ public:
 	Direction directionOf(Position&);
 };
 
+bool operator==(const COORD &lhs, const COORD &rhs);
+
 #endif

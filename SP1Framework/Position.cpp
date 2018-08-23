@@ -50,3 +50,8 @@ Direction Position::directionOf(Position &p)
 	else
 		return right;
 }
+
+bool operator==(const COORD &lhs, const COORD &rhs)
+{
+	return lhs.X == rhs.X && lhs.Y == rhs.Y;
+}
