@@ -2,11 +2,19 @@
 
 Player::Player() : openedInventory(false)
 {
+	for (int i = 0; i < 9; i++)
+	{
+		items[i] = State();
+	}
 }
 
 Player::Player(const char i, Position p, Colour fc, Colour bc)
-	: Person(i, p, fc, bc), openedInventory(false)
+	: Person(i, p, fc, bc, 0.125), openedInventory(false)
 {
+	for (int i = 0; i < 9; i++)
+	{
+		items[i] = State();
+	}
 }
 
 Player::~Player()
@@ -15,6 +23,15 @@ Player::~Player()
 
 void Player::storeItem(State item)
 {
+	for (int i = 0; i < 8; i++)
+	{
+		if (items[i] == State())
+		{
+			items[i] = item;
+			return;
+		} // else tell user that inventory is full
+	}
+
 	items[itemIndex] = item;
 	itemIndex++;
 }
@@ -25,7 +42,7 @@ bool Player::hasItem(State item)
 	{
 		if (items[i] == item)
 		{
-			items[i] = State((char)32, false, true, (Colour)15, (Colour)15); // removes item from inventory after usage
+			items[i] = State((char)32, false, true, (Colour)15, (Colour)15, 0, false); // removes item from inventory after usage
 			return true;
 		}
 	}

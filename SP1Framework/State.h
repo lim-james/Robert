@@ -11,9 +11,11 @@ public:
 	bool isSeeThrough;
 	Colour foregroundColour;	// colour of icon
 	Colour backgroundColour;
-	
+	int soundRadius;
+	bool playingSound;
+
 	State();
-	State(char, bool, bool, Colour, Colour);
+	State(char, bool, bool, Colour, Colour, int, bool);
 
 	bool operator==(const State &s) const;
 	bool operator<(const State &s) const;

@@ -124,6 +124,8 @@ void getInput( void )
     g_abKeyPressed[K_ESCAPE] = isKeyPressed(VK_ESCAPE);
 	g_abKeyPressed[K_TAB] = isKeyPressed(VK_TAB);
 	g_abKeyPressed[K_BACKSLASH] = isKeyPressed(VK_OEM_5);
+	g_abKeyPressed[K_LSHIFT] = isKeyPressed(VK_LSHIFT);
+	g_abKeyPressed[K_RSHIFT] = isKeyPressed(VK_RSHIFT);
 }
 
 //--------------------------------------------------------------
@@ -201,36 +203,46 @@ void playerKeyEvents()
 	for (int i = 0; i < numberOfEnemies(); ++i)
 	{
 		Enemy *e = enemies()[i];
+		Node* item = e->facingIn(grid());
+
 		if (g_dElapsedTime > e->bounceTime)
 		{
-			e->bounceTime = e->movementDelay + g_dElapsedTime;
 			if (e->isInView(player1(), grid()))
 			{
-				e->movementDelay = 0.1;
+				
 				if (e->chase(player1(), grid()))
 					setLevel(L_LOSE);
-			} 
+			}
 			else if (e->isInView(player2(), grid()))
 			{
-				e->movementDelay = 0.1;
 				if (e->chase(player2(), grid()))
 					setLevel(L_LOSE);
 			}
 			else
 			{
-				e->movementDelay = 0.25;
-				//std::thread m(&Enemy::move, e, grid());
-				//m.detach();
+				e->check(grid());
 				e->move(grid());
+				/*if (e->position.facing == e->targetPosition.coord)
+				{
+					item->toggle();
+				}*/
 			}
+			e->bounceTime = e->getMovementDelay() + g_dElapsedTime;
 		}
 	}
 
 	for (int i = 0; i < 2; ++i)
 	{
 		Player *player = players()[i];
+		player->isSprinting = false;
+		if (g_abKeyPressed[i % 2 ? K_RSHIFT : K_LSHIFT])
+		{
+			player->isSprinting = true;
+		}
+				
 		if (player->bounceTime < g_dElapsedTime)
 		{
+			
 			if (g_abKeyPressed[i % 2 ? K_UP : K_W])
 				movePlayer(player, up);
 
@@ -254,7 +266,9 @@ void playerKeyEvents()
 			
 		}
 		if (player->somethingHappened)
-			player->bounceTime = g_dElapsedTime + 0.125;
+			player->bounceTime = g_dElapsedTime + player->getMovementDelay();
+		
+		
 	}
 
 	if (player1()->somethingHappened || player2()->somethingHappened)
@@ -293,18 +307,18 @@ void playerAction(Player* player)
 	Node* item = player->facingIn(grid());
 
 	// door
-	if (item->getState() == State((char)178, true, true, (Colour)8, (Colour)15) && (currentLevel == L_START || currentLevel == L_LOSE))
+	if (item->getState() == State((char)178, true, false, (Colour)8, (Colour)15, 0, false) && (currentLevel == L_START || currentLevel == L_LOSE))
 	{
 		setLevel(L_AUNTYS_HOUSE);
 	}
 	// key
-	else if (item->getState() == State((char)157, true, false, (Colour)11, (Colour)5) && (currentLevel == L_AUNTYS_HOUSE))
+	else if (item->getState() == State((char)157, true, false, (Colour)11, (Colour)5, 0, false) && (currentLevel == L_AUNTYS_HOUSE))
 	{
 		player->storeItem(item->getState());
 		item->toggle();
 	}
 	// cupboard
-	else if (item->getState() == State((char)254, true, false, (Colour)3, (Colour)15) && (currentLevel == L_AUNTYS_HOUSE))
+	else if (item->getState() == State((char)254, true, false, (Colour)3, (Colour)15, 0, false) && (currentLevel == L_AUNTYS_HOUSE))
 	{
 		player->isHidden = !player->isHidden;
 	}
@@ -314,9 +328,15 @@ void playerAction(Player* player)
 		player->isHidden = !player->isHidden;
 	}
 	// unlock safe
-	else if ((item->getState() == State((char)240, true, true, (Colour)13, (Colour)15)) && player->hasItem(State((char)157, true, false, (Colour)11, (Colour)5)))
+	else if ((item->getState() == State((char)240, true, true, (Colour)13, (Colour)15, 0, false) && player->hasItem(State((char)157, true, false, (Colour)11, (Colour)5, 0, false))))
 	{
 		setLevel(L_START);
+	}
+	else if (attrs()[item->getState()] == "]_open_door" || "]_close_door" || "]_open_window" || "]_close_window")
+	{
+		item->toggle();
+		item->getPlayingSound() = !item->getPlayingSound();
+		item->getPlayingSound() = !item->getPlayingSound();
 	}
 	else
 	{

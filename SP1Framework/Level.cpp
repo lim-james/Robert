@@ -81,11 +81,11 @@ void Level::initAttrs(std::string file)
 	ifs >> count;
 	for (int i = 0; i < count; ++i)
 	{
-		int icon, foregroundColour, backgroundColour;
-		bool isBlocked, isSeeThrough;
+		int icon, foregroundColour, backgroundColour, soundRadius;
+		bool isBlocked, isSeeThrough, playingSound;
 		std::string value;
-		ifs >> icon >> isBlocked >> isSeeThrough >> foregroundColour >> backgroundColour >> value;
-		State key((char)icon, isBlocked, isSeeThrough, (Colour)foregroundColour, (Colour)backgroundColour);
+		ifs >> icon >> isBlocked >> isSeeThrough >> foregroundColour >> backgroundColour >> soundRadius >> playingSound  >> value;
+		State key((char)icon, isBlocked, isSeeThrough, (Colour)foregroundColour, (Colour)backgroundColour, soundRadius, playingSound);
 
 		std::replace(value.begin(), value.end(), '_', ' ');
 		attrs[key] = value;

@@ -5,13 +5,18 @@ Person::Person()
 {
 }
 
-Person::Person(const char i, Position p, Colour fc, Colour bc)
-	: icon(i), position(p), foregroundColor(fc), backgroundColor(bc), isHidden(false)
+Person::Person(const char i, Position p, Colour fc, Colour bc, float ms)
+	: icon(i), position(p), foregroundColor(fc), backgroundColor(bc), movementDelay(ms), isHidden(false)
 {
 }
 
 Person::~Person()
 {
+}
+
+float Person::getMovementDelay()
+{
+	return isSprinting ? movementDelay / 3.0 : movementDelay;
 }
 
 //--------------------------------------------------------------

@@ -26,18 +26,18 @@ Grid::Grid(std::string attr, std::string file)
 		bool hasTwoStates;
 		State onState, offState;
 		onState = offState = State();
-		bool isBlocked, seen, toggled, isPickable, isSeeThrough;
-		int onIcon, onForegroundColour, onBackgroundColour;
+		bool isBlocked, seen, toggled, isPickable, isSeeThrough, playingSound;
+		int onIcon, onForegroundColour, onBackgroundColour, soundRadius;
 		int offIcon, offForegroundColour, offBackgroundColour;
 		
 		ifs >> item >> hasTwoStates
-			>> onIcon >> onState.isBlocked >> onState.isSeeThrough >> onForegroundColour >> onBackgroundColour;
+			>> onIcon >> onState.isBlocked >> onState.isSeeThrough >> onForegroundColour >> onBackgroundColour >> onState.soundRadius >> onState.playingSound;
 		onState.icon = (char)onIcon;
 		onState.foregroundColour = (Colour)onForegroundColour;
 		onState.backgroundColour = (Colour)onBackgroundColour;
 		if (hasTwoStates)
 		{
-			ifs >> offIcon >> offState.isBlocked >> offState.isSeeThrough >> offForegroundColour >> offBackgroundColour;
+			ifs >> offIcon >> offState.isBlocked >> offState.isSeeThrough >> offForegroundColour >> offBackgroundColour >> offState.soundRadius >> offState.playingSound;
 			offState.icon = (char)offIcon;
 			offState.foregroundColour = (Colour)offForegroundColour;
 			offState.backgroundColour = (Colour)offBackgroundColour;
