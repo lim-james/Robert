@@ -537,7 +537,7 @@ void renderCharacter(Player* player)
 	{
 		pos.X += splitScreen.paddingX;
 		otherPos.X += splitScreen.paddingX;
-	}
+	}	
 
 	renderPoint(pos, player->getIcon(), player->getAttribute(), player);
 	if (otherPos.X >= splitScreen.paddingX && otherPos.X < splitScreen.width - splitScreen.paddingX &&

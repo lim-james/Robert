@@ -28,8 +28,8 @@ public:
 	double movementDelay;
 	E_STATE state;
 	Position *positions, targetPosition;
-	std::vector<Position>* standardPath;
-	std::vector<Position>* chasePath;
+	std::vector<Position> standardPath;
+	std::vector<Position> chasePath;
 
 	Enemy();										// default constructor
 	Enemy(const char, std::string, Colour, Colour);	// comprehensive constructor
@@ -39,7 +39,7 @@ public:
 
 	void move(Grid*);
 	bool chase(Person*, Grid*);
-	std::vector<Position>* getPath();
+	std::vector<Position>& getPath();
 };
 
 #endif

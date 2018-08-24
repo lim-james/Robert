@@ -67,14 +67,14 @@ void renderInventoryPoint1(COORD, char, WORD);	// renders inventory for player 1
 void renderInventoryPoint2(COORD, char, WORD);	// renders inventory for player 2
 void clearScreen();         // clears the current screen and draw from scratch 
 void renderSplashScreen();  // renders the splash screen
-void renderGame();          // renders the game stuff
-void renderMap();           // renders the map to the buffer first
-void renderCharacter();// renders the character into the buffer
+void renderGame(Player*);   // renders the game stuff
+void renderMap(Player*);           // renders the map to the buffer first
+void renderCharacter(Player*);// renders the character into the buffer
 void renderEnemyVision(Enemy*);	// renders enemy's vision
 void renderEnemyVisionPoint(COORD, short, short);	// renders enemy's view points
 void renderPlayerVision(Player*);	// renders enemy's vision
 void renderPlayerVisionPoint(float, float, float, float);	// renders enemy's view points
-void renderPoint(COORD, char, WORD);
+void renderPoint(COORD, char, WORD, Player*);
 void renderMessage(std::string, Player*); // renders a short message for player
 void renderFramerate();     // renders debug information, frame rate, elapsed time, etc
 void renderToScreen();      // dump the contents of the buffer to the screen, one frame worth of game

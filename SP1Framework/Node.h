@@ -16,6 +16,7 @@ public:
 	~Node();									// default deconstructor
 
 	State getState();
+	State getOtherState();
 	char getIcon();
 	bool getIsBlocked();
 	bool getIsSeeThrough();

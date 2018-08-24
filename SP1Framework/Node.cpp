@@ -21,6 +21,11 @@ State Node::getState()
 	return toggled ? onState : offState;
 }
 
+State Node::getOtherState()
+{
+	return toggled ? offState : onState;
+}
+
 char Node::getIcon()
 {
 	return getState().icon;

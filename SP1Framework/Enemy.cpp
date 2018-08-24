@@ -8,29 +8,35 @@ bool Enemy::A_STAR_NODE::operator==(A_STAR_NODE const&rhs) const
 
 void Enemy::generatePath(Position start, Position goal, Grid* grid)
 {
-	std::deque<A_STAR_NODE*> OPEN;
-	std::deque<A_STAR_NODE*> CLOSED;
+	std::vector<A_STAR_NODE*> OPEN;
+	std::vector<A_STAR_NODE*> CLOSED;
 
 	A_STAR_NODE* startNode = new A_STAR_NODE;
 	startNode->pos = start;
 	startNode->parent = startNode;
 	startNode->g = 0;
-	startNode->h = abs(goal.coord.Y - startNode->pos.coord.Y) + abs(goal.coord.X - startNode->pos.coord.X);
+	startNode->h = pow(goal.distance(startNode->pos), 2.0); //abs(goal.coord.Y - startNode->pos.coord.Y) + abs(goal.coord.X - startNode->pos.coord.X);
 	startNode->f = startNode->g + startNode->h;
 
 	OPEN.push_back(startNode);
 
 	int x[4] = { 0, 0, 1, -1 };
 	int y[4] = { 1, -1, 0, 0 };
+	Direction dir[4] = { down, up, right, left };
 
-	while (true)
+	while (!OPEN.empty())
 	{
-		std::sort(OPEN.begin(), OPEN.end(), [](A_STAR_NODE *lhs, A_STAR_NODE *rhs)
-		{
-			return lhs->f < rhs->f;
-		});
+		int index = 0;
 		A_STAR_NODE* curr = OPEN[0];
-		OPEN.pop_front();
+		for (int i = 1; i < OPEN.size(); ++i)
+		{
+			if (OPEN[i]->f < curr->f || (OPEN[i]->f == curr->f && OPEN[i]->h < curr->h))
+			{
+				curr = OPEN[i];
+				index = i;
+			} 
+		}
+		OPEN.erase(OPEN.begin() + index);
 		CLOSED.push_back(curr);
 
 		if (curr->pos.coord == goal.coord)
@@ -42,23 +48,34 @@ void Enemy::generatePath(Position start, Position goal, Grid* grid)
 			neighbour->pos = curr->pos;
 			neighbour->pos.coord.X += x[i];
 			neighbour->pos.coord.Y += y[i];
+			neighbour->pos.facing = dir[i];
 
 			neighbour->g = curr->g + 1;
 			neighbour->h = abs(goal.coord.Y - neighbour->pos.coord.Y) + abs(goal.coord.X - neighbour->pos.coord.X);
 			neighbour->f = neighbour->g + neighbour->h;
 			neighbour->parent = curr;
 
-			if (curr->pos.coord.Y <= 0 || curr->pos.coord.Y >= grid->size.Y ||
-				curr->pos.coord.X <= 0 || curr->pos.coord.X >= grid->size.X ||
-				grid->nodes[neighbour->pos.coord.Y][neighbour->pos.coord.X].getIsBlocked() ||
+			COORD &c = neighbour->pos.coord;
+
+			if (c.X < 0 || c.X >= grid->size.X ||
+				c.Y < 0 || c.Y >= grid->size.Y ||
+				(grid->nodes[c.Y][c.X].getIsBlocked() &&
+				grid->nodes[c.Y][c.X].getOtherState().isBlocked) || 
 				std::find(CLOSED.begin(), CLOSED.end(), neighbour) != CLOSED.end())
 				continue;
 
-
-			if (std::find(OPEN.begin(), OPEN.end(), neighbour) != OPEN.end())
+			int index = OPEN.size();
+			for (int n = 0; n < OPEN.size(); ++n)
 			{
-				auto node = std::find(OPEN.begin(), OPEN.end(), neighbour);
-				unsigned int index = std::distance(OPEN.begin(), node);
+				if (OPEN[n]->pos.coord == neighbour->pos.coord)
+				{
+					index = n;
+					break;
+				}
+			}
+
+			if (index != OPEN.size())
+			{
 				if (neighbour->g < OPEN[index]->g)
 				{
 					OPEN[index] = neighbour;
@@ -72,12 +89,13 @@ void Enemy::generatePath(Position start, Position goal, Grid* grid)
 	}
 
 	A_STAR_NODE *endNode = CLOSED[CLOSED.size() - 1];
-	getPath()->clear();
+	getPath().clear();
 	while (!(endNode->pos.coord == endNode->parent->pos.coord))
 	{
-		getPath()->push_back(endNode->pos);
+		getPath().push_back(endNode->pos);
 		endNode = endNode->parent;
 	}
+	std::reverse(getPath().begin(), getPath().end());
 }
 
 Enemy::Enemy()
@@ -112,7 +130,7 @@ Enemy::Enemy(const char i, std::string file, Colour fc, Colour bc)
 				break;
 		}
 	}
-	nextPosition = 1;
+	nextPosition = 0;
 	nextIndex = 1;
 
 	position = positions[0];
@@ -137,26 +155,25 @@ void Enemy::move(Grid* grid)
 			if (nextIndex < numberOfPositions - 1)
 			{
 				nextIndex++;
-				nextPosition = 1;
+				nextPosition = 0;
 			}
 			else
 			{
 				nextIndex = 0;
 			}
-			//generatePath(position, positions[nextIndex], grid);
+			generatePath(position, positions[nextIndex], grid);
 			return;
 		}
 		else
 		{
 			targetPosition = positions[nextIndex];
-			//generatePath(position, targetPosition, grid);
+			nextPosition = 0;
+			generatePath(position, targetPosition, grid);
 			return;
 		}
 	}
 
-	position.facing = position.directionOf(targetPosition);//getPath()->at(nextPosition));
-
-	Person::move();
+	position = getPath()[nextPosition++];
 }
 
 bool Enemy::chase(Person* p, Grid* grid)
@@ -164,14 +181,16 @@ bool Enemy::chase(Person* p, Grid* grid)
 	state = chasing;
 	if (!(targetPosition.coord == p->position.coord))
 	{
+		nextPosition = 0;
 		targetPosition = p->position;
-		//generatePath(position, targetPosition, grid);
+		generatePath(position, targetPosition, grid);
 	}
 	move(grid);
+	position.facing = position.directionOf(p->position);
 	return position.coord == p->position.coord;
 }
 
-std::vector<Position>* Enemy::getPath()
+std::vector<Position>& Enemy::getPath()
 {
 	return state == normal ? standardPath : chasePath;
 }

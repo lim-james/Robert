@@ -145,5 +145,17 @@
     <Text Include="LOSESCREEN_LEVEL.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="VILLAGE_1ST_STOREY.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="VILLAGE_1ST_LEVEL.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="VILLAGE_PLAYERS.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="VILLAGE_GUARD_1.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

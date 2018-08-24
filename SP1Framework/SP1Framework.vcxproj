@@ -123,6 +123,10 @@
     <Text Include="SPLASHSCREEN_PLAYERS.txt" />
     <Text Include="SPLASHSCREEN_STOREY.txt" />
     <Text Include="Test_Map.txt" />
+    <Text Include="VILLAGE_1ST_LEVEL.txt" />
+    <Text Include="VILLAGE_1ST_STOREY.txt" />
+    <Text Include="VILLAGE_GUARD_1.txt" />
+    <Text Include="VILLAGE_PLAYERS.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
