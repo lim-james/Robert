@@ -14,11 +14,14 @@ public:
 	Colour backgroundColor;		// colour of background
 	double bounceTime = 0;
 	bool isHidden;
+	float movementDelay;
+	bool isSprinting;
 
 	Person();										// default constructor
-	Person(const char, Position, Colour, Colour);		// comprehensive constructor
+	Person(const char, Position, Colour, Colour, float);		// comprehensive constructor
 	~Person();										// default deconstructor
 
+	float getMovementDelay();
 	char getIcon();
 	WORD getAttribute();							// returns attribute
 	bool canMoveIn(Grid*);							// moves player in a specified direction

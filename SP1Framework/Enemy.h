@@ -25,7 +25,6 @@ class Enemy : public Person
 
 public:
 	int nextIndex, nextPosition, numberOfPositions;
-	double movementDelay;
 	E_STATE state;
 	Position *positions, targetPosition;
 	std::vector<Position>* standardPath;
@@ -37,6 +36,7 @@ public:
 
 	void generatePath(Position, Position, Grid*);
 
+	float getMovementDelay();
 	void check(Grid*);
 	void move(Grid*);
 	bool chase(Person*, Grid*);

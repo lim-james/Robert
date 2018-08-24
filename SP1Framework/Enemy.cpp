@@ -6,6 +6,53 @@ bool Enemy::A_STAR_NODE::operator==(A_STAR_NODE const&rhs) const
 	return pos.coord == rhs.pos.coord;
 }
 
+Enemy::Enemy()
+{
+	state = normal;
+}
+
+Enemy::Enemy(const char i, std::string file, Colour fc, Colour bc)
+{
+	state = normal;
+	std::ifstream ifs(file);
+	ifs >> numberOfPositions >> movementDelay;
+	positions = new Position[numberOfPositions];
+	for (int p = 0; p < numberOfPositions; ++p) {
+		ifs >> positions[p].coord.X >> positions[p].coord.Y;
+		char dir;
+		ifs >> dir;
+		switch (dir)
+		{
+			case 'U':
+				positions[p].facing = up;
+				break;
+			case 'D':
+				positions[p].facing = down;
+				break;
+			case 'L':
+				positions[p].facing = left;
+				break;
+			case 'R':
+			default:
+				positions[p].facing = right;
+				break;
+		}
+	}
+	nextPosition = 1;
+	nextIndex = 1;
+
+	position = positions[0];
+	targetPosition = positions[nextIndex];
+
+	icon = i;
+	foregroundColor = fc;
+	backgroundColor = bc;
+}
+
+Enemy::~Enemy()
+{
+}
+
 void Enemy::generatePath(Position start, Position goal, Grid* grid)
 {
 	std::deque<A_STAR_NODE*> OPEN;
@@ -80,51 +127,9 @@ void Enemy::generatePath(Position start, Position goal, Grid* grid)
 	}
 }
 
-Enemy::Enemy()
+float Enemy::getMovementDelay()
 {
-	state = normal;
-}
-
-Enemy::Enemy(const char i, std::string file, Colour fc, Colour bc)
-{
-	state = normal;
-	std::ifstream ifs(file);
-	ifs >> numberOfPositions >> movementDelay;
-	positions = new Position[numberOfPositions];
-	for (int p = 0; p < numberOfPositions; ++p) {
-		ifs >> positions[p].coord.X >> positions[p].coord.Y;
-		char dir;
-		ifs >> dir;
-		switch (dir)
-		{
-			case 'U':
-				positions[p].facing = up;
-				break;
-			case 'D':
-				positions[p].facing = down;
-				break;
-			case 'L':
-				positions[p].facing = left;
-				break;
-			case 'R':
-			default:
-				positions[p].facing = right;
-				break;
-		}
-	}
-	nextPosition = 1;
-	nextIndex = 1;
-
-	position = positions[0];
-	targetPosition = positions[nextIndex];
-
-	icon = i;
-	foregroundColor = fc;
-	backgroundColor = bc;
-}
-
-Enemy::~Enemy()
-{
+	return state == chasing ? movementDelay / 2.0 : movementDelay;
 }
 
 void Enemy::check(Grid* grid)
@@ -167,6 +172,7 @@ void Enemy::move(Grid* grid)
 		}
 		else
 		{
+			state = normal;
 			targetPosition = positions[nextIndex];
 			//generatePath(position, targetPosition, grid);
 			return;

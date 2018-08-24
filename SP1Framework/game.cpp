@@ -112,6 +112,8 @@ void getInput( void )
     g_abKeyPressed[K_ESCAPE] = isKeyPressed(VK_ESCAPE);
 	g_abKeyPressed[K_TAB] = isKeyPressed(VK_TAB);
 	g_abKeyPressed[K_BACKSLASH] = isKeyPressed(VK_OEM_5);
+	g_abKeyPressed[K_LSHIFT] = isKeyPressed(VK_LSHIFT);
+	g_abKeyPressed[K_RSHIFT] = isKeyPressed(VK_RSHIFT);
 }
 
 //--------------------------------------------------------------
@@ -188,33 +190,38 @@ void playerKeyEvents()
 		Enemy *e = enemies()[i];
 		if (g_dElapsedTime > e->bounceTime)
 		{
-			e->bounceTime = e->movementDelay + g_dElapsedTime;
 			if (e->isInView(player1(), grid()))
 			{
-				e->movementDelay = 0.1;
+				
 				if (e->chase(player1(), grid()))
 					setLevel(L_LOSE);
-			} 
+			}
 			else if (e->isInView(player2(), grid()))
 			{
-				e->movementDelay = 0.1;
 				if (e->chase(player2(), grid()))
 					setLevel(L_LOSE);
 			}
 			else
 			{
 				e->check(grid());
-				e->movementDelay = 0.25;
 				e->move(grid());
 			}
+			e->bounceTime = e->getMovementDelay() + g_dElapsedTime;
 		}
 	}
 
 	for (int i = 0; i < 2; ++i)
 	{
 		Player *player = players()[i];
+		player->isSprinting = false;
+		if (g_abKeyPressed[i % 2 ? K_RSHIFT : K_LSHIFT])
+		{
+			player->isSprinting = true;
+		}
+				
 		if (player->bounceTime < g_dElapsedTime)
 		{
+			
 			if (g_abKeyPressed[i % 2 ? K_UP : K_W])
 				movePlayer(player, up);
 
@@ -238,7 +245,9 @@ void playerKeyEvents()
 			
 		}
 		if (player->somethingHappened)
-			player->bounceTime = g_dElapsedTime + 0.125;
+			player->bounceTime = g_dElapsedTime + player->getMovementDelay();
+		
+		
 	}
 
 	if (player1()->somethingHappened || player2()->somethingHappened)
