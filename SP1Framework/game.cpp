@@ -186,6 +186,8 @@ void playerKeyEvents()
 	for (int i = 0; i < numberOfEnemies(); ++i)
 	{
 		Enemy *e = enemies()[i];
+		Node* item = e->facingIn(grid());
+
 		if (g_dElapsedTime > e->bounceTime)
 		{
 			e->bounceTime = e->movementDelay + g_dElapsedTime;
@@ -206,6 +208,10 @@ void playerKeyEvents()
 				e->check(grid());
 				e->movementDelay = 0.25;
 				e->move(grid());
+				/*if (e->position.facing == e->targetPosition.coord)
+				{
+					item->toggle();
+				}*/
 			}
 		}
 	}
@@ -277,18 +283,18 @@ void playerAction(Player* player)
 	Node* item = player->facingIn(grid());
 
 	// door
-	if (item->getState() == State((char)178, true, false, (Colour)8, (Colour)15, 1) && (currentLevel == L_START || currentLevel == L_LOSE))
+	if (item->getState() == State((char)178, true, false, (Colour)8, (Colour)15, 0, false) && (currentLevel == L_START || currentLevel == L_LOSE))
 	{
 		setLevel(L_AUNTYS_HOUSE);
 	}
 	// key
-	else if (item->getState() == State((char)157, true, false, (Colour)11, (Colour)5, 0) && (currentLevel == L_AUNTYS_HOUSE))
+	else if (item->getState() == State((char)157, true, false, (Colour)11, (Colour)5, 0, false) && (currentLevel == L_AUNTYS_HOUSE))
 	{
 		player->storeItem(item->getState());
 		item->toggle();
 	}
 	// cupboard
-	else if (item->getState() == State((char)254, true, false, (Colour)3, (Colour)15, 0) && (currentLevel == L_AUNTYS_HOUSE))
+	else if (item->getState() == State((char)254, true, false, (Colour)3, (Colour)15, 0, false) && (currentLevel == L_AUNTYS_HOUSE))
 	{
 		player->isHidden = !player->isHidden;
 	}
@@ -298,9 +304,15 @@ void playerAction(Player* player)
 		player->isHidden = !player->isHidden;
 	}
 	// unlock safe
-	else if ((item->getState() == State((char)240, true, true, (Colour)13, (Colour)15, (int)0)) && player->hasItem(State((char)157, true, false, (Colour)11, (Colour)5, (int)0)))
+	else if ((item->getState() == State((char)240, true, true, (Colour)13, (Colour)15, 0, false) && player->hasItem(State((char)157, true, false, (Colour)11, (Colour)5, 0, false))))
 	{
 		setLevel(L_START);
+	}
+	else if (attrs()[item->getState()] == "]_open_door" || "]_close_door" || "]_open_window" || "]_close_window")
+	{
+		item->toggle();
+		item->getPlayingSound() = !item->getPlayingSound();
+		item->getPlayingSound() = !item->getPlayingSound();
 	}
 	else
 	{

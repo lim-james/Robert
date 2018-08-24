@@ -134,10 +134,11 @@ void Enemy::check(Grid* grid)
 		for (SHORT x = 0; x < grid->size.X; x++)
 		{
 			int radius = grid->nodes[y][x].getState().soundRadius;
+			bool playingSound = grid->nodes[y][x].getPlayingSound();
 			if (radius != 0)
 			{
 				Position pos({x,y}, left);
-				if (position.distance(pos) <= radius)
+				if (position.distance(pos) <= radius && playingSound == 1)
 				{
 					targetPosition = pos;
 				}

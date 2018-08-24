@@ -16,25 +16,31 @@ Node::~Node()
 {
 }
 
-State Node::getState()
+State &Node::getState()
 {
 	return toggled ? onState : offState;
 }
 
-char Node::getIcon()
+char &Node::getIcon()
 {
 	return getState().icon;
 }
 
-bool Node::getIsBlocked()
+bool &Node::getIsBlocked()
 {
 	return getState().isBlocked;
 }
 
-bool Node::getIsSeeThrough()
+bool &Node::getIsSeeThrough()
 {
 	return getState().isSeeThrough;
 }
+
+bool &Node::getPlayingSound()
+{
+	return getState().playingSound;
+}
+
 //--------------------------------------------------------------
 // Purpose  : When called it returns both the foreground and
 //			  background colours in one attribute
