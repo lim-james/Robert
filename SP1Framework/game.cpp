@@ -392,7 +392,6 @@ void renderInventoryPoint1(COORD c, char i, WORD attr)
 	unsigned int offsetX = (g_Console.getConsoleSize().X - grid()->size.X - 14) / 4;
 	unsigned int offsetY = (g_Console.getConsoleSize().Y - 7) / 2;
 
-
 	c.X += offsetX;
 	c.Y += offsetY;
 
@@ -403,6 +402,7 @@ void renderInventoryPoint2(COORD c, char i, WORD attr)
 {
 	unsigned int offsetX = g_Console.getConsoleSize().X - ((g_Console.getConsoleSize().X - grid()->size.X - 14) / 4) - 7;
 	unsigned int offsetY = (g_Console.getConsoleSize().Y - 7) / 2;
+
 	c.X += offsetX;
 	c.Y += offsetY;
 
@@ -567,15 +567,16 @@ void renderEnemyVision(Enemy* e, Player* player)
 		x2 = +1; y2 = -1;
 		break;
 	}
-	renderEnemyVisionPoint(e->position.coord, x1, y1, player);
-	renderEnemyVisionPoint(e->position.coord, x2, y2, player);
+	renderEnemyVisionPoint(e, e->position.coord, x1, y1, player);
+	renderEnemyVisionPoint(e, e->position.coord, x2, y2, player);
 }
 
-void renderEnemyVisionPoint(COORD c, short x, short y, Player* player)
+void renderEnemyVisionPoint(Enemy* e, COORD c, short x, short y, Player* player)
 {
 	c.Y += y;
 	c.X += x;
-	if (c.X < 0 || c.X >= grid()->size.X ||
+	if (distance(e->position.coord, c) > e->getViewRange() ||
+		c.X < 0 || c.X >= grid()->size.X ||
 		c.Y < 0 || c.Y >= grid()->size.Y ||
 		!grid()->nodes[c.Y][c.X].getIsSeeThrough() ||
 		!grid()->nodes[c.Y][c.X].seen)
@@ -583,7 +584,7 @@ void renderEnemyVisionPoint(COORD c, short x, short y, Player* player)
 
 	renderMapPoint(c, ' ', lightGrey * 17, player);
 
-	renderEnemyVisionPoint(c, x, y, player);
+	renderEnemyVisionPoint(e, c, x, y, player);
 }
 
 void renderPlayerVision(Player* p)
@@ -761,4 +762,9 @@ void checkGamestate()
 			setLevel(L_LOSE);
 		}
 	}
+}
+
+int distance(COORD a, COORD b)
+{
+	return sqrt(pow(a.X - b.X, 2.0) + pow(a.Y - b.Y, 2.0));
 }

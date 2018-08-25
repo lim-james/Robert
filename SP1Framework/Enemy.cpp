@@ -229,7 +229,7 @@ int Enemy::getViewRange()
 	case normal:
 		return viewRange;
 	case chasing:
-		return INFINITE;
+		return viewRange * 5;
 	}
 }
 

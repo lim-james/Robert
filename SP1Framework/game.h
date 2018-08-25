@@ -81,7 +81,7 @@ void renderEnemies(Player*);// renders the character into the buffer
 void renderPerson(Person*, Player*);
 
 void renderEnemyVision(Enemy*, Player*);	// renders enemy's vision
-void renderEnemyVisionPoint(COORD, short, short, Player*);	// renders enemy's view points
+void renderEnemyVisionPoint(Enemy*, COORD, short, short, Player*);	// renders enemy's view points
 
 void renderPlayerVision(Player*);	// renders enemy's vision
 void renderPlayerVisionPoint(Player*, float, float, float, float);	// renders enemy's view points
@@ -96,5 +96,7 @@ void renderFramerate();     // renders debug information, frame rate, elapsed ti
 void renderToScreen();      // dump the contents of the buffer to the screen, one frame worth of game
 
 void checkGamestate();
+
+int distance(COORD, COORD);
 
 #endif // _GAME_H
