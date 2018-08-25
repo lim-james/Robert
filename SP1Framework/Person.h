@@ -28,7 +28,6 @@ public:
 	void move();									// moves player in a specified direction
 	Node* facingIn(Grid*);
 	Node* standingOn(Grid*);
-	bool isInView(Person*, Grid*);
 };
 
 #endif

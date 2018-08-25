@@ -207,13 +207,13 @@ void playerKeyEvents()
 
 		if (g_dElapsedTime > e->bounceTime)
 		{
-			if (e->isInView(player1(), grid()))
+			if (e->isInView(player1(), grid(), e->enemyRange, e->state))
 			{
 				
 				if (e->chase(player1(), grid()))
 					setLevel(L_LOSE);
 			}
-			else if (e->isInView(player2(), grid()))
+			else if (e->isInView(player2(), grid(), e->enemyRange, e->state))
 			{
 				if (e->chase(player2(), grid()))
 					setLevel(L_LOSE);
@@ -725,7 +725,7 @@ void checkGamestate()
 {
 	for (int i = 0; i < numberOfEnemies(); ++i)
 	{
-		if (enemies()[i]->isInView(player1(), grid()) || enemies()[i]->isInView(player2(), grid()))
+		if (enemies()[i]->isInView(player1(), grid(), enemies()[i]->enemyRange, enemies()[i]->state) || enemies()[i]->isInView(player2(), grid(), enemies()[i]->enemyRange, enemies()[i]->state))
 		{
 			Sleep(1000);
 			setLevel(L_LOSE);
