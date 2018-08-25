@@ -40,7 +40,9 @@ public:
 	void check(Grid*);
 	void move(Grid*);
 	bool chase(Person*, Grid*);
+	int enemyRange;
 	std::vector<Position>& getPath();
+	bool isInView(Person*, Grid*, int, E_STATE);
 };
 
 #endif
