@@ -29,6 +29,7 @@ public:
 	Position *positions, targetPosition;
 	std::vector<Position> standardPath;
 	std::vector<Position> chasePath;
+	int viewRange;
 
 	Enemy();										// default constructor
 	Enemy(const char, std::string, Colour, Colour);	// comprehe/nsive constructor
@@ -40,9 +41,9 @@ public:
 	void check(Grid*);
 	void move(Grid*);
 	bool chase(Person*, Grid*);
-	int enemyRange;
 	std::vector<Position>& getPath();
-	bool isInView(Person*, Grid*, int, E_STATE);
+	int getViewRange();
+	bool isInView(Person*, Grid*);
 };
 
 #endif

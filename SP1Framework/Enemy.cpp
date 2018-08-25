@@ -15,7 +15,7 @@ Enemy::Enemy(const char i, std::string file, Colour fc, Colour bc)
 {
 	state = normal;
 	std::ifstream ifs(file);
-	ifs >> enemyRange;
+	ifs >> viewRange;
 	ifs >> numberOfPositions >> movementDelay;
 	positions = new Position[numberOfPositions];
 	for (int p = 0; p < numberOfPositions; ++p) {
@@ -222,7 +222,18 @@ std::vector<Position>& Enemy::getPath()
 	return state == normal ? standardPath : chasePath;
 }
 
-bool Enemy::isInView(Person* p, Grid* grid, int enemyRange, E_STATE state)
+int Enemy::getViewRange()
+{
+	switch (state)
+	{
+	case normal:
+		return viewRange;
+	case chasing:
+		return INFINITE;
+	}
+}
+
+bool Enemy::isInView(Person* p, Grid* grid)
 {
 	if (position.directionOf(p->position) == position.facing)
 	{
@@ -232,27 +243,7 @@ bool Enemy::isInView(Person* p, Grid* grid, int enemyRange, E_STATE state)
 		double m = yDiff / xDiff;
 		double c = m * -position.coord.X + position.coord.Y;
 
-		if (state == normal)
-		{
-			if (d <= enemyRange)
-			{
-				for (double i = 0; i < d; ++i) {
-					double x, y;
-					if ((int)xDiff == 0) {
-						y = i / d * yDiff + position.coord.Y;
-						x = position.coord.X;
-					}
-					else
-					{
-						x = xDiff * i / d + position.coord.X;
-						y = m * x + c;
-					}
-					if (grid->nodes[(int)y][(int)x].getIsSeeThrough())
-						state = chasing;
-				}
-			}
-		}
-		if (state == chasing)
+		if (d <= getViewRange())
 		{
 			for (double i = 0; i < d; ++i) {
 				double x, y;
