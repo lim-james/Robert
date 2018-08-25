@@ -1,7 +1,6 @@
 #include "Grid.h"
 
-Grid::Grid()
-	: size(COORD())
+Grid::Grid() : size(COORD())
 {
 	this->nodes = new Node*[this->size.Y];
 	for (int r = 0; r < this->size.Y; ++r)

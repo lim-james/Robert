@@ -19,18 +19,22 @@ bool    g_abKeyPressed[K_COUNT];
 EGAMESTATES g_eGameState = S_SPLASHSCREEN;
 double  g_dBounceTime; // this is to prevent key bouncing, so we won't trigger keypresses more than once
 
+#define WIDTH 120
+#define HEIGHT 30
+
 // Console object
-Console g_Console(80, 40, "ROBERT");
+Console g_Console(WIDTH, HEIGHT, "ROBERT");
 
 const struct SplitScreen {
-	static const int width = 40;
-	static const int height = 40;
+	static const int width = WIDTH / 2;
+	static const int height = HEIGHT;
 
 	static const int paddingX = 1;
-	static const int paddingY = 2;
+	static const int paddingY = 7;
 
 	static const int centerX() { return width / 2; }
 	static const int centerY() { return height / 2; }
+	static const int diagonal() { return sqrt(pow(centerX(), 2.0) + pow(centerY(), 2.0)); }
 } splitScreen;
 
 std::string levelFiles[L_COUNT] = {
@@ -80,7 +84,7 @@ void init( void )
     g_eGameState = S_SPLASHSCREEN;
 
     // sets the width, height and the font name to use in the console
-	g_Console.setConsoleFont(0, 25, L"Raster Fonts");
+	g_Console.setConsoleFont(0, 25, L"Consolas");
 }
 
 //--------------------------------------------------------------
@@ -427,32 +431,37 @@ void renderSplashScreen()  // renders the splash screen
 
 void renderGame(Player* player)
 {
+	
 	if (currentLevel != L_START && currentLevel != L_LOSE)
 	{
+		for (int r = 0; r < grid()->size.Y; ++r)
+			for (int c = 0; c < grid()->size.X; ++c)
+				grid()->nodes[r][c].seen = false;
 		renderPlayerVision(player1());
 		renderPlayerVision(player2());
 	}
 	renderMap(player);        // renders the map to the buffer first
-	//renderMessage(attrs()[player1()->facingIn(grid())->getState()], player1());
-	//renderMessage(attrs()[player2()->facingIn(grid())->getState()], player2());
+	renderMessage(attrs()[player1()->facingIn(grid())->getState()], player1());
+	renderMessage(attrs()[player2()->facingIn(grid())->getState()], player2());
 
 	//if (player1()->openedInventory)
 	//	renderInventory(player1());
 	//if (player2()->openedInventory)
 	//	renderInventory(player2());
 
-	//for (int i = 0; i < numberOfEnemies(); ++i)
-	//{
-	//	renderEnemyVision(enemies()[i]);
-	//	std::vector<Position> &path = enemies()[i]->getPath();
-	//	for (int p = 0; p < path.size(); ++p)
-	//	{
-	//		renderPoint(path[p].coord, ' ', yellow * 17, player1());
-	//		renderPoint(path[p].coord, ' ', yellow * 17, player2());
-	//	}
-	//}
+	for (int i = 0; i < numberOfEnemies(); ++i)
+	{
+		renderEnemyVision(enemies()[i], player);
+		//std::vector<position> &path = enemies()[i]->getpath();
+		//for (int p = 0; p < path.size(); ++p)
+		//{
+			//renderpoint(path[p].coord, ' ', yellow * 17, player1());
+			//renderpoint(path[p].coord, ' ', yellow * 17, player2());
+		//}
+	}
 
-    renderCharacter(player);  // renders the character into the buffer
+    renderPlayers(player);  // renders the character into the buffer
+	renderEnemies(player);
 }
 
 void renderMap(Player* player)
@@ -506,95 +515,37 @@ void renderMap(Player* player)
 				if (n.seen)
 					renderPoint(coord, n.getIcon(), n.getAttribute(), player);
 			}
+			
 		}
 	}
 	
 }
 
-void renderCharacter(Player* player)
+void renderPlayers(Player* player)
 {
-	int sizeX = splitScreen.centerX();
-	int sizeY = splitScreen.centerY();
-
 	Player* other = player == player1() ? player2() : player1();
 
-	COORD pos = player->position.coord;
-	COORD otherPos = other->position.coord;
+	renderPerson(other, player);
+	renderPerson(player, player);
+}
 
-	if (pos.Y > sizeY - splitScreen.paddingY)
-	{
-		if (grid()->size.Y - pos.Y < sizeY - splitScreen.paddingY)
-		{
-			pos.Y = splitScreen.height - grid()->size.Y + pos.Y - splitScreen.paddingY;
-		 	otherPos.Y = splitScreen.height - grid()->size.Y + otherPos.Y - splitScreen.paddingY;
-		}
-		else
-		{
-			otherPos.Y -= pos.Y - sizeY;
-			pos.Y = splitScreen.centerY();
-		}
-	}  
-	else
-	{
-		pos.Y += splitScreen.paddingY;
-		otherPos.Y += splitScreen.paddingY;
-	}
-
-	if (pos.X > sizeX - splitScreen.paddingX)
-	{
-		if (grid()->size.X - pos.X < sizeX - splitScreen.paddingX)
-		{
-			pos.X = splitScreen.width - grid()->size.X + pos.X - splitScreen.paddingX;
-			otherPos.X = splitScreen.width - grid()->size.X + otherPos.X - splitScreen.paddingX;
-		}
-		else
-		{
-			otherPos.X -= pos.X - sizeX;
-			pos.X = splitScreen.centerX();
-		}
-	}
-	else
-	{
-		pos.X += splitScreen.paddingX;
-		otherPos.X += splitScreen.paddingX;
-	}
-
-	renderPoint(pos, player->getIcon(), player->getAttribute(), player);
-	if (otherPos.X >= splitScreen.paddingX && otherPos.X < splitScreen.width - splitScreen.paddingX &&
-		otherPos.Y >= splitScreen.paddingY && otherPos.Y < splitScreen.height - splitScreen.paddingY)
-		renderPoint(otherPos, other->getIcon(), other->getAttribute(), player);
-
+void renderEnemies(Player* player)
+{
 	for (int i = 0; i < numberOfEnemies(); ++i)
 	{
 		Enemy *enemy = enemies()[i];
-		renderPoint(enemy->position.coord, enemy->icon, enemy->getAttribute(), player1());
-		renderPoint(enemy->position.coord, enemy->icon, enemy->getAttribute(), player2());
+		if (!grid()->nodes[enemy->position.coord.Y][enemy->position.coord.X].seen)
+			continue;
+		renderPerson(enemy, player);
 	}
 }
 
-void renderMessage(std::string str, Player *p)
-{	
-	COORD c;
-	c.Y = (g_Console.getConsoleSize().Y - grid()->size.Y) / 4;
-	if (p == player2())
-	{
-		c.Y = g_Console.getConsoleSize().Y - c.Y;
-		if (str[0] == ']') str = "[enter" + str;
-	}
-	else
-	{
-		if (str[0] == ']') str = "[space" + str;
-	}
-
-	for (c.X = 0; c.X < g_Console.getConsoleSize().X; ++c.X)
-		g_Console.writeToBuffer(c, ' ', 0x00);
-
-	int length = str.length();
-	c.X = (g_Console.getConsoleSize().X - str.length()) / 2;
-	g_Console.writeToBuffer(c, str, 0x0f);
+void renderPerson(Person* person, Player* player)
+{
+	renderMapPoint(person->position.coord, person->icon, person->getAttribute(), player);
 }
 
-void renderEnemyVision(Enemy* e)
+void renderEnemyVision(Enemy* e, Player* player)
 {
 	short x1, y1, x2, y2;
 	switch (e->position.facing)
@@ -616,29 +567,29 @@ void renderEnemyVision(Enemy* e)
 		x2 = +1; y2 = -1;
 		break;
 	}
-	renderEnemyVisionPoint(e->position.coord, x1, y1);
-	renderEnemyVisionPoint(e->position.coord, x2, y2);
+	renderEnemyVisionPoint(e->position.coord, x1, y1, player);
+	renderEnemyVisionPoint(e->position.coord, x2, y2, player);
 }
 
-void renderEnemyVisionPoint(COORD c, short x, short y)
+void renderEnemyVisionPoint(COORD c, short x, short y, Player* player)
 {
 	c.Y += y;
 	c.X += x;
 	if (c.X < 0 || c.X >= grid()->size.X ||
 		c.Y < 0 || c.Y >= grid()->size.Y ||
-		!grid()->nodes[c.Y][c.X].getIsSeeThrough())
+		!grid()->nodes[c.Y][c.X].getIsSeeThrough() ||
+		!grid()->nodes[c.Y][c.X].seen)
 		return;
 
-	renderPoint(c, ' ', lightGrey * 17, player1());
-	renderPoint(c, ' ', lightGrey * 17, player2());
+	renderMapPoint(c, ' ', lightGrey * 17, player);
 
-	renderEnemyVisionPoint(c, x, y);
+	renderEnemyVisionPoint(c, x, y, player);
 }
 
 void renderPlayerVision(Player* p)
 {
 	float x1, y1, x2, y2;
-	for (float a = 1; a <= 45; ++a)
+	for (float a = 1; a <= 180; ++a)
 	{
 		double angle = a / 180.0 * M_PI;
 		switch (p->position.facing)
@@ -646,33 +597,32 @@ void renderPlayerVision(Player* p)
 		case up:
 			x1 = +1; y1 = -1;
 			x2 = -1; y2 = -1;
-			renderPlayerVisionPoint(p->position.coord.X, p->position.coord.Y, x1 * sin(angle), y1 * cos(angle));
-			renderPlayerVisionPoint(p->position.coord.X, p->position.coord.Y, x2 * sin(angle), y2 * cos(angle));
+			renderPlayerVisionPoint(p, p->position.coord.X, p->position.coord.Y, x1 * sin(angle), y1 * cos(angle));
+			renderPlayerVisionPoint(p, p->position.coord.X, p->position.coord.Y, x2 * sin(angle), y2 * cos(angle));
 			break;
 		case down:
 			x1 = +1; y1 = +1;
 			x2 = -1; y2 = +1;
-			renderPlayerVisionPoint(p->position.coord.X, p->position.coord.Y, x1 * sin(angle), y1 * cos(angle));
-			renderPlayerVisionPoint(p->position.coord.X, p->position.coord.Y, x2 * sin(angle), y2 * cos(angle));
+			renderPlayerVisionPoint(p, p->position.coord.X, p->position.coord.Y, x1 * sin(angle), y1 * cos(angle));
+			renderPlayerVisionPoint(p, p->position.coord.X, p->position.coord.Y, x2 * sin(angle), y2 * cos(angle));
 			break;
 		case left:
 			x1 = -1; y1 = +1;
 			x2 = -1; y2 = -1;
-			renderPlayerVisionPoint(p->position.coord.X, p->position.coord.Y, x1 * cos(angle), y1 * sin(angle));
-			renderPlayerVisionPoint(p->position.coord.X, p->position.coord.Y, x2 * cos(angle), y2 * sin(angle));
+			renderPlayerVisionPoint(p, p->position.coord.X, p->position.coord.Y, x1 * cos(angle), y1 * sin(angle));
+			renderPlayerVisionPoint(p, p->position.coord.X, p->position.coord.Y, x2 * cos(angle), y2 * sin(angle));
 			break;
 		case right:
 			x1 = +1; y1 = +1;
 			x2 = +1; y2 = -1;
-			renderPlayerVisionPoint(p->position.coord.X, p->position.coord.Y, x1 * cos(angle), y1 * sin(angle));
-			renderPlayerVisionPoint(p->position.coord.X, p->position.coord.Y, x2 * cos(angle), y2 * sin(angle));
+			renderPlayerVisionPoint(p, p->position.coord.X, p->position.coord.Y, x1 * cos(angle), y1 * sin(angle));
+			renderPlayerVisionPoint(p, p->position.coord.X, p->position.coord.Y, x2 * cos(angle), y2 * sin(angle));
 			break;
 		}
-		
 	}
 }
 
-void renderPlayerVisionPoint(float x, float y, float xDiff, float yDiff)
+void renderPlayerVisionPoint(Player* player, float x, float y, float xDiff, float yDiff)
 {
 	COORD c;
 	c.X = x + xDiff;
@@ -683,17 +633,97 @@ void renderPlayerVisionPoint(float x, float y, float xDiff, float yDiff)
 		return;
 
 	n.seen = true;
-	if (!n.getIsSeeThrough())
+	if (!n.getIsSeeThrough() || sqrt(pow(player->position.coord.X - c.X, 2.0) + pow(player->position.coord.Y - c.Y, 2.0)) >= splitScreen.height - 2 * splitScreen.paddingY)
 		return;
-	renderPlayerVisionPoint(x + xDiff, y + yDiff, xDiff, yDiff);
+	renderPlayerVisionPoint(player, x + xDiff, y + yDiff, xDiff, yDiff);
+}
+
+void renderMapPoint(COORD c, char i, WORD attr, Player *player)
+{
+	int sizeX = splitScreen.centerX();
+	int sizeY = splitScreen.centerY();
+
+	COORD pos = player->position.coord;
+
+	if (pos.Y > sizeY - splitScreen.paddingY)
+	{
+		if (grid()->size.Y - pos.Y < sizeY - splitScreen.paddingY)
+		{
+			pos.Y = splitScreen.height - grid()->size.Y + pos.Y - splitScreen.paddingY;
+			c.Y = splitScreen.height - grid()->size.Y + c.Y - splitScreen.paddingY;
+		}
+		else
+		{
+			c.Y -= pos.Y - sizeY;
+			pos.Y = sizeY;
+		}
+	}
+	else
+	{
+		pos.Y += splitScreen.paddingY;
+		c.Y += splitScreen.paddingY;
+	}
+
+	if (pos.X > sizeX - splitScreen.paddingX)
+	{
+		if (grid()->size.X - pos.X < sizeX - splitScreen.paddingX)
+		{
+			pos.X = splitScreen.width - grid()->size.X + pos.X - splitScreen.paddingX;
+			c.X = splitScreen.width - grid()->size.X + c.X - splitScreen.paddingX;
+		}
+		else
+		{
+			c.X -= pos.X - sizeX;
+			pos.X = splitScreen.centerX();
+		}
+	}
+	else
+	{
+		pos.X += splitScreen.paddingX;
+		c.X += splitScreen.paddingX;
+	}
+
+	if (c.X >= splitScreen.paddingX && c.X < splitScreen.width - splitScreen.paddingX &&
+		c.Y >= splitScreen.paddingY && c.Y < splitScreen.height - splitScreen.paddingY)
+		renderPoint(c, i, attr, player);
 }
 
 void renderPoint(COORD c, char i, WORD attr, Player *player)
 {
 	if (player == player2())
 		c.X += splitScreen.width;
-
 	g_Console.writeToBuffer(c, i, attr);
+}
+
+void renderLine(COORD c, LPCSTR str, WORD attr, Player *player)
+{
+	if (player == player2())
+		c.X += splitScreen.width;
+	g_Console.writeToBuffer(c, str, attr);
+}
+
+void renderMessage(std::string str, Player *p)
+{	
+	COORD c;
+	c.Y = splitScreen.paddingY / 2;
+
+	for (c.X = 0; c.X < splitScreen.width; ++c.X)
+		renderPoint(c, ' ', 0x00, p);
+
+	if (p == player2())
+	{
+		if (str[0] == ']') 
+			str = "[enter" + str;
+	}
+	else
+	{
+		if (str[0] == ']') 
+			str = "[space" + str;
+	}
+	
+	int length = str.length();
+	c.X = (splitScreen.width - str.length()) / 2;
+	renderLine(c, (LPCSTR)str.c_str(), white, p);
 }
 
 void renderFramerate()

@@ -54,7 +54,7 @@ bool &Node::getPlayingSound()
 //--------------------------------------------------------------
 WORD Node::getAttribute()
 {
-	return getState().foregroundColour + getState().backgroundColour * 16;
+	return getState().getAttribute();
 
 }
 

@@ -10,6 +10,18 @@ State::State(char i, bool b, bool s, Colour fc, Colour bc, int sr, bool ps)
 {
 }
 
+//--------------------------------------------------------------
+// Purpose  : When called it returns both the foreground and
+//			  background colours in one attribute
+// Input    : void
+// Output   : WORD
+//--------------------------------------------------------------
+WORD State::getAttribute()
+{
+	return foregroundColour + backgroundColour * 16;
+
+}
+
 bool State::operator==(const State &s) const
 {
 	return icon == s.icon && 

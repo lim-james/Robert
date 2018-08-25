@@ -64,20 +64,34 @@ void playerKeyEvents();       // moves the character, collision detection, physi
 void movePlayer(Player*, Direction);	// moves a player in direction
 void playerAction(Player*);	// check if player can perform action and performs it
 void processUserInput();    // checks if you should change states or do something else with the game, e.g. pause, exit
+
 void renderInventory(Player*);	// renders the player inventory
 void renderInventoryPoint1(COORD, char, WORD);	// renders inventory for player 1
 void renderInventoryPoint2(COORD, char, WORD);	// renders inventory for player 2
+
 void clearScreen();         // clears the current screen and draw from scratch 
 void renderSplashScreen();  // renders the splash screen
+
 void renderGame(Player*);   // renders the game stuff
+
 void renderMap(Player*);           // renders the map to the buffer first
-void renderCharacter(Player*);// renders the character into the buffer
-void renderEnemyVision(Enemy*);	// renders enemy's vision
-void renderEnemyVisionPoint(COORD, short, short);	// renders enemy's view points
+
+void renderPlayers(Player*);// renders the character into the buffer
+void renderEnemies(Player*);// renders the character into the buffer
+void renderPerson(Person*, Player*);
+
+void renderEnemyVision(Enemy*, Player*);	// renders enemy's vision
+void renderEnemyVisionPoint(COORD, short, short, Player*);	// renders enemy's view points
+
 void renderPlayerVision(Player*);	// renders enemy's vision
-void renderPlayerVisionPoint(float, float, float, float);	// renders enemy's view points
+void renderPlayerVisionPoint(Player*, float, float, float, float);	// renders enemy's view points
+
+void renderMapPoint(COORD, char, WORD, Player*);
 void renderPoint(COORD, char, WORD, Player*);
+void renderLine(COORD, LPCSTR, WORD, Player*);
+
 void renderMessage(std::string, Player*); // renders a short message for player
+
 void renderFramerate();     // renders debug information, frame rate, elapsed time, etc
 void renderToScreen();      // dump the contents of the buffer to the screen, one frame worth of game
 
