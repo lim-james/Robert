@@ -9,7 +9,7 @@
 #include "Person.h"
 #include "Grid.h"
 
-enum E_STATE { normal, chasing };
+enum E_STATE { normal, chasing, camera }; //do i need this even
 
 class Enemy : public Person
 {
@@ -24,7 +24,7 @@ class Enemy : public Person
 	};
 
 public:
-	int nextIndex, nextPosition, numberOfPositions;
+	int nextIndex, nextPosition, numberOfPositions, enemyRange;
 	E_STATE state;
 	Position *positions, targetPosition;
 	std::vector<Position> standardPath;
@@ -40,9 +40,9 @@ public:
 	void check(Grid*);
 	void move(Grid*);
 	bool chase(Person*, Grid*);
-	int enemyRange;
 	std::vector<Position>& getPath();
-	bool isInView(Person*, Grid*, int, E_STATE);
+	bool isInView(Person*, Grid*, int);
+	bool cameraSight();
 };
 
 #endif

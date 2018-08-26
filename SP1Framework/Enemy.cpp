@@ -222,8 +222,10 @@ std::vector<Position>& Enemy::getPath()
 	return state == normal ? standardPath : chasePath;
 }
 
-bool Enemy::isInView(Person* p, Grid* grid, int enemyRange, E_STATE state)
+bool Enemy::isInView(Person* p, Grid* grid, int enemyRange)
 {
+	if (numberOfPositions == 1)
+		state = camera;
 	if (position.directionOf(p->position) == position.facing)
 	{
 		double d = position.distance(p->position);
@@ -272,4 +274,9 @@ bool Enemy::isInView(Person* p, Grid* grid, int enemyRange, E_STATE state)
 		}
 	}
 	return false;
+}
+
+bool Enemy::cameraSight()
+{
+
 }
