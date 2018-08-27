@@ -32,8 +32,8 @@ void Player::storeItem(State item)
 		} // else tell user that inventory is full
 	}
 
-	items[itemIndex] = item;
-	itemIndex++;
+	//items[itemIndex] = item;
+	//itemIndex++;
 }
 
 bool Player::hasItem(State item)
