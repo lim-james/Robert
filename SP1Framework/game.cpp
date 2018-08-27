@@ -481,10 +481,10 @@ void renderGame(Player* player)
 	renderMessage(attrs()[player1()->facingIn(grid())->getState()], player1());
 	renderMessage(attrs()[player2()->facingIn(grid())->getState()], player2());
 
-	//if (player1()->openedInventory)
-	//	renderInventory(player1());
-	//if (player2()->openedInventory)
-	//	renderInventory(player2());
+	if (player1()->openedInventory)
+		renderInventory(player1());
+	if (player2()->openedInventory)
+		renderInventory(player2());
 
 	for (int i = 0; i < numberOfEnemies(); ++i)
 	{
