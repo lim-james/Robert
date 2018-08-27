@@ -31,16 +31,15 @@ enum EKEYS
 // Enumeration for the different screen states
 enum EGAMESTATES
 {
-    S_SPLASHSCREEN,
-    S_GAME,
+	S_SPLASHSCREEN,
+	S_GAME,
+	S_LOSESCREEN,
     S_COUNT
 };
 
 enum LEVELSTATES
 {
-	L_START,
 	L_AUNTYS_HOUSE,
-	L_LOSE,
 	L_COUNT
 };
 
@@ -59,6 +58,7 @@ void update      ( double dt ); // update the game and the state of the game
 void render      ( void );      // renders the current state of the game to the console
 void shutdown    ( void );      // do clean up, free memory
 void splashScreenWait();    // waits for time to pass in splash screen
+void loseScreenWait();
 void gameplay();            // gameplay logic
 void playerKeyEvents();       // moves the character, collision detection, physics, etc
 void movePlayer(Player*, Direction);	// moves a player in direction
@@ -71,6 +71,7 @@ void renderInventoryPoint2(COORD, char, WORD);	// renders inventory for player 2
 
 void clearScreen();         // clears the current screen and draw from scratch 
 void renderSplashScreen();  // renders the splash screen
+void renderLoseScreen();
 
 void renderGame(Player*);   // renders the game stuff
 

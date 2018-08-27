@@ -38,15 +38,13 @@ const struct SplitScreen {
 } splitScreen;
 
 std::string levelFiles[L_COUNT] = {
-	"SPLASHSCREEN_LEVEL.txt",
-	"VILLAGE_1ST_LEVEL.txt",
-	"LOSESCREEN_LEVEL.txt"
+	"VILLAGE_1ST_LEVEL.txt"
 };
 //Level *level = new Level("AUNTY'S_HOUSE_LEVEL.txt");
 
-LEVELSTATES currentLevel = L_START;
+LEVELSTATES currentLevel = L_AUNTYS_HOUSE;
 
-Level *level = new Level("SPLASHSCREEN_LEVEL.txt");
+Level *level = new Level(levelFiles[currentLevel]);
 
 void setLevel(LEVELSTATES l)
 {
@@ -153,13 +151,15 @@ void update(double dt)
     // get the delta time
     g_dElapsedTime += dt;
     g_dDeltaTime = dt;
-
+	processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     switch (g_eGameState)
     {
         case S_SPLASHSCREEN : splashScreenWait(); // game logic for the splash screen
             break;
         case S_GAME: gameplay(); // gameplay logic when we are in the game
             break;
+		case S_LOSESCREEN: loseScreenWait();
+			break;
     }
 }
 
@@ -182,6 +182,8 @@ void render()
 			renderGame(player1());
 			renderGame(player2());
             break;
+		case S_LOSESCREEN: renderLoseScreen();
+			break;
     }
     renderFramerate();  // renders debug information, frame rate, elapsed time, etc
     renderToScreen();   // dump the contents of the buffer to the screen, one frame worth of game
@@ -189,13 +191,25 @@ void render()
 
 void splashScreenWait()    // waits for time to pass in splash screen
 {
-    if (g_dElapsedTime > 3.0) // wait for 3 seconds to switch to game mode, else do nothing
-        g_eGameState = S_GAME;
+	if (g_abKeyPressed[K_SPACE]) // wait for space to switch to game mode, else do nothing
+	{
+		setLevel(currentLevel);
+		g_eGameState = S_GAME;
+	}
+	
+}
+
+void loseScreenWait()
+{
+	if (g_abKeyPressed[K_SPACE]) // wait for space to switch to game mode, else do nothing
+	{
+		setLevel(currentLevel);
+		g_eGameState = S_GAME;
+	}
 }
 
 void gameplay()            // gameplay logic
 {
-    processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
 	playerKeyEvents();  // moves the character, collision detection, physics, etc
                         // sound can be played here too.
 	checkGamestate();
@@ -322,7 +336,7 @@ void playerAction(Player* player)
 	Node* item = player->facingIn(grid());
 
 	// door
-	if (item->getState() == State((char)178, true, false, (Colour)8, (Colour)15, 0, false) && (currentLevel == L_START || currentLevel == L_LOSE))
+	if (item->getState() == State((char)178, true, false, (Colour)8, (Colour)15, 0, false))
 	{
 		setLevel(L_AUNTYS_HOUSE);
 	}
@@ -345,7 +359,7 @@ void playerAction(Player* player)
 	// unlock safe
 	else if ((item->getState() == State((char)240, true, true, (Colour)13, (Colour)15, 0, false) && player->hasItem(State((char)157, true, false, (Colour)11, (Colour)5, 0, false))))
 	{
-		setLevel(L_START);
+		
 	}
 	else if (attrs()[item->getState()] == "]_open_door" || "]_close_door" || "]_open_window" || "]_close_window")
 	{
@@ -431,19 +445,33 @@ void renderSplashScreen()  // renders the splash screen
     COORD c = g_Console.getConsoleSize();
     c.Y /= 3;
     c.X = c.X / 2 - 9;
-    g_Console.writeToBuffer(c, "A game in 3 seconds", 0x03);
+    g_Console.writeToBuffer(c, "WELCOME TO ROBERT", 0x12);
     c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 2 - 20;
-    g_Console.writeToBuffer(c, "Press <Space> to change character colour", 0x09);
+    c.X = g_Console.getConsoleSize().X / 2 - 11;
+    g_Console.writeToBuffer(c, "Press <Space> to start", 0x09);
     c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 2 - 9;
-    g_Console.writeToBuffer(c, "Press 'Esc' to quit", 0x09);
+    c.X = g_Console.getConsoleSize().X / 2 - 10;
+    g_Console.writeToBuffer(c, "Press <Esc> to quit", 0x09);
+}
+
+void renderLoseScreen()  // renders the splash screen
+{
+	COORD c = g_Console.getConsoleSize();
+	c.Y /= 3;
+	c.X = c.X / 2 - 5;
+	g_Console.writeToBuffer(c, "YOU LOST", 0x12);
+	c.Y += 1;
+	c.X = g_Console.getConsoleSize().X / 2 - 13;
+	g_Console.writeToBuffer(c, "Press <Space> to re-start", 0x09);
+	c.Y += 1;
+	c.X = g_Console.getConsoleSize().X / 2 - 10;
+	g_Console.writeToBuffer(c, "Press <Esc> to quit", 0x09);
 }
 
 void renderGame(Player* player)
 {
 	
-	if (currentLevel != L_START && currentLevel != L_LOSE)
+	if (currentLevel != S_LOSESCREEN)
 	{
 		for (int r = 0; r < grid()->size.Y; ++r)
 			for (int c = 0; c < grid()->size.X; ++c)
@@ -478,7 +506,7 @@ void renderGame(Player* player)
 void renderMap(Player* player)
 {
 	COORD coord;
-	if (currentLevel == L_START || currentLevel == L_LOSE)
+	if (currentLevel == S_LOSESCREEN)
 	{
 		for (int r = 0; r < grid()->size.Y; ++r)
 		{
@@ -553,7 +581,7 @@ void renderEnemies(Player* player)
 
 void renderPerson(Person* person, Player* player)
 {
-	renderMapPoint(person->position.coord, person->icon, person->getAttribute(), player);
+	renderMapPoint(person->position.coord, person->getIcon(), person->getAttribute(), player);
 }
 
 void renderEnemyVision(Enemy* e, Player* player)

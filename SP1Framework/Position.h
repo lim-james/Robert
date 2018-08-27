@@ -4,11 +4,12 @@
 #include <Windows.h>
 #include <cmath>
 
-# define M_PI 3.14159265358979323846
+#define M_PI 3.14159265358979323846
 
 enum Direction { up, down, left, right };
 
-class Position {
+class Position 
+{
 public:
 	COORD coord;
 	Direction facing;
