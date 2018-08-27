@@ -227,7 +227,7 @@ void playerKeyEvents()
 
 		if (g_dElapsedTime > e->bounceTime)
 		{
-			if (e->isInView(player1(), grid()))
+			if (!player1()->isHidden && e->isInView(player1(), grid()))
 			{
 				if (!e->isStationary)
 				{
@@ -238,7 +238,7 @@ void playerKeyEvents()
 					e->alert(numberOfEnemies(), enemies(), player1(), grid());
 				}
 			}
-			else if (e->isInView(player2(), grid()))
+			else if (!player2()->isHidden && e->isInView(player2(), grid()))
 			{
 				if (!e->isStationary)
 				{
