@@ -118,6 +118,7 @@ Console::~Console()
 
 void Console::initConsole(COORD consoleSize, LPCSTR lpConsoleTitle)
 {
+
 	this->m_cConsoleSize = consoleSize;
     // Use the ascii version for the consoleTitle
     SetConsoleTitleA(lpConsoleTitle);
@@ -140,6 +141,8 @@ void Console::initConsole(COORD consoleSize, LPCSTR lpConsoleTitle)
 	// Sets the console size
 	setConsoleWindowSize();
     SetConsoleActiveScreenBuffer(m_hScreenBuffer); 	
+
+	SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), ENABLE_EXTENDED_FLAGS);
 }
 
 void Console::setConsoleTitle(LPCSTR lpConsoleTitle)
