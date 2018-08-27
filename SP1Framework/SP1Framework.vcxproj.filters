@@ -175,5 +175,6 @@
     <Text Include="VILLAGE_LEVEL.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="VILLAGE_BASEMENT.txt" />
   </ItemGroup>
 </Project>
