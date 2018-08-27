@@ -24,7 +24,7 @@ Level::Level(std::string file)
 		{
 			std::string enemyFile;
 			ifs >> enemyFile;
-			enemies[i][e] = new Enemy('=', enemyFile, black, white);
+			enemies[i][e] = new Enemy(enemyFile);
 		}
 	}
 	ifs >> currentStorey;

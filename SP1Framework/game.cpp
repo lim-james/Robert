@@ -65,6 +65,7 @@ Player* player2() { return level->players[1]; }
 Grid* grid() { return level->storeys[level->currentStorey]; }
 unsigned int numberOfEnemies() { return level->numberOfEnemies[level->currentStorey]; }
 Enemy** enemies() { return level->enemies[level->currentStorey]; }
+//** cameras() { return level->cameras[level->currentStorey]; }
 std::map<State, std::string> attrs() { return level->attrs; };
 
 //--------------------------------------------------------------
@@ -197,6 +198,7 @@ void gameplay()            // gameplay logic
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
 	playerKeyEvents();  // moves the character, collision detection, physics, etc
                         // sound can be played here too.
+	checkGamestate();
 }
 
 void playerKeyEvents()
@@ -213,23 +215,32 @@ void playerKeyEvents()
 		{
 			if (e->isInView(player1(), grid()))
 			{
-				
-				if (e->chase(player1(), grid()))
-					setLevel(L_LOSE);
+				if (!e->isStationary)
+				{
+					if (e->chase(player1(), grid()))
+						setLevel(L_LOSE);
+				}
+				else
+				{
+					e->alert(numberOfEnemies(), enemies(), player1(), grid());
+				}
 			}
 			else if (e->isInView(player2(), grid()))
 			{
-				if (e->chase(player2(), grid()))
-					setLevel(L_LOSE);
+				if (!e->isStationary)
+				{
+					if (e->chase(player2(), grid()))
+						setLevel(L_LOSE);
+				}
+				else
+				{
+					e->alert(numberOfEnemies(), enemies(), player2(), grid());
+				}
 			}
 			else
 			{
 				e->check(grid());
 				e->move(grid());
-				/*if (e->position.facing == e->targetPosition.coord)
-				{
-					item->toggle();
-				}*/
 			}
 			e->bounceTime = e->getMovementDelay() + g_dElapsedTime;
 		}
@@ -243,10 +254,10 @@ void playerKeyEvents()
 		{
 			player->isSprinting = true;
 		}
-				
+
 		if (player->bounceTime < g_dElapsedTime)
 		{
-			
+
 			if (g_abKeyPressed[i % 2 ? K_UP : K_W])
 				movePlayer(player, up);
 
@@ -267,12 +278,12 @@ void playerKeyEvents()
 				player->openedInventory = !player->openedInventory;
 				player->somethingHappened = true;
 			}
-			
+
 		}
 		if (player->somethingHappened)
 			player->bounceTime = g_dElapsedTime + player->getMovementDelay();
-		
-		
+
+
 	}
 
 	if (player1()->somethingHappened || player2()->somethingHappened)
@@ -458,7 +469,7 @@ void renderGame(Player* player)
 			//renderpoint(path[p].coord, ' ', yellow * 17, player1());
 			//renderpoint(path[p].coord, ' ', yellow * 17, player2());
 		//}
-	}
+	}]
 
     renderPlayers(player);  // renders the character into the buffer
 	renderEnemies(player);
@@ -756,11 +767,8 @@ void checkGamestate()
 {
 	for (int i = 0; i < numberOfEnemies(); ++i)
 	{
-		if (enemies()[i]->isInView(player1(), grid()) || enemies()[i]->isInView(player2(), grid()))
-		{
-			Sleep(1000);
+		if(enemies()[i]->position.coord == player1()->position.coord || enemies()[i]->position.coord == player2()->position.coord)
 			setLevel(L_LOSE);
-		}
 	}
 }
 

@@ -9,7 +9,7 @@
 #include "Person.h"
 #include "Grid.h"
 
-enum E_STATE { normal, chasing, camera }; //do i need this even
+enum E_STATE { normal, chasing }; //do i need this even
 
 class Enemy : public Person
 {
@@ -24,16 +24,17 @@ class Enemy : public Person
 	};
 
 public:
-	int nextIndex, nextPosition, numberOfPositions;
+	int nextIndex, nextPosition, numberOfPositions, closestEnemy;
 	E_STATE state;
 	Position *positions, targetPosition;
 	std::vector<Position> standardPath;
 	std::vector<Position> chasePath;
 	int viewRange;
+	bool isStationary;
 
-	Enemy();										// default constructor
-	Enemy(const char, std::string, Colour, Colour);	// comprehe/nsive constructor
-	~Enemy();										// default 
+	Enemy();									// default constructor
+	Enemy(std::string);	// comprehensive constructor
+	~Enemy();									// default 
 
 	void generatePath(Position, Position, Grid*);
 
@@ -44,6 +45,7 @@ public:
 	std::vector<Position>& getPath();
 	int getViewRange();
 	bool isInView(Person*, Grid*);
+	void alert(unsigned int, Enemy**, Person*, Grid*);
 };
 
 #endif

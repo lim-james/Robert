@@ -11,10 +11,13 @@ Enemy::Enemy()
 	state = normal;
 }
 
-Enemy::Enemy(const char i, std::string file, Colour fc, Colour bc)
+Enemy::Enemy(std::string file)
 {
 	state = normal;
+	int i, foregroundColour, backgroundColour;
 	std::ifstream ifs(file);
+	ifs >> i >> foregroundColour >> backgroundColour;
+	ifs >> isStationary;
 	ifs >> viewRange;
 	ifs >> numberOfPositions >> movementDelay;
 	positions = new Position[numberOfPositions];
@@ -46,8 +49,8 @@ Enemy::Enemy(const char i, std::string file, Colour fc, Colour bc)
 	targetPosition = positions[nextIndex];
 
 	icon = i;
-	foregroundColor = fc;
-	backgroundColor = bc;
+	Colour foregroundColor;
+	Colour backgroundColor;
 }
 
 Enemy::~Enemy()
@@ -162,7 +165,7 @@ void Enemy::check(Grid* grid)
 			if (radius != 0)
 			{
 				Position pos({x,y}, left);
-				if (position.distance(pos) <= radius && playingSound == 1)
+				if (position.distance(pos) <= radius && playingSound)
 				{
 					targetPosition = pos;
 				}
@@ -265,7 +268,38 @@ bool Enemy::isInView(Person* p, Grid* grid)
 	return false;
 }
 
-bool Enemy::cameraSight()
+void Enemy::alert(unsigned int count, Enemy** enemies, Person* p, Grid* grid)
 {
-
+	for (int e = 0; e < count; ++e)
+	{
+		Enemy *enemy = enemies[e];
+		if (!enemy->isStationary)
+		{
+			enemy->chase(p, grid);
+		}
+	}
 }
+
+/*bool Enemy::cameraDetection(Person* p, Grid* grid, Enemy* e, unsigned int numberOfEnemies)
+{
+	for (nextIndex = 0; nextIndex < numberOfEnemies; ++nextIndex)
+	{
+		int temp;
+		*e = e[nextIndex];
+		closestEnemy = sqrt(pow(position.coord.X - e->position.coord.X, 2.0) + pow(position.coord.Y - e->position.coord.Y, 2.0));
+		*e = e[nextIndex + 1];
+		temp = sqrt(pow(position.coord.X - e->position.coord.X, 2.0) + pow(position.coord.Y - e->position.coord.Y, 2.0));
+		if (closestEnemy > temp)
+			closestEnemy = temp;
+	}
+	for (nextIndex = 0; nextIndex < numberOfEnemies; ++nextIndex)
+	{
+		*e = e[nextIndex];
+		if (e->position.distance(position) == closestEnemy)
+		{
+			if (e->chase(p, grid))
+				return true;
+		}
+	}
+}
+}*/

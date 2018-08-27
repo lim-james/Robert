@@ -125,6 +125,7 @@
     <Text Include="Test_Map.txt" />
     <Text Include="VILLAGE_1ST_LEVEL.txt" />
     <Text Include="VILLAGE_1ST_STOREY.txt" />
+    <Text Include="VILLAGE_1ST_STOREY_CAMERA_1.txt" />
     <Text Include="VILLAGE_1ST_STOREY_GUARD_1.txt" />
     <Text Include="VILLAGE_1ST_STOREY_GUARD_2.txt" />
     <Text Include="VILLAGE_1ST_STOREY_GUARD_3.txt" />
