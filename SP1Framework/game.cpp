@@ -38,7 +38,7 @@ const struct SplitScreen {
 } splitScreen;
 
 std::string levelFiles[L_COUNT] = {
-	"VILLAGE_1ST_LEVEL.txt"
+	"VILLAGE_LEVEL.txt"
 };
 //Level *level = new Level("AUNTY'S_HOUSE_LEVEL.txt");
 
@@ -231,8 +231,7 @@ void playerKeyEvents()
 			{
 				if (!e->isStationary)
 				{
-					if (e->chase(player1(), grid()))
-						setLevel(L_LOSE);
+					e->chase(player1(), grid());
 				}
 				else
 				{
@@ -243,8 +242,7 @@ void playerKeyEvents()
 			{
 				if (!e->isStationary)
 				{
-					if (e->chase(player2(), grid()))
-						setLevel(L_LOSE);
+					e->chase(player2(), grid());
 				}
 				else
 				{
@@ -497,7 +495,7 @@ void renderGame(Player* player)
 			//renderpoint(path[p].coord, ' ', yellow * 17, player1());
 			//renderpoint(path[p].coord, ' ', yellow * 17, player2());
 		//}
-	}]
+	}
 
     renderPlayers(player);  // renders the character into the buffer
 	renderEnemies(player);
@@ -796,7 +794,7 @@ void checkGamestate()
 	for (int i = 0; i < numberOfEnemies(); ++i)
 	{
 		if(enemies()[i]->position.coord == player1()->position.coord || enemies()[i]->position.coord == player2()->position.coord)
-			setLevel(L_LOSE);
+			g_eGameState = S_LOSESCREEN;
 	}
 }
 

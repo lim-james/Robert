@@ -225,7 +225,7 @@ void Enemy::move(Grid* grid)
 	position = getPath()[nextPosition++];
 }
 
-bool Enemy::chase(Person* p, Grid* grid)
+void Enemy::chase(Person* p, Grid* grid)
 {
 	state = chasing;
 	if (!(targetPosition.coord == p->position.coord))
@@ -236,7 +236,6 @@ bool Enemy::chase(Person* p, Grid* grid)
 	}
 	move(grid);
 	position.facing = position.directionOf(p->position);
-	return position.coord == p->position.coord;
 }
 
 std::vector<PathNode>& Enemy::getPath()

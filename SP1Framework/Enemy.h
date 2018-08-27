@@ -40,7 +40,7 @@ public:
 	float getMovementDelay();
 	void check(Grid*);
 	void move(Grid*);
-	bool chase(Person*, Grid*);
+	void chase(Person*, Grid*);
 	std::vector<PathNode>& getPath();
 	int getViewRange();
 	bool isInView(Person*, Grid*);
