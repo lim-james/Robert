@@ -47,9 +47,9 @@ void setLevel(LEVELSTATES);
 Player** players();
 Player* player1();
 Player* player2();
-Grid* grid();
-unsigned int numberOfEnemies();
-Enemy** enemies();
+Grid* grid(unsigned int);
+unsigned int numberOfEnemies(unsigned int);
+Enemy** enemies(unsigned int);
 std::map<State, std::string> attrs();
 
 void init        ( void );      // initialize your variables, allocate memory, etc
@@ -66,8 +66,7 @@ void playerAction(Player*);	// check if player can perform action and performs i
 void processUserInput();    // checks if you should change states or do something else with the game, e.g. pause, exit
 
 void renderInventory(Player*);	// renders the player inventory
-void renderInventoryPoint1(COORD, char, WORD);	// renders inventory for player 1
-void renderInventoryPoint2(COORD, char, WORD);	// renders inventory for player 2
+void renderInventoryPoint(COORD, char, WORD, Player*);	// renders inventory for player
 
 void clearScreen();         // clears the current screen and draw from scratch 
 void renderSplashScreen();  // renders the splash screen

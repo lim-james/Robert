@@ -27,7 +27,7 @@ Level::Level(std::string file)
 			enemies[i][e] = new Enemy(enemyFile);
 		}
 	}
-	ifs >> currentStorey;
+	ifs >> players[0]->currentStorey >> players[1]->currentStorey;
 }
 
 //--------------------------------------------------------------

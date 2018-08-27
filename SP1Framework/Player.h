@@ -6,6 +6,7 @@
 class Player : public Person 
 {
 public:
+	unsigned int currentStorey = 0;
 	int itemIndex = 0;
 	bool somethingHappened, openedInventory;
 	State items[9];

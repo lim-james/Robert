@@ -51,18 +51,23 @@ void setLevel(LEVELSTATES l)
 	currentLevel = l;
 	delete level;
 	level = new Level(levelFiles[currentLevel]);
-	for (int i = 0; i < numberOfEnemies(); ++i)
+	for (int p = 0; p < 2; ++p)
 	{
-		enemies()[i]->generatePath(enemies()[i]->position, enemies()[i]->targetPosition, grid());
+		Player *player = players()[p];
+		for (int i = 0; i < numberOfEnemies(player->currentStorey); ++i)
+		{
+			Enemy* e = enemies(player->currentStorey)[i];
+			e->generatePath(e->position, e->targetPosition, grid(player->currentStorey));
+		}
 	}
 }
 
 Player** players() { return level->players; }
 Player* player1() { return level->players[0]; }
 Player* player2() { return level->players[1]; }
-Grid* grid() { return level->storeys[level->currentStorey]; }
-unsigned int numberOfEnemies() { return level->numberOfEnemies[level->currentStorey]; }
-Enemy** enemies() { return level->enemies[level->currentStorey]; }
+Grid* grid(unsigned int x) { return level->storeys[x]; }
+unsigned int numberOfEnemies(unsigned int x) { return level->numberOfEnemies[x]; }
+Enemy** enemies(unsigned int x) { return level->enemies[x]; }
 //** cameras() { return level->cameras[level->currentStorey]; }
 std::map<State, std::string> attrs() { return level->attrs; };
 
@@ -217,50 +222,44 @@ void gameplay()            // gameplay logic
 
 void playerKeyEvents()
 {
-	player1()->somethingHappened = false;
-	player2()->somethingHappened = false;
-
-	for (int i = 0; i < numberOfEnemies(); ++i)
-	{
-		Enemy *e = enemies()[i];
-		Node* item = e->facingIn(grid());
-
-		if (g_dElapsedTime > e->bounceTime)
-		{
-			if (!player1()->isHidden && e->isInView(player1(), grid()))
-			{
-				if (!e->isStationary)
-				{
-					e->chase(player1(), grid());
-				}
-				else
-				{
-					e->alert(numberOfEnemies(), enemies(), player1(), grid());
-				}
-			}
-			else if (!player2()->isHidden && e->isInView(player2(), grid()))
-			{
-				if (!e->isStationary)
-				{
-					e->chase(player2(), grid());
-				}
-				else
-				{
-					e->alert(numberOfEnemies(), enemies(), player2(), grid());
-				}
-			}
-			else
-			{
-				e->check(grid());
-				e->move(grid());
-			}
-			e->bounceTime = e->getMovementDelay() + g_dElapsedTime;
-		}
-	}
 
 	for (int i = 0; i < 2; ++i)
 	{
 		Player *player = players()[i];
+		unsigned int storey = player->currentStorey;
+
+		Grid *g = grid(storey);
+		unsigned int num = numberOfEnemies(storey);
+		Enemy** es = enemies(storey);
+
+		for (int e = 0; e < num; ++e)
+		{
+			Enemy *enemy = es[i];
+			Node* item = enemy->facingIn(g);
+
+			if (g_dElapsedTime > enemy->bounceTime)
+			{
+				if (!player->isHidden && enemy->isInView(player, g))
+				{
+					if (!enemy->isStationary)
+					{
+						enemy->chase(player, g);
+					}
+					else
+					{
+						enemy->alert(num, es, player, g);
+					}
+				}
+				else
+				{
+					enemy->check(g);
+					enemy->move(g);
+				}
+				enemy->bounceTime = enemy->getMovementDelay() + g_dElapsedTime;
+			}
+		}
+
+		player->somethingHappened = false;
 		player->isSprinting = false;
 		if (g_abKeyPressed[i % 2 ? K_RSHIFT : K_LSHIFT])
 		{
@@ -292,20 +291,17 @@ void playerKeyEvents()
 			}
 
 		}
+
 		if (player->somethingHappened)
-			player->bounceTime = g_dElapsedTime + player->getMovementDelay();
-
-
-	}
-
-	if (player1()->somethingHappened || player2()->somethingHappened)
-	{
-		if (player1()->standingOn(grid())->getIcon() == (char)186 && player2()->standingOn(grid())->getIcon() == (char)186)
 		{
-			if (level->currentStorey + 1 < level->numberOfStoreys)
-				level->currentStorey++;
-			else
-				level->currentStorey = 0;
+			player->bounceTime = g_dElapsedTime + player->getMovementDelay();
+			if (player->standingOn(g)->getIcon() == (char)186)
+			{
+				if (player->currentStorey + 1 < level->numberOfStoreys)
+					player->currentStorey++;
+				else
+					player->currentStorey = 0;
+			}
 		}
 	}
 }
@@ -317,7 +313,7 @@ void movePlayer(Player* player, Direction dir)
 	
 	if (player->position.facing == dir)
 	{
-		if (player->canMoveIn(grid()))
+		if (player->canMoveIn(grid(player->currentStorey)))
 		{
 			player->move();
 		}
@@ -331,7 +327,7 @@ void movePlayer(Player* player, Direction dir)
 
 void playerAction(Player* player)
 {
-	Node* item = player->facingIn(grid());
+	Node* item = player->facingIn(grid(player->currentStorey));
 
 	// door
 	if (item->getState() == State((char)178, true, false, (Colour)8, (Colour)15, 0, false))
@@ -412,43 +408,18 @@ void renderInventory(Player* player)
 	i[5][3] = player->items[7].icon;
 	i[5][5] = player->items[8].icon;
 
-	for (int y = 0; y < 7; y++)
+	for (SHORT y = 0; y < 7; y++)
 	{
-		for (int x = 0; x < 7; x++)
+		for (SHORT x = 0; x < 7; x++)
 		{
-			COORD c = { x, y };
-			if (player == player1())
-			{
-				renderInventoryPoint1(c, i[y][x], white);
-			}
-			else
-			{
-				renderInventoryPoint2(c, i[y][x], white);
-			}
+			renderInventoryPoint({ x, y }, i[y][x], white, player);
 		}
 	}
 }
 
-void renderInventoryPoint1(COORD c, char i, WORD attr)
+void renderInventoryPoint(COORD c, char i, WORD attr, Player* player)
 {
-	unsigned int offsetX = (g_Console.getConsoleSize().X - grid()->size.X - 14) / 4;
-	unsigned int offsetY = (g_Console.getConsoleSize().Y - 7) / 2;
-
-	c.X += 0;
-	c.Y += 0;
-
-	renderPoint(c, i, attr, player1());
-}
-
-void renderInventoryPoint2(COORD c, char i, WORD attr)
-{
-	unsigned int offsetX = g_Console.getConsoleSize().X - ((g_Console.getConsoleSize().X - grid()->size.X - 14) / 4) - 7;
-	unsigned int offsetY = (g_Console.getConsoleSize().Y - 7) / 2;
-
-	c.X += 0;
-	c.Y += 0;
-
-	renderPoint(c, i, attr, player2());
+	renderPoint(c, i, attr, player);
 }
 
 void clearScreen()
@@ -487,27 +458,26 @@ void renderLoseScreen()  // renders the splash screen
 
 void renderGame(Player* player)
 {
-	
+	unsigned int storey = player->currentStorey;
+	Grid *g = grid(storey);
+
 	if (currentLevel != S_LOSESCREEN)
 	{
-		for (int r = 0; r < grid()->size.Y; ++r)
-			for (int c = 0; c < grid()->size.X; ++c)
-				grid()->nodes[r][c].seen = false;
+		for (int r = 0; r < g->size.Y; ++r)
+			for (int c = 0; c < g->size.X; ++c)
+				g->nodes[r][c].seen = false;
 		renderPlayerVision(player1());
 		renderPlayerVision(player2());
 	}
 	renderMap(player);        // renders the map to the buffer first
-	renderMessage(attrs()[player1()->facingIn(grid())->getState()], player1());
-	renderMessage(attrs()[player2()->facingIn(grid())->getState()], player2());
+	renderMessage(attrs()[player->facingIn(grid(storey))->getState()], player);
 
-	if (player1()->openedInventory)
-		renderInventory(player1());
-	if (player2()->openedInventory)
-		renderInventory(player2());
+	if (player->openedInventory)
+		renderInventory(player);
 
-	for (int i = 0; i < numberOfEnemies(); ++i)
+	for (int i = 0; i < numberOfEnemies(storey); ++i)
 	{
-		renderEnemyVision(enemies()[i], player);
+		renderEnemyVision(enemies(storey)[i], player);
 		//std::vector<position> &path = enemies()[i]->getpath();
 		//for (int p = 0; p < path.size(); ++p)
 		//{
@@ -522,57 +492,40 @@ void renderGame(Player* player)
 
 void renderMap(Player* player)
 {
-	COORD coord;
-	if (currentLevel == S_LOSESCREEN)
-	{
-		for (int r = 0; r < grid()->size.Y; ++r)
-		{
-			coord.Y = r;
-			for (int c = 0; c < grid()->size.X; ++c)
-			{
-				Node &n = grid()->nodes[r][c];
-				coord.X = c;
-				if (n.seen)
-				{
-					renderPoint(coord, n.getIcon(), n.getAttribute(), player1());
-					renderPoint(coord, n.getIcon(), n.getAttribute(), player2());
-				}
-			}
-		}
-	} 
-	else
-	{
-		COORD &pos = player->position.coord;
-		int sizeX = splitScreen.centerX() - splitScreen.paddingX;
-		int sizeY = splitScreen.centerY() - splitScreen.paddingY;
-		for (int r = -sizeY; r < sizeY; ++r)
-		{
-			coord.Y = r + sizeY + splitScreen.paddingY;
-			for (int c = -sizeX; c < sizeX; ++c)
-			{
-				coord.X = c + sizeX + splitScreen.paddingX;
-				int y = r;
-				if (pos.Y < sizeY)
-					y += sizeY;
-				else if (pos.Y > grid()->size.Y - sizeY)
-					y += grid()->size.Y - sizeY;
-				else
-					y += pos.Y;
+	unsigned int storey = player->currentStorey;
+	Grid *g = grid(storey);
 
-				int x = c;
-				if (pos.X < sizeX)
-					x += sizeX;
-				else if (pos.X > grid()->size.X - sizeX)
-					x += grid()->size.X - sizeX;
-				else
-					x += pos.X;
-				
-				Node &n = grid()->nodes[y][x];
-				if (n.seen)
-					renderPoint(coord, n.getIcon(), n.getAttribute(), player);
-			}
-			
+	COORD coord;
+	COORD &pos = player->position.coord;
+	int sizeX = splitScreen.centerX() - splitScreen.paddingX;
+	int sizeY = splitScreen.centerY() - splitScreen.paddingY;
+	for (int r = -sizeY; r < sizeY; ++r)
+	{
+		coord.Y = r + sizeY + splitScreen.paddingY;
+		for (int c = -sizeX; c < sizeX; ++c)
+		{
+			coord.X = c + sizeX + splitScreen.paddingX;
+			int y = r;
+			if (pos.Y < sizeY)
+				y += sizeY;
+			else if (pos.Y > g->size.Y - sizeY)
+				y += g->size.Y - sizeY;
+			else
+				y += pos.Y;
+
+			int x = c;
+			if (pos.X < sizeX)
+				x += sizeX;
+			else if (pos.X > g->size.X - sizeX)
+				x += g->size.X - sizeX;
+			else
+				x += pos.X;
+
+			Node &n = g->nodes[y][x];
+			if (n.seen)
+				renderPoint(coord, n.getIcon(), n.getAttribute(), player);
 		}
+
 	}
 	
 }
@@ -581,16 +534,18 @@ void renderPlayers(Player* player)
 {
 	Player* other = player == player1() ? player2() : player1();
 
-	renderPerson(other, player);
+	if (other->currentStorey == player->currentStorey)
+		renderPerson(other, player);
 	renderPerson(player, player);
 }
 
 void renderEnemies(Player* player)
 {
-	for (int i = 0; i < numberOfEnemies(); ++i)
+	unsigned int storey = player->currentStorey;
+	for (int i = 0; i < numberOfEnemies(storey); ++i)
 	{
-		Enemy *enemy = enemies()[i];
-		if (!grid()->nodes[enemy->position.coord.Y][enemy->position.coord.X].seen)
+		Enemy *enemy = enemies(storey)[i];
+		if (!grid(storey)->nodes[enemy->position.coord.Y][enemy->position.coord.X].seen)
 			continue;
 		renderPerson(enemy, player);
 	}
@@ -629,13 +584,16 @@ void renderEnemyVision(Enemy* e, Player* player)
 
 void renderEnemyVisionPoint(Enemy* e, COORD c, short x, short y, Player* player)
 {
+	unsigned int storey = player->currentStorey;
+	Grid *g = grid(storey);
+
 	c.Y += y;
 	c.X += x;
 	if (distance(e->position.coord, c) > e->getViewRange() ||
-		c.X < 0 || c.X >= grid()->size.X ||
-		c.Y < 0 || c.Y >= grid()->size.Y ||
-		!grid()->nodes[c.Y][c.X].getIsSeeThrough() ||
-		!grid()->nodes[c.Y][c.X].seen)
+		c.X < 0 || c.X >= g->size.X ||
+		c.Y < 0 || c.Y >= g->size.Y ||
+		!g->nodes[c.Y][c.X].getIsSeeThrough() ||
+		!g->nodes[c.Y][c.X].seen)
 		return;
 
 	renderMapPoint(c, ' ', lightGrey * 17, player);
@@ -681,12 +639,15 @@ void renderPlayerVision(Player* p)
 
 void renderPlayerVisionPoint(Player* player, float x, float y, float xDiff, float yDiff)
 {
+	unsigned int storey = player->currentStorey;
+	Grid *g = grid(storey);
+
 	COORD c;
 	c.X = x + xDiff;
 	c.Y = y + yDiff;
-	Node &n = grid()->nodes[c.Y][c.X];
-	if (c.X < 0 || c.X >= grid()->size.X ||
-		c.Y < 0 || c.Y >= grid()->size.Y)
+	Node &n = g->nodes[c.Y][c.X];
+	if (c.X < 0 || c.X >= g->size.X ||
+		c.Y < 0 || c.Y >= g->size.Y)
 		return;
 
 	n.seen = true;
@@ -697,6 +658,9 @@ void renderPlayerVisionPoint(Player* player, float x, float y, float xDiff, floa
 
 void renderMapPoint(COORD c, char i, WORD attr, Player *player)
 {
+	unsigned int storey = player->currentStorey;
+	Grid *g = grid(storey);
+
 	int sizeX = splitScreen.centerX();
 	int sizeY = splitScreen.centerY();
 
@@ -704,10 +668,10 @@ void renderMapPoint(COORD c, char i, WORD attr, Player *player)
 
 	if (pos.Y > sizeY - splitScreen.paddingY)
 	{
-		if (grid()->size.Y - pos.Y < sizeY - splitScreen.paddingY)
+		if (g->size.Y - pos.Y < sizeY - splitScreen.paddingY)
 		{
-			pos.Y = splitScreen.height - grid()->size.Y + pos.Y - splitScreen.paddingY;
-			c.Y = splitScreen.height - grid()->size.Y + c.Y - splitScreen.paddingY;
+			pos.Y = splitScreen.height - g->size.Y + pos.Y - splitScreen.paddingY;
+			c.Y = splitScreen.height - g->size.Y + c.Y - splitScreen.paddingY;
 		}
 		else
 		{
@@ -723,10 +687,10 @@ void renderMapPoint(COORD c, char i, WORD attr, Player *player)
 
 	if (pos.X > sizeX - splitScreen.paddingX)
 	{
-		if (grid()->size.X - pos.X < sizeX - splitScreen.paddingX)
+		if (g->size.X - pos.X < sizeX - splitScreen.paddingX)
 		{
-			pos.X = splitScreen.width - grid()->size.X + pos.X - splitScreen.paddingX;
-			c.X = splitScreen.width - grid()->size.X + c.X - splitScreen.paddingX;
+			pos.X = splitScreen.width - g->size.X + pos.X - splitScreen.paddingX;
+			c.X = splitScreen.width - g->size.X + c.X - splitScreen.paddingX;
 		}
 		else
 		{
@@ -810,11 +774,18 @@ void renderToScreen()
 
 void checkGamestate()
 {
-	for (int i = 0; i < numberOfEnemies(); ++i)
+	for (int p = 0; p < 2; ++p)
 	{
-		if(enemies()[i]->position.coord == player1()->position.coord || enemies()[i]->position.coord == player2()->position.coord)
-			g_eGameState = S_LOSESCREEN;
+		Player* player = players()[p];
+		unsigned int storey = player->currentStorey;
+		for (int i = 0; i < numberOfEnemies(storey); ++i)
+		{
+			Enemy *e = enemies(storey)[i];
+			if (e->position.coord == player->position.coord)
+				g_eGameState = S_LOSESCREEN;
+		}
 	}
+	
 }
 
 int distance(COORD a, COORD b)

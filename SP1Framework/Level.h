@@ -13,7 +13,6 @@ class Level
 {
 public:
 	unsigned int numberOfStoreys;
-	unsigned int currentStorey;
 	Grid **storeys;
 	unsigned int *numberOfEnemies;
 	Enemy ***enemies;
