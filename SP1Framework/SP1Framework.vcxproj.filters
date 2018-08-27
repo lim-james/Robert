@@ -154,9 +154,6 @@
     <Text Include="VILLAGE_1ST_STOREY.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="VILLAGE_1ST_LEVEL.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
     <Text Include="VILLAGE_PLAYERS.txt">
       <Filter>Resource Files</Filter>
     </Text>
@@ -169,7 +166,13 @@
     <Text Include="VILLAGE_1ST_STOREY_GUARD_3.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="VILLAGE_1ST_STOREY_CAMERA_1.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
     <Text Include="VILLAGE_TEST_GUARD.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="VILLAGE_LEVEL.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
