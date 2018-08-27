@@ -89,7 +89,7 @@ void Enemy::generatePath(Position start, Position goal, Grid* grid)
 		}
 		OPEN.erase(OPEN.begin() + index);
 		CLOSED.push_back(curr);
-
+			
 		if (curr->coord == goal.coord)
 			break;
 
@@ -103,7 +103,7 @@ void Enemy::generatePath(Position start, Position goal, Grid* grid)
 			neighbour->facing = dir[i];
 
 			neighbour->g = curr->g + 1;
-			neighbour->h = abs(goal.coord.Y - neighbour->coord.Y) + abs(goal.coord.X - neighbour->coord.X);
+			neighbour->h = goal.distance(*neighbour);// abs(goal.coord.Y - neighbour->coord.Y) + abs(goal.coord.X - neighbour->coord.X);
 			neighbour->f = neighbour->g + neighbour->h;
 			neighbour->parent = curr;
 
@@ -112,9 +112,19 @@ void Enemy::generatePath(Position start, Position goal, Grid* grid)
 			if (c.X < 0 || c.X >= grid->size.X ||
 				c.Y < 0 || c.Y >= grid->size.Y ||
 				(grid->nodes[c.Y][c.X].getIsBlocked() &&
-				grid->nodes[c.Y][c.X].getOtherState().isBlocked) || 
-				std::find(CLOSED.begin(), CLOSED.end(), neighbour) != CLOSED.end())
+				grid->nodes[c.Y][c.X].getOtherState().isBlocked))
 				continue;
+
+			bool found = false;
+			for (int close = 0; close < CLOSED.size(); ++close)
+			{
+				if (CLOSED[close]->coord == neighbour->coord)
+				{
+					found = true;
+					break;
+				}
+			}
+			if (found) continue;
 
 			if (grid->nodes[c.Y][c.X].getIsBlocked() && !grid->nodes[c.Y][c.X].getOtherState().isBlocked)
 			{
@@ -130,7 +140,7 @@ void Enemy::generatePath(Position start, Position goal, Grid* grid)
 				neighbour->action = [](Node* n) { return false; };
 			}
 
-			int index = OPEN.size();
+			int index = OPEN.size(); 
 			for (int n = 0; n < OPEN.size(); ++n)
 			{
 				if (OPEN[n]->coord == neighbour->coord)
