@@ -24,11 +24,12 @@ class Enemy : public Person
 	};
 
 public:
-	int nextIndex, nextPosition, numberOfPositions, enemyRange;
+	int nextIndex, nextPosition, numberOfPositions;
 	E_STATE state;
 	Position *positions, targetPosition;
 	std::vector<Position> standardPath;
 	std::vector<Position> chasePath;
+	int viewRange;
 
 	Enemy();										// default constructor
 	Enemy(const char, std::string, Colour, Colour);	// comprehe/nsive constructor
@@ -41,8 +42,8 @@ public:
 	void move(Grid*);
 	bool chase(Person*, Grid*);
 	std::vector<Position>& getPath();
-	bool isInView(Person*, Grid*, int);
-	bool cameraSight();
+	int getViewRange();
+	bool isInView(Person*, Grid*);
 };
 
 #endif

@@ -1,6 +1,7 @@
 #ifndef STATE_H
 #define STATE_H
 
+#include <windows.h>
 #include "Colours.h"
 
 class State
@@ -16,6 +17,8 @@ public:
 
 	State();
 	State(char, bool, bool, Colour, Colour, int, bool);
+
+	WORD getAttribute();
 
 	bool operator==(const State &s) const;
 	bool operator<(const State &s) const;
