@@ -38,8 +38,7 @@ const struct SplitScreen {
 } splitScreen;
 
 std::string levelFiles[L_COUNT] = {
-	"VILLAGE_1ST_LEVEL.txt",
-	"LOSESCREEN_LEVEL.txt"
+	"VILLAGE_1ST_LEVEL.txt"
 };
 //Level *level = new Level("AUNTY'S_HOUSE_LEVEL.txt");
 
@@ -151,13 +150,15 @@ void update(double dt)
     // get the delta time
     g_dElapsedTime += dt;
     g_dDeltaTime = dt;
-
+	processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     switch (g_eGameState)
     {
         case S_SPLASHSCREEN : splashScreenWait(); // game logic for the splash screen
             break;
         case S_GAME: gameplay(); // gameplay logic when we are in the game
             break;
+		case S_LOSESCREEN: loseScreenWait();
+			break;
     }
 }
 
@@ -180,6 +181,8 @@ void render()
 			renderGame(player1());
 			renderGame(player2());
             break;
+		case S_LOSESCREEN: renderLoseScreen();
+			break;
     }
     renderFramerate();  // renders debug information, frame rate, elapsed time, etc
     renderToScreen();   // dump the contents of the buffer to the screen, one frame worth of game
@@ -188,12 +191,24 @@ void render()
 void splashScreenWait()    // waits for time to pass in splash screen
 {
 	if (g_abKeyPressed[K_SPACE]) // wait for space to switch to game mode, else do nothing
+	{
+		setLevel(currentLevel);
 		g_eGameState = S_GAME;
+	}
+	
+}
+
+void loseScreenWait()
+{
+	if (g_abKeyPressed[K_SPACE]) // wait for space to switch to game mode, else do nothing
+	{
+		setLevel(currentLevel);
+		g_eGameState = S_GAME;
+	}
 }
 
 void gameplay()            // gameplay logic
 {
-    processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
 	playerKeyEvents();  // moves the character, collision detection, physics, etc
                         // sound can be played here too.
 }
@@ -214,12 +229,12 @@ void playerKeyEvents()
 			{
 				
 				if (e->chase(player1(), grid()))
-					setLevel(L_LOSE);
+					g_eGameState = S_LOSESCREEN;
 			}
 			else if (e->isInView(player2(), grid()))
 			{
 				if (e->chase(player2(), grid()))
-					setLevel(L_LOSE);
+					g_eGameState = S_LOSESCREEN;
 			}
 			else
 			{
@@ -310,7 +325,7 @@ void playerAction(Player* player)
 	Node* item = player->facingIn(grid());
 
 	// door
-	if (item->getState() == State((char)178, true, false, (Colour)8, (Colour)15, 0, false) && currentLevel == L_LOSE)
+	if (item->getState() == State((char)178, true, false, (Colour)8, (Colour)15, 0, false))
 	{
 		setLevel(L_AUNTYS_HOUSE);
 	}
@@ -419,19 +434,33 @@ void renderSplashScreen()  // renders the splash screen
     COORD c = g_Console.getConsoleSize();
     c.Y /= 3;
     c.X = c.X / 2 - 9;
-    g_Console.writeToBuffer(c, "WELCOME TO ROBERT", 0x03);
+    g_Console.writeToBuffer(c, "WELCOME TO ROBERT", 0x12);
     c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 2 - 20;
+    c.X = g_Console.getConsoleSize().X / 2 - 11;
     g_Console.writeToBuffer(c, "Press <Space> to start", 0x09);
     c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 2 - 9;
+    c.X = g_Console.getConsoleSize().X / 2 - 10;
     g_Console.writeToBuffer(c, "Press <Esc> to quit", 0x09);
+}
+
+void renderLoseScreen()  // renders the splash screen
+{
+	COORD c = g_Console.getConsoleSize();
+	c.Y /= 3;
+	c.X = c.X / 2 - 5;
+	g_Console.writeToBuffer(c, "YOU LOST", 0x12);
+	c.Y += 1;
+	c.X = g_Console.getConsoleSize().X / 2 - 13;
+	g_Console.writeToBuffer(c, "Press <Space> to re-start", 0x09);
+	c.Y += 1;
+	c.X = g_Console.getConsoleSize().X / 2 - 10;
+	g_Console.writeToBuffer(c, "Press <Esc> to quit", 0x09);
 }
 
 void renderGame(Player* player)
 {
 	
-	if (currentLevel != L_LOSE)
+	if (currentLevel != S_LOSESCREEN)
 	{
 		for (int r = 0; r < grid()->size.Y; ++r)
 			for (int c = 0; c < grid()->size.X; ++c)
@@ -466,7 +495,7 @@ void renderGame(Player* player)
 void renderMap(Player* player)
 {
 	COORD coord;
-	if (currentLevel == L_LOSE)
+	if (currentLevel == S_LOSESCREEN)
 	{
 		for (int r = 0; r < grid()->size.Y; ++r)
 		{
@@ -758,7 +787,7 @@ void checkGamestate()
 		if (enemies()[i]->isInView(player1(), grid()) || enemies()[i]->isInView(player2(), grid()))
 		{
 			Sleep(1000);
-			setLevel(L_LOSE);
+			g_eGameState = S_LOSESCREEN;
 		}
 	}
 }
