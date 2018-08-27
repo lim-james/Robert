@@ -1,4 +1,4 @@
-28
+33
 64 1 0 4 15 5 1 ]_off_stove
 64 1 0 0 15 0 0 ]_toggle_stove
 178 1 0 8 15 40 0 ]_open_door
@@ -18,12 +18,17 @@
 228 1 0 9 15 0 0 fridge
 154 1 1 7 15 0 0 ]_flush_toilet
 234 1 1 7 15 0 0 ]_toggle_basin
-157 1 0 11 5 0 0 ]_get_key
+157 1 1 11 5 0 0 ]_get_key
 254 1 0 3 15 0 0 ]_hide_in_closet
 254 1 1 10 15 0 0 ]_toggle_circuit_breaker
 240 1 1 13 15 0 0 ]_unlock_safe
-49 1 1 8 15 0 0 "sophie"
-50 1 1 8 15 0 0 "is"
-51 1 1 8 15 0 0 "very"
-52 1 1 8 15 0 0 "very"
-53 1 1 8 15 0 0 "gay"
+49 1 1 8 15 0 0 DOCUMENT:"sophie"
+50 1 1 8 15 0 0 DOCUMENT:"wong"
+51 1 1 8 15 0 0 DOCUMENT:"is"
+52 1 1 8 15 0 0 DOCUMENT:"very"
+53 1 1 8 15 0 0 DOCUMENT:"gay"
+54 1 1 8 15 0 0 DOCUMENT:"james"
+55 1 1 8 15 0 0 DOCUMENT:"also"
+56 1 1 8 15 0 0 DOCUMENT:"very"
+57 1 1 8 15 0 0 DOCUMENT:"gay"
+79 1 1 0 15 0 0 ]_sewer
