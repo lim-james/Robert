@@ -542,7 +542,7 @@ void renderEnemies(Player* player)
 
 void renderPerson(Person* person, Player* player)
 {
-	renderMapPoint(person->position.coord, person->icon, person->getAttribute(), player);
+	renderMapPoint(person->position.coord, person->getIcon(), person->getAttribute(), player);
 }
 
 void renderEnemyVision(Enemy* e, Player* player)

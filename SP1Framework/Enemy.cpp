@@ -162,7 +162,7 @@ void Enemy::check(Grid* grid)
 			if (radius != 0)
 			{
 				Position pos({x,y}, left);
-				if (position.distance(pos) <= radius && playingSound == 1)
+				if (position.distance(pos) <= radius && playingSound)
 				{
 					targetPosition = pos;
 				}
