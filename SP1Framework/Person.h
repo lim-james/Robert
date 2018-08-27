@@ -3,7 +3,7 @@
 
 #include <Windows.h>
 #include "Grid.h"
-#include "Position.h"
+#include "PathNode.h"
 
 class Person
 {

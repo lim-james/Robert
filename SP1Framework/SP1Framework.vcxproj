@@ -87,6 +87,7 @@
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="PathNode.cpp" />
     <ClCompile Include="Person.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Position.cpp" />
@@ -99,6 +100,7 @@
     <ClInclude Include="Framework\timer.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="PathNode.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Node.h" />
@@ -129,6 +131,7 @@
     <Text Include="VILLAGE_1ST_STOREY_GUARD_2.txt" />
     <Text Include="VILLAGE_1ST_STOREY_GUARD_3.txt" />
     <Text Include="VILLAGE_PLAYERS.txt" />
+    <Text Include="VILLAGE_TEST_GUARD.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
