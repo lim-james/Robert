@@ -354,10 +354,11 @@ void playerAction(Player* player)
 	{
 		player->isHidden = !player->isHidden;
 	}
-	// unlock safe
+	// unlock safe and take document
 	else if ((item->getState() == State((char)240, true, true, (Colour)13, (Colour)15, 0, false) && player->hasItem(State((char)157, true, false, (Colour)11, (Colour)5, 0, false))))
 	{
-		
+		player->storeItem(State((char)72, true, true, (Colour)0, (Colour)15, 0, false));
+		item->toggle;
 	}
 	else if (attrs()[item->getState()] == "]_open_door" || "]_close_door" || "]_open_window" || "]_close_window")
 	{
@@ -365,9 +366,16 @@ void playerAction(Player* player)
 		item->getPlayingSound() = !item->getPlayingSound();
 		item->getPlayingSound() = !item->getPlayingSound();
 	}
+	// end game
+	else if (attrs()[item->getState()] == "]_sewer" && player->hasItem(State((char)72, true, true, (Colour)0, (Colour)15, 0, false)))
+	{
+		g_eGameState = S_SPLASHSCREEN;
+	}
 	else
 	{
-		item->toggle();
+		// if item is a safe, does not toggle till player has key
+		if(!(item->getState() == State((char)240, true, true, (Colour)13, (Colour)15, 0, false)))
+			item->toggle();
 	}
 
 	player->somethingHappened = true;
@@ -383,7 +391,7 @@ void processUserInput()
 void renderInventory(Player* player)
 {
 	char i[7][7] = {
-		{ 201, 205, 203, 205, 203, 205, 187 },
+	{ 201, 205, 203, 205, 203, 205, 187 },
 	{ 186, 32, 186, 32, 186, 32, 186 },
 	{ 204, 205, 206, 205, 206, 205, 185 },
 	{ 186, 32, 186, 32, 186, 32, 186 },
@@ -392,6 +400,14 @@ void renderInventory(Player* player)
 	{ 200, 205, 202, 205, 202, 205, 188 }
 	};
 	i[1][1] = player->items[0].icon;
+	i[1][3] = player->items[1].icon;
+	i[1][5] = player->items[2].icon;
+	i[3][1] = player->items[3].icon;
+	i[3][3] = player->items[4].icon;
+	i[3][5] = player->items[5].icon;
+	i[5][1] = player->items[6].icon;
+	i[5][3] = player->items[7].icon;
+	i[5][5] = player->items[8].icon;
 
 	for (int y = 0; y < 7; y++)
 	{
@@ -415,10 +431,10 @@ void renderInventoryPoint1(COORD c, char i, WORD attr)
 	unsigned int offsetX = (g_Console.getConsoleSize().X - grid()->size.X - 14) / 4;
 	unsigned int offsetY = (g_Console.getConsoleSize().Y - 7) / 2;
 
-	c.X += offsetX;
-	c.Y += offsetY;
+	c.X += 0;
+	c.Y += 0;
 
-	g_Console.writeToBuffer(c, i, attr);
+	renderPoint(c, i, attr, player1());
 }
 
 void renderInventoryPoint2(COORD c, char i, WORD attr)
@@ -426,10 +442,10 @@ void renderInventoryPoint2(COORD c, char i, WORD attr)
 	unsigned int offsetX = g_Console.getConsoleSize().X - ((g_Console.getConsoleSize().X - grid()->size.X - 14) / 4) - 7;
 	unsigned int offsetY = (g_Console.getConsoleSize().Y - 7) / 2;
 
-	c.X += offsetX;
-	c.Y += offsetY;
+	c.X += 0;
+	c.Y += 0;
 
-	g_Console.writeToBuffer(c, i, attr);
+	renderPoint(c, i, attr, player2());
 }
 
 void clearScreen()
@@ -481,10 +497,10 @@ void renderGame(Player* player)
 	renderMessage(attrs()[player1()->facingIn(grid())->getState()], player1());
 	renderMessage(attrs()[player2()->facingIn(grid())->getState()], player2());
 
-	//if (player1()->openedInventory)
-	//	renderInventory(player1());
-	//if (player2()->openedInventory)
-	//	renderInventory(player2());
+	if (player1()->openedInventory)
+		renderInventory(player1());
+	if (player2()->openedInventory)
+		renderInventory(player2());
 
 	for (int i = 0; i < numberOfEnemies(); ++i)
 	{

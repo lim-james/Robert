@@ -42,7 +42,7 @@ bool Player::hasItem(State item)
 	{
 		if (items[i] == item)
 		{
-			items[i] = State((char)32, false, true, (Colour)15, (Colour)15, 0, false); // removes item from inventory after usage
+			items[i] = State(); // removes item from inventory after usage
 			return true;
 		}
 	}

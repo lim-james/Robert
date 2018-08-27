@@ -297,27 +297,3 @@ void Enemy::alert(unsigned int count, Enemy** enemies, Person* p, Grid* grid)
 		}
 	}
 }
-
-/*bool Enemy::cameraDetection(Person* p, Grid* grid, Enemy* e, unsigned int numberOfEnemies)
-{
-	for (nextIndex = 0; nextIndex < numberOfEnemies; ++nextIndex)
-	{
-		int temp;
-		*e = e[nextIndex];
-		closestEnemy = sqrt(pow(position.coord.X - e->position.coord.X, 2.0) + pow(position.coord.Y - e->position.coord.Y, 2.0));
-		*e = e[nextIndex + 1];
-		temp = sqrt(pow(position.coord.X - e->position.coord.X, 2.0) + pow(position.coord.Y - e->position.coord.Y, 2.0));
-		if (closestEnemy > temp)
-			closestEnemy = temp;
-	}
-	for (nextIndex = 0; nextIndex < numberOfEnemies; ++nextIndex)
-	{
-		*e = e[nextIndex];
-		if (e->position.distance(position) == closestEnemy)
-		{
-			if (e->chase(p, grid))
-				return true;
-		}
-	}
-}
-}*/
