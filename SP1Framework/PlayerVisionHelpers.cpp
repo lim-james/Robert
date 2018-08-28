@@ -50,7 +50,7 @@ void renderPlayerVisionPoint(Player* player, float x, float y, float xDiff, floa
 		return;
 
 	n.seen = true;
-	if (!n.getIsSeeThrough() || sqrt(pow(player->position.coord.X - c.X, 2.0) + pow(player->position.coord.Y - c.Y, 2.0)) >= splitScreen.height - 2 * splitScreen.paddingY)
+	if (!n.getIsSeeThrough() || distance(player->position.coord, c) >= splitScreen.width - 2 * splitScreen.paddingX)
 		return;
 	renderPlayerVisionPoint(player, x + xDiff, y + yDiff, xDiff, yDiff);
 }
