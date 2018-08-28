@@ -37,7 +37,7 @@ const struct SplitScreen {
 	static const int diagonal() { return sqrt(pow(centerX(), 2.0) + pow(centerY(), 2.0)); }
 } splitScreen;
 
-State iterativeItems[I_COUNT] = {
+State iterativeItems[ITEM_COUNT] = {
 	State((char)254, true, false, (Colour)3, (Colour)15, 0, false),
 
 };
