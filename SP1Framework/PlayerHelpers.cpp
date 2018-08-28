@@ -14,7 +14,7 @@ void playerKeyEvents()
 
 		for (int e = 0; e < num; ++e)
 		{
-			Enemy *enemy = es[i];
+			Enemy *enemy = es[e];
 			Node* item = enemy->facingIn(g);
 
 			if (g_dElapsedTime > enemy->bounceTime)
