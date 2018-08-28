@@ -109,7 +109,7 @@ void playerAction(Player* player)
 	Node* item = player->facingIn(grid(player->currentStorey));
 
 	// door
-	if (item->getState() == iterativeItems[CLOSET])
+	if (item->getState() == interactiveItems[CLOSET])
 	{
 		setLevel(L_AUNTYS_HOUSE);
 	}

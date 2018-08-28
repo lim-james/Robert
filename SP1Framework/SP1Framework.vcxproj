@@ -155,6 +155,13 @@
     <Text Include="SPLASHSCREEN_PLAYERS.txt" />
     <Text Include="SPLASHSCREEN_STOREY.txt" />
     <Text Include="Test_Map.txt" />
+    <Text Include="VILLAGE_1ST_STOREY_GUARD_10.txt" />
+    <Text Include="VILLAGE_1ST_STOREY_GUARD_4.txt" />
+    <Text Include="VILLAGE_1ST_STOREY_GUARD_5.txt" />
+    <Text Include="VILLAGE_1ST_STOREY_GUARD_6.txt" />
+    <Text Include="VILLAGE_1ST_STOREY_GUARD_7.txt" />
+    <Text Include="VILLAGE_1ST_STOREY_GUARD_8.txt" />
+    <Text Include="VILLAGE_1ST_STOREY_GUARD_9.txt" />
     <Text Include="VILLAGE_BASEMENT.txt" />
     <Text Include="VILLAGE_LEVEL.txt" />
     <Text Include="VILLAGE_1ST_STOREY.txt" />

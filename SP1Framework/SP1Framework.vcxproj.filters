@@ -268,5 +268,26 @@
     <Text Include="SPLASHSCREEN_ATTRIBUTES_NAME.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="VILLAGE_1ST_STOREY_GUARD_10.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="VILLAGE_1ST_STOREY_GUARD_9.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="VILLAGE_1ST_STOREY_GUARD_4.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="VILLAGE_1ST_STOREY_GUARD_5.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="VILLAGE_1ST_STOREY_GUARD_6.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="VILLAGE_1ST_STOREY_GUARD_7.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="VILLAGE_1ST_STOREY_GUARD_8.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

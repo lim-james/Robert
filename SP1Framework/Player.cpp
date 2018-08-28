@@ -9,7 +9,7 @@ Player::Player() : openedInventory(false)
 }
 
 Player::Player(const char i, Position p, Colour fc, Colour bc)
-	: Person(i, p, fc, bc, 0.125), openedInventory(false)
+	: Person(i, p, fc, bc, 0.075), openedInventory(false)
 {
 	for (int i = 0; i < 9; i++)
 	{

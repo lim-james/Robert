@@ -178,7 +178,7 @@ void renderGame(Player* player)
 	{
 		for (int r = 0; r < g->size.Y; ++r)
 			for (int c = 0; c < g->size.X; ++c)
-				g->nodes[r][c].seen = false;
+				g->nodes[r][c].seen = g->nodes[r][c].getState() == interactiveItems[WALL];
 		renderPlayerVision(player1());
 		renderPlayerVision(player2());
 	}
