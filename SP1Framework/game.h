@@ -43,6 +43,12 @@ enum LEVELSTATES
 	L_COUNT
 };
 
+enum ITEMS
+{
+	CLOSET,
+	ITEM_COUNT
+};
+
 void setLevel(LEVELSTATES);
 Player** players();
 Player* player1();

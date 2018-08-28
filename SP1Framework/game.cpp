@@ -37,6 +37,11 @@ const struct SplitScreen {
 	static const int diagonal() { return sqrt(pow(centerX(), 2.0) + pow(centerY(), 2.0)); }
 } splitScreen;
 
+State iterativeItems[I_COUNT] = {
+	State((char)254, true, false, (Colour)3, (Colour)15, 0, false),
+
+};
+
 std::string levelFiles[L_COUNT] = {
 	"VILLAGE_LEVEL.txt"
 };
@@ -330,7 +335,7 @@ void playerAction(Player* player)
 	Node* item = player->facingIn(grid(player->currentStorey));
 
 	// door
-	if (item->getState() == State((char)178, true, false, (Colour)8, (Colour)15, 0, false))
+	if (item->getState() == iterativeItems[CLOSET])
 	{
 		setLevel(L_AUNTYS_HOUSE);
 	}
