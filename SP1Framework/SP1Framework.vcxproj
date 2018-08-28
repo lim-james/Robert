@@ -79,34 +79,64 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ConsoleHelpers.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyVisionHelpers.cpp" />
     <ClCompile Include="Framework\console.cpp" />
     <ClCompile Include="Framework\timer.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="GameStateHelpers.cpp" />
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="KeyHelpers.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="LevelHelpers.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MathHelpers.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="PathNode.cpp" />
     <ClCompile Include="Person.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerHelpers.cpp" />
+    <ClCompile Include="PlayerVisionHelpers.cpp" />
     <ClCompile Include="Position.cpp" />
+    <ClCompile Include="RenderInventoryHelpers.cpp" />
+    <ClCompile Include="RenderMapHelpers.cpp" />
+    <ClCompile Include="RenderMessageHelpers.cpp" />
+    <ClCompile Include="RenderPersonHelpers.cpp" />
+    <ClCompile Include="RenderPointHelpers.cpp" />
     <ClCompile Include="State.cpp" />
+    <ClCompile Include="TimeHelpers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Colours.h" />
+    <ClInclude Include="ConsoleHelpers.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyVisionHelpers.h" />
     <ClInclude Include="Framework\console.h" />
     <ClInclude Include="Framework\timer.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="GameStateHelpers.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="ItemHelpers.h" />
+    <ClInclude Include="KeyHelpers.h" />
+    <ClInclude Include="LevelHelpers.h" />
+    <ClInclude Include="MathHelpers.h" />
     <ClInclude Include="PathNode.h" />
+    <ClInclude Include="PlayerHelpers.h" />
+    <ClInclude Include="PlayerVisionHelpers.h" />
+    <ClInclude Include="RenderInventoryHelpers.h" />
+    <ClInclude Include="RenderMapHelpers.h" />
+    <ClInclude Include="RenderMessageHelpers.h" />
+    <ClInclude Include="RenderPersonHelpers.h" />
+    <ClInclude Include="RenderPointHelpers.h" />
+    <ClInclude Include="SplitscreenHelpers.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Position.h" />
+    <ClInclude Include="TimeHelpers.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="AUNTY%27S_ATTRIBUTES_NAME.txt" />
