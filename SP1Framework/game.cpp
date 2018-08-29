@@ -378,8 +378,9 @@ void clearScreen()
 			}
 		}
 	}
+	
 	// Clears the buffer with this colour attribute
-	g_Console.clearBuffer(black * 17);
+	g_Console.clearBuffer(0);
 }
 
 void renderSplashScreen()  // renders the splash screen
@@ -659,7 +660,7 @@ void renderGame(Player* player)
 	{
 		for (int r = 0; r < g->size.Y; ++r)
 			for (int c = 0; c < g->size.X; ++c)
-				g->nodes[r][c].seen = g->nodes[r][c].getState() == interactiveItems[WALL];
+					g->nodes[r][c].seen = g->nodes[r][c].getState() == interactiveItems[WALL] && player->currentStorey == 1;
 		renderPlayerVision(player1());
 		renderPlayerVision(player2());
 	}

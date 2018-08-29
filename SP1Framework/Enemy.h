@@ -9,7 +9,7 @@
 #include "Person.h"
 #include "Grid.h"
 
-enum E_STATE { normal, chasing }; //do i need this even
+enum E_STATE { normal, chasing, distracted }; //do i need this even
 
 class Enemy : public Person
 {
@@ -23,7 +23,7 @@ class Enemy : public Person
 	};
 
 public:
-	int nextIndex, nextPosition, numberOfPositions, closestEnemy;
+	int nextPosition, numberOfPositions, closestEnemy;
 	E_STATE state;
 	Position *positions, targetPosition;
 	std::vector<PathNode> standardPath;
