@@ -190,7 +190,7 @@ void Enemy::generatePath(Position start, Position goal, Grid* grid)
 
 float Enemy::getMovementDelay()
 {
-	return state == chasing ? movementDelay / 2.0 : movementDelay;
+	return state == chasing ? movementDelay / 10.0 : movementDelay;
 }
 
 void Enemy::check(Grid* grid)
