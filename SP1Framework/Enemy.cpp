@@ -56,6 +56,19 @@ Enemy::~Enemy()
 {
 }
 
+void Enemy::setTargetPosition(Position* positions, unsigned int count)
+{
+	std::vector<Position> choices;
+	for (int i = 0; i < count; ++i)
+	{
+		if (positions[i].distance(position) < 25)
+		{
+			choices.push_back(positions[i]);
+		}
+	}
+	targetPosition = choices[rand() % choices.size()];
+}
+
 void Enemy::generatePath(Position start, Position goal, Grid* grid)
 {
 	std::vector<A_STAR_NODE*> OPEN;
