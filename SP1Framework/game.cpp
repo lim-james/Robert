@@ -313,7 +313,7 @@ void clearScreen()
 	for (int p = 0; p < 2; ++p)
 	{
 		unsigned int curr = players()[p]->currentStorey;
-		for (int i = 0; i < numberOfEnemies(curr); ++i)
+		for (unsigned int i = 0; i < numberOfEnemies(curr); ++i)
 		{
 			if (enemies(curr)[i]->state == chasing)
 			{
@@ -587,7 +587,7 @@ void renderGame(Player* player)
 	if (player->openedInventory)
 		renderInventory(player);
 
-	for (int i = 0; i < numberOfEnemies(storey); ++i)
+	for (unsigned int i = 0; i < numberOfEnemies(storey); ++i)
 		renderEnemyVision(enemies(storey)[i], player);
 
     renderPlayers(player);  // renders the character into the buffer
@@ -625,7 +625,7 @@ void checkGamestate()
 	{
 		Player* player = players()[p];
 		unsigned int storey = player->currentStorey;
-		for (int i = 0; i < numberOfEnemies(storey); ++i)
+		for (unsigned int i = 0; i < numberOfEnemies(storey); ++i)
 		{
 			Enemy *e = enemies(storey)[i];
 			if (e->position.coord == player->position.coord && !player->isGod)

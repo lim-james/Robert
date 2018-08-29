@@ -15,7 +15,7 @@ const struct SplitScreen {
 
 	static const int centerX() { return width / 2; }
 	static const int centerY() { return height / 2; }
-	static const int diagonal() { return sqrt(pow(centerX(), 2.0) + pow(centerY(), 2.0)); }
+	static const double diagonal() { return sqrt(pow(centerX(), 2.0) + pow(centerY(), 2.0)); }
 } splitScreen;
 
 #endif

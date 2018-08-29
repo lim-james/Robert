@@ -12,7 +12,7 @@ void renderPlayers(Player* player)
 void renderEnemies(Player* player)
 {
 	unsigned int storey = player->currentStorey;
-	for (int i = 0; i < numberOfEnemies(storey); ++i)
+	for (unsigned int i = 0; i < numberOfEnemies(storey); ++i)
 	{
 		Enemy *enemy = enemies(storey)[i];
 		if (!grid(storey)->nodes[enemy->position.coord.Y][enemy->position.coord.X].seen)
