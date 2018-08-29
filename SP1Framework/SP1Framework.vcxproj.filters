@@ -193,51 +193,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="AUNTY%27S_ATTRIBUTES.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="AUNTY%27S_HOUSE_1ST_STOREY.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="Test_Map.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="AUNTY%27S_HOUSE_2ND_STOREY.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="AUNTY%27S_ATTRIBUTES_NAME.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="AUNTY%27S_HOUSE_LEVEL.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="AUNTY%27S_HOUSE_GUARD_1.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="AUNTY%27S_HOUSE_PLAYERS.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="SPLASHSCREEN_ATTRIBUTES.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="SPLASHSCREEN_GUARD_1.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="SPLASHSCREEN_LEVEL.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="SPLASHSCREEN_PLAYERS.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="SPLASHSCREEN_STOREY.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="LOSESCREEN_STOREY.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="LOSESCREEN_LEVEL.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
     <Text Include="VILLAGE_1ST_STOREY.txt">
       <Filter>Resource Files</Filter>
     </Text>
@@ -265,9 +220,6 @@
     <Text Include="VILLAGE_BASEMENT.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="SPLASHSCREEN_ATTRIBUTES_NAME.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
     <Text Include="VILLAGE_1ST_STOREY_GUARD_10.txt">
       <Filter>Resource Files</Filter>
     </Text>
@@ -287,6 +239,12 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="VILLAGE_1ST_STOREY_GUARD_8.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="VILLAGE_ATTRIBUTES_NAME.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="VILLAGE_ATTRIBUTES.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
