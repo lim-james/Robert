@@ -81,6 +81,7 @@
   <ItemGroup>
     <ClCompile Include="ConsoleHelpers.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyHelpers.cpp" />
     <ClCompile Include="EnemyVisionHelpers.cpp" />
     <ClCompile Include="Framework\console.cpp" />
     <ClCompile Include="Framework\timer.cpp" />
@@ -111,6 +112,7 @@
     <ClInclude Include="Colours.h" />
     <ClInclude Include="ConsoleHelpers.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyHelpers.h" />
     <ClInclude Include="EnemyVisionHelpers.h" />
     <ClInclude Include="Framework\console.h" />
     <ClInclude Include="Framework\timer.h" />

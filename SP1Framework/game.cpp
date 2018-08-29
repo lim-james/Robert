@@ -10,6 +10,129 @@
 #include <algorithm>
 #include <thread>
 
+
+std::string splashScreen[7][15] =
+{
+	{
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+		"- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+		"- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+		"- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+		"- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+	},
+	{
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - / / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - / - - - / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"- - - / - - - / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+		"- - - / / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+		"- - - / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+		"- - - / - / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+		"- - - / - - / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+		"/ - - / - - - / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - / - - - / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+	},
+	{
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - / / / / / - - / / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - / - - - / - - / - - - / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"- - - / - - - / - - / - - - / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+		"- - - / / / / / - - / - - - / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+		"- - - / / - - - - - / - - - / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+		"- - - / - / - - - - / - - - / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+		"- - - / - - / - - - / - - - / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+		"/ - - / - - - / - - / - - - / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - / - - - / - - / / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+	},
+	{
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - / / / / / - - / / / / / - - / / / / / - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - / - - - / - - / - - - / - - / - - - / - - - - - - - - - - - - - - - - - - - - - - - /",
+		"- - - / - - - / - - / - - - / - - / - - - / - - - - - - - - - - - - - - - - - - - - - - - -",
+		"- - - / / / / / - - / - - - / - - / - - - / - - - - - - - - - - - - - - - - - - - - - - - -",
+		"- - - / / - - - - - / - - - / - - / / / / - - - - - - - - - - - - - - - - - - - - - - - - -",
+		"- - - / - / - - - - / - - - / - - / - - - / - - - - - - - - - - - - - - - - - - - - - - - -",
+		"- - - / - - / - - - / - - - / - - / - - - / - - - - - - - - - - - - - - - - - - - - - - - -",
+		"/ - - / - - - / - - / - - - / - - / - - - / - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - / - - - / - - / / / / / - - / / / / / - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+	},
+	{
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - / / / / / - - / / / / / - - / / / / / - - / / / / / - - - - - - - - - - - - - - - - /",
+		"/ - - / - - - / - - / - - - / - - / - - - / - - / - - - - - - - - - - - - - - - - - - - - /",
+		"- - - / - - - / - - / - - - / - - / - - - / - - / - - - - - - - - - - - - - - - - - - - - -",
+		"- - - / / / / / - - / - - - / - - / - - - / - - / - - - - - - - - - - - - - - - - - - - - -",
+		"- - - / / - - - - - / - - - / - - / / / / - - - / / / / / - - - - - - - - - - - - - - - - -",
+		"- - - / - / - - - - / - - - / - - / - - - / - - / - - - - - - - - - - - - - - - - - - - - -",
+		"- - - / - - / - - - / - - - / - - / - - - / - - / - - - - - - - - - - - - - - - - - - - - -",
+		"/ - - / - - - / - - / - - - / - - / - - - / - - / - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - / - - - / - - / / / / / - - / / / / / - - / / / / / - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+	},
+	{
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - / / / / / - - / / / / / - - / / / / / - - / / / / / - - / / / / / - - - - - - - - - /",
+		"/ - - / - - - / - - / - - - / - - / - - - / - - / - - - - - - / - - - / - - - - - - - - - /",
+		"- - - / - - - / - - / - - - / - - / - - - / - - / - - - - - - / - - - / - - - - - - - - - -",
+		"- - - / / / / / - - / - - - / - - / - - - / - - / - - - - - - / / / / / - - - - - - - - - -",
+		"- - - / / - - - - - / - - - / - - / / / / - - - / / / / / - - / / - - - - - - - - - - - - -",
+		"- - - / - / - - - - / - - - / - - / - - - / - - / - - - - - - / - / - - - - - - - - - - - -",
+		"- - - / - - / - - - / - - - / - - / - - - / - - / - - - - - - / - - / - - - - - - - - - - -",
+		"/ - - / - - - / - - / - - - / - - / - - - / - - / - - - - - - / - - - / - - - - - - - - - /",
+		"/ - - / - - - / - - / / / / / - - / / / / / - - / / / / / - - / - - - / - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+	},
+	{
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - / / / / / - - / / / / / - - / / / / / - - / / / / / - - / / / / / - - / / / / / - - /",
+		"/ - - / - - - / - - / - - - / - - / - - - / - - / - - - - - - / - - - / - - - - / - - - - /",
+		"- - - / - - - / - - / - - - / - - / - - - / - - / - - - - - - / - - - / - - - - / - - - - -",
+		"- - - / / / / / - - / - - - / - - / - - - / - - / - - - - - - / / / / / - - - - / - - - - -",
+		"- - - / / - - - - - / - - - / - - / / / / - - - / / / / / - - / / - - - - - - - / - - - - -",
+		"- - - / - / - - - - / - - - / - - / - - - / - - / - - - - - - / - / - - - - - - / - - - - -",
+		"- - - / - - / - - - / - - - / - - / - - - / - - / - - - - - - / - - / - - - - - / - - - - -",
+		"/ - - / - - - / - - / - - - / - - / - - - / - - / - - - - - - / - - - / - - - - / - - - - /",
+		"/ - - / - - - / - - / / / / / - - / / / / / - - / / / / / - - / - - - / - - - - / - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+	},
+};
 //--------------------------------------------------------------
 // Purpose  : Initialisation function
 //            Initialize variables, allocate memory, load data from file, etc. 
@@ -70,6 +193,16 @@ void update(double dt)
     {
         case S_SPLASHSCREEN : splashScreenWait(); // game logic for the splash screen
             break;
+		case S_LOADINGSCREEN1: loadingScreenWait1();
+			break;
+		case S_LOADINGSCREEN2: loadingScreenWait2();
+			break;
+		case S_LOADINGSCREEN3: loadingScreenWait3();
+			break;
+		case S_LOADINGSCREEN4: loadingScreenWait4();
+			break;
+		case S_LOADINGSCREEN5: loadingScreenWait5();
+			break;
         case S_GAME: gameplay(); // gameplay logic when we are in the game
             break;
 		case S_LOSESCREEN: loseScreenWait();
@@ -92,6 +225,16 @@ void render()
     {
         case S_SPLASHSCREEN: renderSplashScreen();
             break;
+		case S_LOADINGSCREEN1: renderLoadingScreen1();
+			break;
+		case S_LOADINGSCREEN2: renderLoadingScreen2();
+			break;
+		case S_LOADINGSCREEN3: renderLoadingScreen3();
+			break;
+		case S_LOADINGSCREEN4: renderLoadingScreen4();
+			break;
+		case S_LOADINGSCREEN5: renderLoadingScreen5();
+			break;
 		case S_GAME:
 			renderGame(player1());
 			renderGame(player2());
@@ -108,8 +251,37 @@ void splashScreenWait()    // waits for time to pass in splash screen
 	if (g_abKeyPressed[K_SPACE]) // wait for space to switch to game mode, else do nothing
 	{
 		setLevel(currentLevel);
-		g_eGameState = S_GAME;
+		g_eGameState = S_LOADINGSCREEN1;
 	}
+}
+
+void loadingScreenWait1()
+{
+	Sleep(1200);
+	g_eGameState = S_LOADINGSCREEN2;
+}
+
+void loadingScreenWait2()
+{
+	Sleep(1200);
+	g_eGameState = S_LOADINGSCREEN3;
+}
+
+void loadingScreenWait3()
+{
+	Sleep(1200);
+	g_eGameState = S_LOADINGSCREEN4;
+}
+void loadingScreenWait4()
+{
+	Sleep(1200);
+	g_eGameState = S_LOADINGSCREEN5;
+}
+void loadingScreenWait5()
+{
+	Sleep(2000);
+	setLevel(currentLevel);
+	g_eGameState = S_GAME;
 }
 
 void loseScreenWait()
@@ -123,6 +295,7 @@ void loseScreenWait()
 
 void gameplay()            // gameplay logic
 {
+	refreshEnemies();
 	playerKeyEvents();  // moves the character, collision detection, physics, etc
                         // sound can be played here too.
 	checkGamestate();
@@ -143,16 +316,228 @@ void clearScreen()
 
 void renderSplashScreen()  // renders the splash screen
 {
-    COORD c = g_Console.getConsoleSize();
-    c.Y /= 3;
-    c.X = c.X / 2 - 9;
-    g_Console.writeToBuffer(c, "WELCOME TO ROBERT", 0x12);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 2 - 11;
-    g_Console.writeToBuffer(c, "Press <Space> to start", 0x09);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 2 - 10;
-    g_Console.writeToBuffer(c, "Press <Esc> to quit", 0x09);
+	COORD c = g_Console.getConsoleSize();
+	c.Y /= 5;
+	c.X = c.X / 2 - 45;
+
+	int frame = 6;
+	if (g_dElapsedTime * 2 < 7)
+		frame = (int)(g_dElapsedTime * 2);
+
+	for (int r = 0; r < 15; ++r)
+	{
+		g_Console.writeToBuffer(c, splashScreen[frame][r], white);
+		c.Y++;
+	}
+
+	if (g_dElapsedTime * 2 < 7)
+		return;
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 9;
+	g_Console.writeToBuffer(c, "WELCOME TO ROBERT", white);
+	c.Y += 1;
+	c.X = g_Console.getConsoleSize().X / 2 - 11;
+	g_Console.writeToBuffer(c, "Press <Space> to start", white);
+	c.Y += 1;
+	c.X = g_Console.getConsoleSize().X / 2 - 10;
+	g_Console.writeToBuffer(c, "Press <Esc> to quit", white);
+}
+
+void renderLoadingScreen1()
+{
+	COORD c = g_Console.getConsoleSize();
+	c.Y /= 4;
+	c.X = c.X / 2 - 7;
+	g_Console.writeToBuffer(c, "    O    ", black);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 12;
+	g_Console.writeToBuffer(c, "                O  ", black);
+	c.X = g_Console.getConsoleSize().X / 2 - 13;
+	g_Console.writeToBuffer(c, "   O             ", black);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 12;
+	g_Console.writeToBuffer(c, "                    O", black);
+	c.X = g_Console.getConsoleSize().X / 2 - 14;
+	g_Console.writeToBuffer(c, "O                   ", black);
+	c.X = g_Console.getConsoleSize().X / 2 - 11;
+	g_Console.writeToBuffer(c, "     LOADING    ", white);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 12;
+	g_Console.writeToBuffer(c, "                O  ", black);
+	c.X = g_Console.getConsoleSize().X / 2 - 13;
+	g_Console.writeToBuffer(c, "   O             ", black);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 7;
+	g_Console.writeToBuffer(c, "    O    ", white);
+
+	c.Y += 5;
+	c.X = g_Console.getConsoleSize().X / 2 - 17;
+	g_Console.writeToBuffer(c, "FIND THE KEY. UNLOCK THE SAFE.", white);
+
+	c.Y += 1;
+	c.X = g_Console.getConsoleSize().X / 2 - 8;
+	g_Console.writeToBuffer(c, "    RUN.    ", white);
+}
+
+void renderLoadingScreen2()
+{
+	COORD c = g_Console.getConsoleSize();
+	c.Y /= 4;
+	c.X = c.X / 2 - 7;
+	g_Console.writeToBuffer(c, "    O    ", black);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 12;
+	g_Console.writeToBuffer(c, "                O  ", black);
+	c.X = g_Console.getConsoleSize().X / 2 - 13;
+	g_Console.writeToBuffer(c, "   O             ", black);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 12;
+	g_Console.writeToBuffer(c, "                    O", black);
+	c.X = g_Console.getConsoleSize().X / 2 - 14;
+	g_Console.writeToBuffer(c, "O                   ", white);
+	c.X = g_Console.getConsoleSize().X / 2 - 11;
+	g_Console.writeToBuffer(c, "     LOADING.   ", white);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 12;
+	g_Console.writeToBuffer(c, "                O  ", black);
+	c.X = g_Console.getConsoleSize().X / 2 - 13;
+	g_Console.writeToBuffer(c, "   O             ", white);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 7;
+	g_Console.writeToBuffer(c, "    O    ", white);
+
+	c.Y += 5;
+	c.X = g_Console.getConsoleSize().X / 2 - 17;
+	g_Console.writeToBuffer(c, "FIND THE KEY. UNLOCK THE SAFE.", white);
+
+	c.Y += 1;
+	c.X = g_Console.getConsoleSize().X / 2 - 8;
+	g_Console.writeToBuffer(c, "    RUN.    ", white);
+}
+
+void renderLoadingScreen3()
+{
+	COORD c = g_Console.getConsoleSize();
+	c.Y /= 4;
+	c.X = c.X / 2 - 7;
+	g_Console.writeToBuffer(c, "    O    ", white);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 12;
+	g_Console.writeToBuffer(c, "                O  ", white);
+	c.X = g_Console.getConsoleSize().X / 2 - 13;
+	g_Console.writeToBuffer(c, "   O             ", white);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 12;
+	g_Console.writeToBuffer(c, "                    O", black);
+	c.X = g_Console.getConsoleSize().X / 2 - 14;
+	g_Console.writeToBuffer(c, "O                   ", white);
+	c.X = g_Console.getConsoleSize().X / 2 - 11;
+	g_Console.writeToBuffer(c, "    LOADING..   ", white);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 12;
+	g_Console.writeToBuffer(c, "                O  ", black);
+	c.X = g_Console.getConsoleSize().X / 2 - 13;
+	g_Console.writeToBuffer(c, "   O             ", white);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 7;
+	g_Console.writeToBuffer(c, "    O    ", white);
+
+	c.Y += 5;
+	c.X = g_Console.getConsoleSize().X / 2 - 17;
+	g_Console.writeToBuffer(c, "FIND THE KEY. UNLOCK THE SAFE.", white);
+
+	c.Y += 1;
+	c.X = g_Console.getConsoleSize().X / 2 - 8;
+	g_Console.writeToBuffer(c, "    RUN.    ", white);
+}
+
+void renderLoadingScreen4()
+{
+	COORD c = g_Console.getConsoleSize();
+	c.Y /= 4;
+	c.X = c.X / 2 - 7;
+	g_Console.writeToBuffer(c, "    O    ", white);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 12;
+	g_Console.writeToBuffer(c, "                O  ", white);
+	c.X = g_Console.getConsoleSize().X / 2 - 13;
+	g_Console.writeToBuffer(c, "   O             ", white);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 12;
+	g_Console.writeToBuffer(c, "                    O", white);
+	c.X = g_Console.getConsoleSize().X / 2 - 14;
+	g_Console.writeToBuffer(c, "O                   ", white);
+	c.X = g_Console.getConsoleSize().X / 2 - 11;
+	g_Console.writeToBuffer(c, "     LOADING    ", white);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 12;
+	g_Console.writeToBuffer(c, "                O  ", black);
+	c.X = g_Console.getConsoleSize().X / 2 - 13;
+	g_Console.writeToBuffer(c, "   O             ", white);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 7;
+	g_Console.writeToBuffer(c, "    O    ", white);
+
+	c.Y += 5;
+	c.X = g_Console.getConsoleSize().X / 2 - 17;
+	g_Console.writeToBuffer(c, "FIND THE KEY. UNLOCK THE SAFE.", white);
+
+	c.Y += 1;
+	c.X = g_Console.getConsoleSize().X / 2 - 8;
+	g_Console.writeToBuffer(c, "    RUN.    ", white);
+}
+
+void renderLoadingScreen5()
+{
+	COORD c = g_Console.getConsoleSize();
+	c.Y /= 4;
+	c.X = c.X / 2 - 7;
+	g_Console.writeToBuffer(c, "    O    ", white);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 13;
+	g_Console.writeToBuffer(c, "   O             O  ", white);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 12;
+	g_Console.writeToBuffer(c, "                    O", white);
+	c.X = g_Console.getConsoleSize().X / 2 - 14;
+	g_Console.writeToBuffer(c, "O                   ", white);
+	c.X = g_Console.getConsoleSize().X / 2 - 12;
+	g_Console.writeToBuffer(c, "     STARTING..    ", white);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 13;
+	g_Console.writeToBuffer(c, "   O             O  ", white);
+
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 7;
+	g_Console.writeToBuffer(c, "    O    ", white);
+
+	c.Y += 5;
+	c.X = g_Console.getConsoleSize().X / 2 - 17;
+	g_Console.writeToBuffer(c, "FIND THE KEY. UNLOCK THE SAFE.", white);
+
+	c.Y += 1;
+	c.X = g_Console.getConsoleSize().X / 2 - 8;
+	g_Console.writeToBuffer(c, "    RUN.    ", white);
 }
 
 void renderLoseScreen()  // renders the splash screen

@@ -3,6 +3,7 @@
 
 #include "Framework\timer.h"
 
+#include "EnemyHelpers.h"
 #include "PlayerHelpers.h"
 #include "RenderMapHelpers.h"
 #include "RenderPersonHelpers.h"
@@ -19,7 +20,17 @@ void update      ( double dt ); // update the game and the state of the game
 void render      ( void );      // renders the current state of the game to the console
 void shutdown    ( void );      // do clean up, free memory
 
-void splashScreenWait();    // waits for time to pass in splash screen
+void splashScreenWait(); 
+void loadingScreenWait1();
+void loadingScreenWait2();
+void loadingScreenWait3();
+void loadingScreenWait4();
+void loadingScreenWait5(); // waits for time to pass in splash screen
+void renderLoadingScreen1();
+void renderLoadingScreen2();
+void renderLoadingScreen3();
+void renderLoadingScreen4();
+void renderLoadingScreen5();
 void loseScreenWait();
 
 void gameplay();            // gameplay logic
