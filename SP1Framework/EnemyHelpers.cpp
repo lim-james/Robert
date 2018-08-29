@@ -16,7 +16,7 @@ void refreshEnemies()
 
 			if (g_dElapsedTime > enemy->bounceTime)
 			{
-				if (!player1()->isHidden && enemy->isInView(player1(), g))
+				if (!player1()->isHidden && enemy->isInView(player1(), g) && !player1()->isGod)
 				{
 					if (!enemy->isStationary)
 					{
@@ -27,7 +27,7 @@ void refreshEnemies()
 						enemy->alert(num, es, player1(), g);
 					}
 				}
-				else if (!player2()->isHidden && enemy->isInView(player2(), g))
+				else if (!player2()->isHidden && enemy->isInView(player2(), g) && !player2()->isGod)
 				{
 					if (!enemy->isStationary)
 					{
@@ -67,7 +67,7 @@ void refreshEnemies()
 
 				if (g_dElapsedTime > enemy->bounceTime)
 				{
-					if (!player->isHidden && enemy->isInView(player, g))
+					if (!player->isHidden && enemy->isInView(player, g) && !player->isGod)
 					{
 						if (!enemy->isStationary)
 						{
