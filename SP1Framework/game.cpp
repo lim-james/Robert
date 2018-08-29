@@ -665,7 +665,16 @@ void renderGame(Player* player)
 		renderPlayerVision(player2());
 	}
 	renderMap(player);        // renders the map to the buffer first
-	renderMessage(attrs()[player->facingIn(grid(storey))->getState()], player);
+	std::string message = attrs()[player->facingIn(grid(storey))->getState()];
+	if (message == "")
+	{
+		if (!player->isSprinting)
+			renderMessage("Hold [SHIFT] to sprint", player);
+	}
+	else
+	{
+		renderMessage(message, player);
+	}
 
 	if (player->openedInventory)
 		renderInventory(player);
