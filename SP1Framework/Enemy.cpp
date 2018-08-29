@@ -7,7 +7,7 @@ bool Enemy::A_STAR_NODE::operator==(A_STAR_NODE const&rhs) const
 
 Enemy::Enemy()
 {
-	state = normal;
+	state = normal; 
 }
 
 Enemy::Enemy(std::string file)
@@ -18,7 +18,7 @@ Enemy::Enemy(std::string file)
 	ifs >> i >> foregroundColour >> backgroundColour;
 	ifs >> isStationary;
 	ifs >> viewRange;
-	ifs >> numberOfPositions >> movementDelay;
+	ifs >> numberOfPositions >> movementDelay; 
 	positions = new Position[numberOfPositions];
 	for (int p = 0; p < numberOfPositions; ++p) {
 		ifs >> positions[p].coord.X >> positions[p].coord.Y;
@@ -298,12 +298,27 @@ bool Enemy::isInView(Person* p, Grid* grid)
 
 void Enemy::alert(unsigned int count, Enemy** enemies, Person* p, Grid* grid)
 {
+	int shortestDist = 0;
+	Enemy *enemy;
 	for (int e = 0; e < count; ++e)
 	{
-		Enemy *enemy = enemies[e];
-		if (!enemy->isStationary)
+		Enemy *curr = enemies[e];
+		if (!curr->isStationary)
 		{
-			enemy->chase(p, grid);
+			int temp = position.distance(curr->position);
+			if (shortestDist == 0)
+			{
+				shortestDist = temp;
+			}
+			else
+			{
+				if (shortestDist > temp)
+				{
+					shortestDist = temp;
+					enemy = curr;
+				}
+			}
 		}
 	}
+	enemy->chase(p, grid);
 }

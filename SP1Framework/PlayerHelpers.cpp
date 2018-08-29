@@ -16,6 +16,12 @@ void playerKeyEvents()
 			player->isSprinting = true;
 		}
 
+		if (g_abKeyPressed[i % 2 ? K_F12 : K_F1])
+		{
+			player->isGod = !player->isGod;
+			player->somethingHappened = true;
+		}
+
 		if (player->bounceTime < g_dElapsedTime)
 		{
 			if (g_abKeyPressed[i % 2 ? K_UP : K_W])
@@ -84,13 +90,13 @@ void playerAction(Player* player)
 		setLevel(L_AUNTYS_HOUSE);
 	}
 	// key
-	else if (item->getState() == State((char)157, true, true, (Colour)11, (Colour)5, 0, false) && currentLevel == L_AUNTYS_HOUSE)
+	else if (item->getState() == interactiveItems[KEY] && currentLevel == L_AUNTYS_HOUSE)
 	{
 		player->storeItem(item->getState());
 		item->toggle();
 	}
 	// cupboard
-	else if (item->getState() == State((char)254, true, false, (Colour)3, (Colour)15, 0, false) && currentLevel == L_AUNTYS_HOUSE)
+	else if (item->getState() == interactiveItems[CLOSET] && currentLevel == L_AUNTYS_HOUSE)
 	{
 		player->isHidden = !player->isHidden;
 	}
@@ -100,9 +106,9 @@ void playerAction(Player* player)
 		player->isHidden = !player->isHidden;
 	}
 	// unlock safe and take document
-	else if ((item->getState() == State((char)240, true, true, (Colour)13, (Colour)15, 0, false) && player->hasItem(State((char)157, true, true, (Colour)11, (Colour)5, 0, false))))
+	else if ((item->getState() == interactiveItems[SAFE] && player->hasItem(interactiveItems[KEY])))
 	{
-		player->storeItem(State((char)77, true, true, (Colour)0, (Colour)15, 0, false));
+		player->storeItem(interactiveItems[DOCUMENT]);
 		item->toggle();
 	}
 	else if (attrs()[item->getState()] == "] open_door" ||
@@ -115,7 +121,7 @@ void playerAction(Player* player)
 		item->getPlayingSound() = !item->getPlayingSound();
 	}
 	// end game
-	else if (attrs()[item->getState()] == "] sewer" && player->hasItem(State((char)77, true, true, (Colour)0, (Colour)15, 0, false)))
+	else if (attrs()[item->getState()] == "] sewer" && player->hasItem(interactiveItems[DOCUMENT]))
 	{
 		g_eGameState = S_LOSESCREEN;
 		Sleep(1000);

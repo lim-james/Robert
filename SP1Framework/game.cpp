@@ -614,7 +614,7 @@ void checkGamestate()
 		for (int i = 0; i < numberOfEnemies(storey); ++i)
 		{
 			Enemy *e = enemies(storey)[i];
-			if (e->position.coord == player->position.coord)
+			if (e->position.coord == player->position.coord && !player->isGod)
 				g_eGameState = S_LOSESCREEN;
 		}
 	}

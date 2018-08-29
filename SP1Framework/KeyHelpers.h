@@ -21,6 +21,8 @@ enum EKEYS
 	K_BACKSLASH,
 	K_LSHIFT,
 	K_RSHIFT,
+	K_F1,
+	K_F12,
 	K_COUNT
 };
 
