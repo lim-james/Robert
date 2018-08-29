@@ -30,4 +30,6 @@ void getInput( void )
 	g_abKeyPressed[K_BACKSLASH] = isKeyPressed(VK_OEM_5);
 	g_abKeyPressed[K_LSHIFT] = isKeyPressed(VK_LSHIFT);
 	g_abKeyPressed[K_RSHIFT] = isKeyPressed(VK_RSHIFT);
+	g_abKeyPressed[K_F1] = isKeyPressed(VK_F1);
+	g_abKeyPressed[K_F12] = isKeyPressed(VK_F12);
 }

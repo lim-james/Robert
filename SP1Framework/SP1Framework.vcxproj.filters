@@ -247,5 +247,11 @@
     <Text Include="VILLAGE_ATTRIBUTES.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="VILLAGE_1ST_STOREY_CAMERA_2.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="VILLAGE_1ST_STOREY_CAMERA_3.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

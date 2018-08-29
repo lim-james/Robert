@@ -298,12 +298,27 @@ bool Enemy::isInView(Person* p, Grid* grid)
 
 void Enemy::alert(unsigned int count, Enemy** enemies, Person* p, Grid* grid)
 {
+	int shortestDist = 0;
+	Enemy *enemy;
 	for (int e = 0; e < count; ++e)
 	{
-		Enemy *enemy = enemies[e];
-		if (!enemy->isStationary)
+		Enemy *curr = enemies[e];
+		if (!curr->isStationary)
 		{
-			enemy->chase(p, grid);
+			int temp = position.distance(curr->position);
+			if (shortestDist == 0)
+			{
+				shortestDist = temp;
+			}
+			else
+			{
+				if (shortestDist > temp)
+				{
+					shortestDist = temp;
+					enemy = curr;
+				}
+			}
 		}
 	}
+	enemy->chase(p, grid);
 }
