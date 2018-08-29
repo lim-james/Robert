@@ -133,6 +133,48 @@ std::string splashScreen[7][15] =
 		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
 	},
 };
+
+std::string loseScreen[7][15] =
+{
+	{
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - / - - - / - - - - - - - - - / - - - - - - / / / / / - - / / / / / - - / / / / / - - /",
+		"/ - - / - - - / - - - - - - - - - / - - - - - - / - - - / - - / - - - / - - / - - - - - - /",
+		"- - - / - - - / - - - - - - - - - / - - - - - - / - - - / - - / - - - - - - / - - - - - - -",
+		"- - - / - - - / - - - - - - - - - / - - - - - - / - - - / - - / - - - - - - / - - - - - - -",
+		"- - - / - - - / - - - - - - - - - / - - - - - - / - - - / - - / / / / / - - / / / / / - - -",
+		"- - - / - - - / - - - - - - - - - / - - - - - - / - - - / - - - - - - / - - / - - - - - - -",
+		"- - - / - - - / - - - - - - - - - / - - - - - - / - - - / - - - - - - / - - / - - - - - - -",
+		"/ - - / - - - / - - - - - - - - - / - - - - - - / - - - / - - / - - - / - - / - - - - - - /",
+		"/ - - / / / / / - - - - - - - - - / / / / / - - / / / / / - - / / / / / - - / / / / / - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+	},
+};
+
+std::string winScreen[7][15] =
+{
+	{
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - / - - - / - - - - - - - - - / - / - / - - / / / / / - - / / / / / - - - - / - - - - /",
+		"/ - - / - - - / - - - - - - - - - / - / - / - - - - / - - - - / - - - / - - - - / - - - - /",
+		"- - - / - - - / - - - - - - - - - / - / - / - - - - / - - - - / - - - / - - - - / - - - - -",
+		"- - - / - - - / - - - - - - - - - / - / - / - - - - / - - - - / - - - / - - - - / - - - - -",
+		"- - - / - - - / - - - - - - - - - / - / - / - - - - / - - - - / - - - / - - - - / - - - - -",
+		"- - - / - - - / - - - - - - - - - / - / - / - - - - / - - - - / - - - / - - - - / - - - - -",
+		"- - - / - - - / - - - - - - - - - / - / - / - - - - / - - - - / - - - / - - - - / - - - - -",
+		"/ - - / - - - / - - - - - - - - - / - / - / - - - - / - - - - / - - - / - - - - - - - - - /",
+		"/ - - / / / / / - - - - - - - - - / / / / / - - / / / / / - - / - - - / - - - - / - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - /",
+		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
+	},
+};
 //--------------------------------------------------------------
 // Purpose  : Initialisation function
 //            Initialize variables, allocate memory, load data from file, etc. 
@@ -207,6 +249,8 @@ void update(double dt)
             break;
 		case S_LOSESCREEN: loseScreenWait();
 			break;
+		case S_WINSCREEN: winScreenWait();
+			break;
     }
 }
 
@@ -240,6 +284,8 @@ void render()
 			renderGame(player2());
             break;
 		case S_LOSESCREEN: renderLoseScreen();
+			break;
+		case S_WINSCREEN: renderWinScreen();
 			break;
     }
     renderFramerate();  // renders debug information, frame rate, elapsed time, etc
@@ -285,6 +331,15 @@ void loadingScreenWait5()
 }
 
 void loseScreenWait()
+{
+	if (g_abKeyPressed[K_SPACE]) // wait for space to switch to game mode, else do nothing
+	{
+		setLevel(currentLevel);
+		g_eGameState = S_GAME;
+	}
+}
+
+void winScreenWait()
 {
 	if (g_abKeyPressed[K_SPACE]) // wait for space to switch to game mode, else do nothing
 	{
@@ -553,18 +608,46 @@ void renderLoadingScreen5()
 	g_Console.writeToBuffer(c, "    RUN.    ", white);
 }
 
+void renderWinScreen()  // renders the splash screen
+{
+	COORD c = g_Console.getConsoleSize();
+	c.Y /= 5;
+	c.X = c.X / 2 - 45;
+	for (int r = 0; r < 15; ++r)
+	{
+		g_Console.writeToBuffer(c, winScreen[0][r], white);
+		c.Y++;
+	}
+	c.Y += 3;
+	c.X = g_Console.getConsoleSize().X / 2 - 5;
+	g_Console.writeToBuffer(c, "YOU WON!!", white);
+	c.Y += 1;
+	c.X = g_Console.getConsoleSize().X / 2 - 12;
+	g_Console.writeToBuffer(c, "Press <Space> to re-start", white);
+	c.Y += 1;
+	c.X = g_Console.getConsoleSize().X / 2 - 10;
+	g_Console.writeToBuffer(c, "Press <Esc> to quit", white);
+}
+
 void renderLoseScreen()  // renders the splash screen
 {
 	COORD c = g_Console.getConsoleSize();
-	c.Y /= 3;
-	c.X = c.X / 2 - 5;
-	g_Console.writeToBuffer(c, "YOU LOST", 0x12);
-	c.Y += 1;
-	c.X = g_Console.getConsoleSize().X / 2 - 13;
-	g_Console.writeToBuffer(c, "Press <Space> to re-start", 0x09);
-	c.Y += 1;
-	c.X = g_Console.getConsoleSize().X / 2 - 10;
-	g_Console.writeToBuffer(c, "Press <Esc> to quit", 0x09);
+		c.Y /= 5;
+		c.X = c.X / 2 - 45;
+		for (int r = 0; r < 15; ++r)
+		{
+			g_Console.writeToBuffer(c, loseScreen[0][r], white);
+			c.Y++;
+		}
+		c.Y += 3;
+		c.X = g_Console.getConsoleSize().X / 2 - 5;
+		g_Console.writeToBuffer(c, "YOU DIED!", white);
+		c.Y += 1;
+		c.X = g_Console.getConsoleSize().X / 2 - 12;
+		g_Console.writeToBuffer(c, "Press <Space> to re-start", white);
+		c.Y += 1;
+		c.X = g_Console.getConsoleSize().X / 2 - 10;
+		g_Console.writeToBuffer(c, "Press <Esc> to quit", white);
 }
 
 void renderGame(Player* player)

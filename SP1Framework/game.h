@@ -32,6 +32,7 @@ void renderLoadingScreen3();
 void renderLoadingScreen4();
 void renderLoadingScreen5();
 void loseScreenWait();
+void winScreenWait();
 
 void gameplay();            // gameplay logic
 
@@ -41,6 +42,7 @@ void clearScreen();         // clears the current screen and draw from scratch
 
 void renderSplashScreen();  // renders the splash screen
 void renderLoseScreen();
+void renderWinScreen();
 
 void renderGame(Player*);   // renders the game stuff
 
