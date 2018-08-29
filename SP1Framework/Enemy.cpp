@@ -60,7 +60,7 @@ void Enemy::updateTargetPosition(Grid* grid)
 	std::vector<Position> choices;
 	for (int i = 0; i < numberOfPositions; ++i)
 	{
-		if (positions[i].distance(position) < 20)
+		if (positions[i].distance(position) < 30)
 		{
 			choices.push_back(positions[i]);
 		}
@@ -80,7 +80,7 @@ void Enemy::generatePath(Position start, Position goal, Grid* grid)
 	startNode->facing = start.facing;
 	startNode->parent = startNode;
 	startNode->g = 0;
-	startNode->h = goal.distance(*startNode);
+	startNode->h = (int)goal.distance(*startNode);
 	startNode->f = startNode->g + startNode->h;
 
 	OPEN.push_back(startNode);
@@ -93,7 +93,7 @@ void Enemy::generatePath(Position start, Position goal, Grid* grid)
 	{
 		int index = 0;
 		A_STAR_NODE* curr = OPEN[0];
-		for (int i = 1; i < OPEN.size(); ++i)
+		for (unsigned int i = 1; i < OPEN.size(); ++i)
 		{
 			if (OPEN[i]->f < curr->f || (OPEN[i]->f == curr->f && OPEN[i]->h < curr->h))
 			{
@@ -117,7 +117,7 @@ void Enemy::generatePath(Position start, Position goal, Grid* grid)
 			neighbour->facing = dir[i];
 
 			neighbour->g = curr->g + 1;
-			neighbour->h = goal.distance(*neighbour);// abs(goal.coord.Y - neighbour->coord.Y) + abs(goal.coord.X - neighbour->coord.X);
+			neighbour->h = (int)goal.distance(*neighbour);// abs(goal.coord.Y - neighbour->coord.Y) + abs(goal.coord.X - neighbour->coord.X);
 			neighbour->f = neighbour->g + neighbour->h;
 			neighbour->parent = curr;
 
@@ -130,7 +130,7 @@ void Enemy::generatePath(Position start, Position goal, Grid* grid)
 				continue;
 
 			bool found = false;
-			for (int close = 0; close < CLOSED.size(); ++close)
+			for (unsigned int close = 0; close < CLOSED.size(); ++close)
 			{
 				if (CLOSED[close]->coord == neighbour->coord)
 				{
@@ -155,7 +155,7 @@ void Enemy::generatePath(Position start, Position goal, Grid* grid)
 			}
 
 			int index = OPEN.size(); 
-			for (int n = 0; n < OPEN.size(); ++n)
+			for (unsigned int n = 0; n < OPEN.size(); ++n)
 			{
 				if (OPEN[n]->coord == neighbour->coord)
 				{
@@ -190,7 +190,7 @@ void Enemy::generatePath(Position start, Position goal, Grid* grid)
 
 float Enemy::getMovementDelay()
 {
-	return state == chasing ? movementDelay / 10.0 : movementDelay;
+	return (float)(state == chasing ? movementDelay / 10.0 : movementDelay);
 }
 
 void Enemy::check(Grid* grid)
@@ -326,12 +326,12 @@ void Enemy::alert(unsigned int count, Enemy** enemies, Person* p, Grid* grid)
 {
 	int shortestDist = 0;
 	Enemy *enemy;
-	for (int e = 0; e < count; ++e)
+	for (unsigned int e = 0; e < count; ++e)
 	{
 		Enemy *curr = enemies[e];
 		if (!curr->isStationary)
 		{
-			int temp = position.distance(curr->position);
+			int temp = (int)position.distance(curr->position);
 			if (shortestDist == 0)
 			{
 				shortestDist = temp;

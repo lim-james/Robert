@@ -390,8 +390,8 @@ void renderSplashScreen()  // renders the splash screen
 	c.X = c.X / 2 - 45;
 
 	int frame = 6;
-	if (g_dElapsedTime * 2 < 7)
-		frame = (int)(g_dElapsedTime * 2);
+	if (g_dElapsedTime * 5 < 7)
+		frame = (int)(g_dElapsedTime * 5);
 
 	for (int r = 0; r < 15; ++r)
 	{
@@ -399,7 +399,7 @@ void renderSplashScreen()  // renders the splash screen
 		c.Y++;
 	}
 
-	if (g_dElapsedTime * 2 < 7)
+	if (g_dElapsedTime * 5 < 7)
 		return;
 
 	c.Y += 3;
