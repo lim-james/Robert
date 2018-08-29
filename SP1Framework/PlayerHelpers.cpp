@@ -123,7 +123,7 @@ void playerAction(Player* player)
 	// end game
 	else if (attrs()[item->getState()] == "] sewer" && player->hasItem(interactiveItems[DOCUMENT]))
 	{
-		g_eGameState = S_LOSESCREEN;
+		g_eGameState = S_WINSCREEN;
 		Sleep(1000);
 	}
 	else

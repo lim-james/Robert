@@ -13,9 +13,9 @@ Enemy::Enemy()
 Enemy::Enemy(std::string file)
 {
 	state = normal;
-	int i, foregroundColour, backgroundColour;
+	int i, fc, bc;
 	std::ifstream ifs(file);
-	ifs >> i >> foregroundColour >> backgroundColour;
+	ifs >> i >> fc >> bc;
 	ifs >> isStationary;
 	ifs >> viewRange;
 	ifs >> numberOfPositions >> movementDelay; 
@@ -42,14 +42,13 @@ Enemy::Enemy(std::string file)
 		}
 	}
 	nextPosition = 1;
-	nextIndex = 1;
 
 	position = positions[0];
-	targetPosition = positions[nextIndex];
+	targetPosition = positions[1];
 
 	icon = i;
-	Colour foregroundColor;
-	Colour backgroundColor;
+	foregroundColor = (Colour)fc;
+	backgroundColor = (Colour)bc;
 }
 
 Enemy::~Enemy()
@@ -207,7 +206,29 @@ void Enemy::check(Grid* grid)
 				Position pos({x,y}, left);
 				if (position.distance(pos) <= radius && playingSound)
 				{
-					targetPosition = pos;
+					if (!(targetPosition.coord == pos.coord))
+					{
+						int xD[4] = { 0, 0, 1, -1 };
+						int yD[4] = { 1, -1, 0, 0 };
+						Direction dir[4] = { up, down, left, right };
+						int d = 0;
+						for (int i = 0; i < 4; ++i)
+						{
+							if (!grid->nodes[y + yD[i]][x + xD[i]].getIsBlocked())
+							{
+								d = i;
+								break;
+							}
+						}
+						state = distracted;
+						targetPosition = pos;
+						targetPosition.coord.X += xD[d];
+						targetPosition.coord.Y += yD[d];
+						nextPosition = 0;
+						
+						generatePath(position, targetPosition, grid);
+					}
+					
 				}
 			}
 		}
@@ -218,19 +239,23 @@ void Enemy::move(Grid* grid)
 {
 	if (targetPosition.coord == position.coord)
 	{
-		if (targetPosition.coord == positions[nextIndex].coord)
+		if (state == distracted)
 		{
-			this->position.facing = positions[nextIndex].facing;
-			updateTargetPosition(grid);
-			return;
+			int xD[4] = { 0, 0, 1, -1 };
+			int yD[4] = { 1, -1, 0, 0 };
+			Direction dir[4] = { down, up, right, left };
+			for (int i = 0; i < 4; ++i)
+			{
+				if (dir[i] == targetPosition.facing)
+				{
+					grid->nodes[position.coord.Y + yD[i]][position.coord.X + xD[i]].toggle();
+					break;
+				}
+			}
 		}
-		else
-		{
-			state = normal;
-			updateTargetPosition(grid);
-			generatePath(position, targetPosition, grid);
-			return;
-		}
+		state = normal;
+		updateTargetPosition(grid);
+		return;
 	}
 	if (getPath()[nextPosition].perform())
 	{
@@ -261,13 +286,7 @@ std::vector<PathNode>& Enemy::getPath()
 
 int Enemy::getViewRange()
 {
-	switch (state)
-	{
-	case normal:
-		return viewRange;
-	case chasing:
-		return viewRange * 5;
-	}
+	return state == chasing ? viewRange * 5 : viewRange;
 }
 
 bool Enemy::isInView(Person* p, Grid* grid)
