@@ -40,6 +40,8 @@ void refreshEnemies()
 				}
 				else
 				{
+					if (enemy->position.coord == enemy->targetPosition.coord)
+						enemy->updateTargetPosition(g);
 					enemy->check(g);
 					enemy->move(g);
 				}
@@ -78,6 +80,8 @@ void refreshEnemies()
 					}
 					else
 					{
+						if (enemy->position.coord == enemy->targetPosition.coord)
+							enemy->updateTargetPosition(g);
 						enemy->check(g);
 						enemy->move(g);
 					}

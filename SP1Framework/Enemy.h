@@ -35,7 +35,7 @@ public:
 	Enemy(std::string);	// comprehensive constructor
 	~Enemy();									// default 
 
-	void setTargetPosition(Position*, unsigned int);
+	void updateTargetPosition(Grid*);
 	void generatePath(Position, Position, Grid*);
 
 	float getMovementDelay();

@@ -310,8 +310,21 @@ void processUserInput()
 
 void clearScreen()
 {
-    // Clears the buffer with this colour attribute
-    g_Console.clearBuffer(black * 17);
+	for (int p = 0; p < 2; ++p)
+	{
+		unsigned int curr = players()[p]->currentStorey;
+		for (int i = 0; i < numberOfEnemies(curr); ++i)
+		{
+			if (enemies(curr)[i]->state == chasing)
+			{
+				// Clears the buffer with this colour attribute
+				g_Console.clearBuffer(((int)(g_dElapsedTime * 5) % 2) * red * 17);
+				return;
+			}
+		}
+	}
+	// Clears the buffer with this colour attribute
+	g_Console.clearBuffer(black * 17);
 }
 
 void renderSplashScreen()  // renders the splash screen

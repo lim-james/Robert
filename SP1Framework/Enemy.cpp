@@ -56,10 +56,10 @@ Enemy::~Enemy()
 {
 }
 
-void Enemy::setTargetPosition(Position* positions, unsigned int count)
+void Enemy::updateTargetPosition(Grid* grid)
 {
 	std::vector<Position> choices;
-	for (int i = 0; i < count; ++i)
+	for (int i = 0; i < numberOfPositions; ++i)
 	{
 		if (positions[i].distance(position) < 25)
 		{
@@ -67,6 +67,8 @@ void Enemy::setTargetPosition(Position* positions, unsigned int count)
 		}
 	}
 	targetPosition = choices[rand() % choices.size()];
+	generatePath(position, targetPosition, grid);
+	nextPosition = 0;
 }
 
 void Enemy::generatePath(Position start, Position goal, Grid* grid)
@@ -219,33 +221,24 @@ void Enemy::move(Grid* grid)
 		if (targetPosition.coord == positions[nextIndex].coord)
 		{
 			this->position.facing = positions[nextIndex].facing;
-			if (nextIndex < numberOfPositions - 1)
-			{
-				nextIndex++;
-				nextPosition = 0;
-			}
-			else
-			{
-				nextIndex = 0;
-			}
-			generatePath(position, positions[nextIndex], grid);
+			updateTargetPosition(grid);
 			return;
 		}
 		else
 		{
 			state = normal;
-			targetPosition = positions[nextIndex];
-			nextPosition = 0;
+			updateTargetPosition(grid);
 			generatePath(position, targetPosition, grid);
 			return;
 		}
 	}
-
 	if (getPath()[nextPosition].perform())
 	{
 		return;
 	}
 	position = getPath()[nextPosition++];
+
+
 }
 
 void Enemy::chase(Person* p, Grid* grid)
