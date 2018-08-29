@@ -7,7 +7,7 @@ bool Enemy::A_STAR_NODE::operator==(A_STAR_NODE const&rhs) const
 
 Enemy::Enemy()
 {
-	state = normal;
+	state = normal; 
 }
 
 Enemy::Enemy(std::string file)
@@ -18,7 +18,7 @@ Enemy::Enemy(std::string file)
 	ifs >> i >> foregroundColour >> backgroundColour;
 	ifs >> isStationary;
 	ifs >> viewRange;
-	ifs >> numberOfPositions >> movementDelay;
+	ifs >> numberOfPositions >> movementDelay; 
 	positions = new Position[numberOfPositions];
 	for (int p = 0; p < numberOfPositions; ++p) {
 		ifs >> positions[p].coord.X >> positions[p].coord.Y;
