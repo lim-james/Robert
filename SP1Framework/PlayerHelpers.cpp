@@ -7,37 +7,7 @@ void playerKeyEvents()
 	{
 		Player *player = players()[i];
 		unsigned int storey = player->currentStorey;
-
 		Grid *g = grid(storey);
-		unsigned int num = numberOfEnemies(storey);
-		Enemy** es = enemies(storey);
-
-		for (int e = 0; e < num; ++e)
-		{
-			Enemy *enemy = es[e];
-			Node* item = enemy->facingIn(g);
-
-			if (g_dElapsedTime > enemy->bounceTime)
-			{
-				if (!player->isHidden && enemy->isInView(player, g))
-				{
-					if (!enemy->isStationary)
-					{
-						enemy->chase(player, g);
-					}
-					else
-					{
-						enemy->alert(num, es, player, g);
-					}
-				}
-				else
-				{
-					enemy->check(g);
-					enemy->move(g);
-				}
-				enemy->bounceTime = enemy->getMovementDelay() + g_dElapsedTime;
-			}
-		}
 
 		player->somethingHappened = false;
 		player->isSprinting = false;
