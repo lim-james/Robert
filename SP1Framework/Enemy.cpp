@@ -60,7 +60,7 @@ void Enemy::updateTargetPosition(Grid* grid)
 	std::vector<Position> choices;
 	for (int i = 0; i < numberOfPositions; ++i)
 	{
-		if (positions[i].distance(position) < 25)
+		if (positions[i].distance(position) < 20)
 		{
 			choices.push_back(positions[i]);
 		}
@@ -206,11 +206,11 @@ void Enemy::check(Grid* grid)
 				Position pos({x,y}, left);
 				if (position.distance(pos) <= radius && playingSound)
 				{
-					if (!(targetPosition.coord == pos.coord))
+					if (!isStationary)
 					{
 						int xD[4] = { 0, 0, 1, -1 };
 						int yD[4] = { 1, -1, 0, 0 };
-						Direction dir[4] = { up, down, left, right };
+						Direction dir[4] = { down, up, left, right };
 						int d = 0;
 						for (int i = 0; i < 4; ++i)
 						{
@@ -224,6 +224,7 @@ void Enemy::check(Grid* grid)
 						targetPosition = pos;
 						targetPosition.coord.X += xD[d];
 						targetPosition.coord.Y += yD[d];
+						targetPosition.facing = dir[d];
 						nextPosition = 0;
 						
 						generatePath(position, targetPosition, grid);
@@ -243,7 +244,7 @@ void Enemy::move(Grid* grid)
 		{
 			int xD[4] = { 0, 0, 1, -1 };
 			int yD[4] = { 1, -1, 0, 0 };
-			Direction dir[4] = { down, up, right, left };
+			Direction dir[4] = { up, down, right, left };
 			for (int i = 0; i < 4; ++i)
 			{
 				if (dir[i] == targetPosition.facing)

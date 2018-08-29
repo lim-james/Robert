@@ -2,7 +2,6 @@
 
 void playerKeyEvents()
 {
-
 	for (int i = 0; i < 2; ++i)
 	{
 		Player *player = players()[i];
@@ -16,14 +15,14 @@ void playerKeyEvents()
 			player->isSprinting = true;
 		}
 
-		if (g_abKeyPressed[i % 2 ? K_F12 : K_F1])
-		{
-			player->isGod = !player->isGod;
-			player->somethingHappened = true;
-		}
-
 		if (player->bounceTime < g_dElapsedTime)
 		{
+			if (g_abKeyPressed[i % 2 ? K_F12 : K_F1])
+			{
+				player->isGod = !player->isGod;
+				player->bounceTime = g_dElapsedTime + 0.125;
+			}
+
 			if (g_abKeyPressed[i % 2 ? K_UP : K_W])
 				movePlayer(player, up);
 
@@ -42,14 +41,13 @@ void playerKeyEvents()
 			if (g_abKeyPressed[i % 2 ? K_BACKSLASH : K_TAB])
 			{
 				player->openedInventory = !player->openedInventory;
-				player->somethingHappened = true;
+				player->bounceTime = g_dElapsedTime + 0.125;
 			}
 
 		}
 
 		if (player->somethingHappened)
 		{
-			player->bounceTime = g_dElapsedTime + player->getMovementDelay();
 			if (player->standingOn(g)->getIcon() == (char)186)
 			{
 				if (player->currentStorey + 1 < level->numberOfStoreys)
@@ -78,19 +76,15 @@ void movePlayer(Player* player, Direction dir)
 		player->position.facing = dir;
 	}
 	player->somethingHappened = true;
+	player->bounceTime = g_dElapsedTime + player->getMovementDelay();
 }
 
 void playerAction(Player* player)
 {
 	Node* item = player->facingIn(grid(player->currentStorey));
 
-	// door
-	if (item->getState() == interactiveItems[CLOSET])
-	{
-		setLevel(L_AUNTYS_HOUSE);
-	}
 	// key
-	else if (item->getState() == interactiveItems[KEY] && currentLevel == L_AUNTYS_HOUSE)
+	if (item->getState() == interactiveItems[KEY] && currentLevel == L_AUNTYS_HOUSE)
 	{
 		player->storeItem(item->getState());
 		item->toggle();
@@ -101,7 +95,7 @@ void playerAction(Player* player)
 		player->isHidden = !player->isHidden;
 	}
 	// bed
-	else if (attrs()[item->getState()] == "bed")
+	else if (attrs()[item->getState()] == "] hide under bed")
 	{
 		player->isHidden = !player->isHidden;
 	}
@@ -111,10 +105,10 @@ void playerAction(Player* player)
 		player->storeItem(interactiveItems[DOCUMENT]);
 		item->toggle();
 	}
-	else if (attrs()[item->getState()] == "] open_door" ||
-		attrs()[item->getState()] == "] close_door" ||
-		attrs()[item->getState()] == "] open_window" ||
-		attrs()[item->getState()] == "] close_window")
+	else if (attrs()[item->getState()] == "] open door" ||
+		attrs()[item->getState()] == "] close door" ||
+		attrs()[item->getState()] == "] open window" ||
+		attrs()[item->getState()] == "] close window")
 	{
 		item->toggle();
 		item->getPlayingSound() = !item->getPlayingSound();
@@ -133,4 +127,5 @@ void playerAction(Player* player)
 	}
 
 	player->somethingHappened = true;
+	player->bounceTime = g_dElapsedTime + 0.125;
 }
