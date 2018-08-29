@@ -323,8 +323,9 @@ void clearScreen()
 			}
 		}
 	}
+	
 	// Clears the buffer with this colour attribute
-	g_Console.clearBuffer(black * 17);
+	g_Console.clearBuffer(0);
 }
 
 void renderSplashScreen()  // renders the splash screen

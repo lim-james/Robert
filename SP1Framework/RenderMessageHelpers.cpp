@@ -6,7 +6,7 @@ void renderMessage(std::string str, Player *p)
 	c.Y = splitScreen.paddingY / 2;
 
 	for (c.X = 0; c.X < splitScreen.width; ++c.X)
-		renderPoint(c, ' ', 0x00, p);
+		renderPoint(c, ' ', p->isGod * darkGreen * 17, p);
 
 	if (p == player2())
 	{
