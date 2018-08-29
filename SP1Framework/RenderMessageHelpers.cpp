@@ -20,6 +20,6 @@ void renderMessage(std::string str, Player *p)
 	}
 
 	int length = str.length();
-	c.X = (splitScreen.width - length) / 2; //str.length()
+	c.X = (splitScreen.width - length) / 2;
 	renderLine(c, (LPCSTR)str.c_str(), white, p);
 }

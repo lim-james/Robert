@@ -35,5 +35,9 @@ bool State::operator==(const State &s) const
 
 bool State::operator<(const State &s) const 
 {
-	return (int)icon < (int)s.icon;
+	if ((int)icon < (int)s.icon)
+		return true;
+	else if ((int)icon == (int)s.icon)
+		return foregroundColour < s.foregroundColour;
+	return false;
 }
