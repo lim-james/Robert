@@ -1,5 +1,11 @@
 #include "PlayerVisionHelpers.h"
 
+//--------------------------------------------------------------
+// Purpose  : Finding the point in which player's vision starts rendering
+//
+// Input    : Player*
+// Output   : N.A.
+//--------------------------------------------------------------
 void renderPlayerVision(Player* p)
 {
 	float x1, y1, x2, y2;
@@ -36,6 +42,12 @@ void renderPlayerVision(Player* p)
 	}
 }
 
+//--------------------------------------------------------------
+// Purpose  : Rendering the player's vision
+//
+// Input    : Player*, X position being checked, Y position being checked, xDiff, yDiff (xDiff and yDiff are the changes to move to the next tile it is checking)
+// Output   : N.A.
+//--------------------------------------------------------------
 void renderPlayerVisionPoint(Player* player, float x, float y, float xDiff, float yDiff)
 {
 	unsigned int storey = player->currentStorey;

@@ -1,5 +1,11 @@
 #include "RenderInventoryHelpers.h"
 
+//--------------------------------------------------------------
+// Purpose  : Render the inventory
+//
+// Input    : Player* 
+// Output   : void
+//--------------------------------------------------------------
 void renderInventory(Player* player)
 {
 	char i[7][7] = {
@@ -30,6 +36,12 @@ void renderInventory(Player* player)
 	}
 }
 
+//--------------------------------------------------------------
+// Purpose  : The point in which the inventory is being rendered at
+//
+// Input    : COORD, char (which is the icon), WORD, Player* 
+// Output   : void
+//--------------------------------------------------------------
 void renderInventoryPoint(COORD c, char i, WORD attr, Player* player)
 {
 	renderPoint(c, i, attr, player);

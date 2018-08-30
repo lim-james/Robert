@@ -1,5 +1,11 @@
 #include "EnemyVisionHelpers.h"
 
+//--------------------------------------------------------------
+// Purpose  : Finding the point in which enemy's vision starts rendering
+//
+// Input    : Enemy*, Player* 
+// Output   : void
+//--------------------------------------------------------------
 void renderEnemyVision(Enemy* e, Player* player)
 {
 	short x1, y1, x2, y2;
@@ -26,6 +32,12 @@ void renderEnemyVision(Enemy* e, Player* player)
 	renderEnemyVisionPoint(e, e->position.coord, x2, y2, player);
 }
 
+//--------------------------------------------------------------
+// Purpose  : render Enemy vision
+//
+// Input    : Enemy*, Enemy COORD, X position being checked, Y position being checked, Player* 
+// Output   : void
+//--------------------------------------------------------------
 void renderEnemyVisionPoint(Enemy* e, COORD c, short x, short y, Player* player)
 {
 	unsigned int storey = player->currentStorey;

@@ -1,5 +1,11 @@
 #include "PlayerHelpers.h"
 
+//--------------------------------------------------------------
+// Purpose  : Player controls
+//
+// Input    : void 
+// Output   : N.A.
+//--------------------------------------------------------------
 void playerKeyEvents()
 {
 	for (int i = 0; i < 2; ++i)
@@ -59,6 +65,12 @@ void playerKeyEvents()
 	}
 }
 
+//--------------------------------------------------------------
+// Purpose  : Checking is player can be moved into next node
+//
+// Input    : Player*, Direction player is facing
+// Output   : N.A.
+//--------------------------------------------------------------
 void movePlayer(Player* player, Direction dir)
 {
 	if (player->isHidden)
@@ -79,6 +91,12 @@ void movePlayer(Player* player, Direction dir)
 	player->bounceTime = g_dElapsedTime + player->getMovementDelay();
 }
 
+//--------------------------------------------------------------
+// Purpose  : Player actions such as hiding and interactions with objects
+//
+// Input    : Player*
+// Output   : N.A.
+//--------------------------------------------------------------
 void playerAction(Player* player)
 {
 	Node* item = player->facingIn(grid(player->currentStorey));

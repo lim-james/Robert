@@ -1,5 +1,11 @@
 #include "EnemyHelpers.h"
 
+//--------------------------------------------------------------
+// Purpose  : Refreshes enemy state (moving, alerting, chasing)
+//
+// Input    : void 
+// Output   : N.A.
+//--------------------------------------------------------------
 void refreshEnemies()
 {
 	if (player1()->currentStorey == player2()->currentStorey)
