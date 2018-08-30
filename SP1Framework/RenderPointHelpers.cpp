@@ -1,5 +1,14 @@
 #include "RenderPointHelpers.h"
 
+//--------------------------------------------------------------
+// Purpose  : Render specified point in map into the viewport
+//
+// Input    : COORD   (position)
+//			  char	  (character to be rendered)
+//			  WORD	  (attribute of that point)
+//			  Player* (player rendering for)
+// Output   : void
+//--------------------------------------------------------------
 void renderMapPoint(COORD c, char i, WORD attr, Player *player)
 {
 	unsigned int storey = player->currentStorey;
@@ -48,11 +57,21 @@ void renderMapPoint(COORD c, char i, WORD attr, Player *player)
 		c.X += splitScreen.paddingX;
 	}
 
+	// check whether point is within viewport size
 	if (c.X >= splitScreen.paddingX && c.X < splitScreen.width - splitScreen.paddingX &&
 		c.Y >= splitScreen.paddingY && c.Y < splitScreen.height - splitScreen.paddingY)
 		renderPoint(c, i, attr, player);
 }
 
+//--------------------------------------------------------------
+// Purpose  : Render point onto respective side of splitscreen
+//
+// Input    : COORD   (position)
+//			  char	  (character to be rendered)
+//			  WORD	  (attribute of that point)
+//			  Player* (player rendering for)
+// Output   : void
+//--------------------------------------------------------------
 void renderPoint(COORD c, char i, WORD attr, Player *player)
 {
 	if (player == player2())
@@ -60,6 +79,15 @@ void renderPoint(COORD c, char i, WORD attr, Player *player)
 	g_Console.writeToBuffer(c, i, attr);
 }
 
+//--------------------------------------------------------------
+// Purpose  : Render a line onto respective side of splitscreen
+//
+// Input    : COORD   (position)
+//			  LPCSTR  (string to be rendered)
+//			  WORD	  (attribute of that line)
+//			  Player* (player rendering for)
+// Output   : void
+//--------------------------------------------------------------
 void renderLine(COORD c, LPCSTR str, WORD attr, Player *player)
 {
 	if (player == player2())

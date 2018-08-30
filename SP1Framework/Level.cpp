@@ -1,5 +1,12 @@
 #include "Level.h"
 
+//--------------------------------------------------------------
+// Purpose  : Get the other files used in the game.
+//			  Initialising the respective aspects of the level
+//            
+// Input    : File path (string) 
+// Output   : N.A.
+//--------------------------------------------------------------
 Level::Level(std::string file) 
 {
 	std::ifstream ifs(file);
