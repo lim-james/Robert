@@ -175,6 +175,9 @@ std::string winScreen[7][15] =
 		"/ / / / / - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - / / / / /",
 	},
 };
+
+bool debugging = false;
+
 //--------------------------------------------------------------
 // Purpose  : Initialisation function
 //            Initialize variables, allocate memory, load data from file, etc. 
@@ -288,7 +291,8 @@ void render()
 		case S_WINSCREEN: renderWinScreen();
 			break;
     }
-    renderFramerate();  // renders debug information, frame rate, elapsed time, etc
+	if (debugging)
+		renderFramerate();  // renders debug information, frame rate, elapsed time, etc
     renderToScreen();   // dump the contents of the buffer to the screen, one frame worth of game
 }
 
@@ -361,6 +365,10 @@ void processUserInput()
     // quits the game if player hits the escape key
     if (g_abKeyPressed[K_ESCAPE])
         g_bQuitGame = true;    
+	if (g_abKeyPressed[K_F2])
+		debugging = true;
+	if (g_abKeyPressed[K_F3])
+		debugging = false;
 }
 
 void clearScreen()
