@@ -4,6 +4,12 @@ LEVELSTATES currentLevel = L_AUNTYS_HOUSE;
 
 Level *level = new Level(levelFiles[currentLevel]);
 
+//--------------------------------------------------------------
+// Purpose  : Get level files from .txt
+//			  Init contents and enemy pos.
+// Input    : File path 
+// Output   : N.A.
+//--------------------------------------------------------------
 void setLevel(LEVELSTATES l)
 {
 	currentLevel = l;

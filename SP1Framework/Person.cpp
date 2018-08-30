@@ -1,5 +1,11 @@
 #include "Person.h"
 
+//--------------------------------------------------------------
+// Purpose  : Default constructor.
+//
+// Input    : void 
+// Output   : N.A.
+//--------------------------------------------------------------
 Person::Person() 
 	: position(Position()), icon(' '), foregroundColor(black), backgroundColor(white), isHidden(false)
 {
@@ -14,6 +20,12 @@ Person::~Person()
 {
 }
 
+//--------------------------------------------------------------
+// Purpose  : Get if player if sprinting
+//			  Increases sppeed if it is sprinting
+// Input    : void 
+// Output   : N.A.
+//--------------------------------------------------------------
 float Person::getMovementDelay()
 {
 	return isSprinting ? movementDelay / 3.0 : movementDelay;

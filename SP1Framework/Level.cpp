@@ -49,28 +49,9 @@ void Level::initPlayers(std::string file)
 	for (int i = 0; i < 2; ++i)
 	{
 		COORD c;
-		ifs >> c.X >> c.Y;
-		Direction facing;
 		char dir;
-		ifs >> dir;
-		switch (dir)
-		{
-			case 'U':
-				facing = up;
-				break;
-			case 'D':
-				facing = down;
-				break;
-			case 'L':
-				facing = left;
-				break;
-			case 'R':
-				facing = right;
-				break;
-			default:
-				break;
-		}
-		players[i] = new Player((char)178, Position(c, facing), i % 2 ? red : blue, white);
+		ifs >> c.X >> c.Y >> dir;
+		players[i] = new Player((char)178, Position(c, dir), i % 2 ? red : blue, white);
 	}
 }
 

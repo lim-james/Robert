@@ -10,7 +10,12 @@
 #include <algorithm>
 #include <thread>
 
-
+//--------------------------------------------------------------
+// Purpose  : Array for splash screen
+//
+// Input    : void
+// Output   : txt
+//--------------------------------------------------------------
 std::string splashScreen[7][15] =
 {
 	{
@@ -134,6 +139,12 @@ std::string splashScreen[7][15] =
 	},
 };
 
+//--------------------------------------------------------------
+// Purpose  : Array for lose screen
+//
+// Input    : void
+// Output   : txt
+//--------------------------------------------------------------
 std::string loseScreen[7][15] =
 {
 	{
@@ -155,6 +166,12 @@ std::string loseScreen[7][15] =
 	},
 };
 
+//--------------------------------------------------------------
+// Purpose  : Array for win screen
+//
+// Input    : void
+// Output   : txt
+//--------------------------------------------------------------
 std::string winScreen[7][15] =
 {
 	{
@@ -296,6 +313,12 @@ void render()
     renderToScreen();   // dump the contents of the buffer to the screen, one frame worth of game
 }
 
+//--------------------------------------------------------------
+// Purpose  : Logic for splash screen to change state
+//
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
 void splashScreenWait()    // waits for time to pass in splash screen
 {
 	if (g_abKeyPressed[K_SPACE]) // wait for space to switch to game mode, else do nothing
@@ -305,6 +328,12 @@ void splashScreenWait()    // waits for time to pass in splash screen
 	}
 }
 
+//--------------------------------------------------------------
+// Purpose  : Logic for loading screen to change state
+//
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
 void loadingScreenWait1()
 {
 	Sleep(1200);
@@ -343,6 +372,12 @@ void loseScreenWait()
 	}
 }
 
+//--------------------------------------------------------------
+// Purpose  : Logic for win screen to change state
+//
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
 void winScreenWait()
 {
 	if (g_abKeyPressed[K_SPACE]) // wait for space to switch to game mode, else do nothing
@@ -352,6 +387,12 @@ void winScreenWait()
 	}
 }
 
+//--------------------------------------------------------------
+// Purpose  : Logic for gameplay
+//
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
 void gameplay()            // gameplay logic
 {
 	refreshEnemies();
@@ -360,6 +401,12 @@ void gameplay()            // gameplay logic
 	checkGamestate();
 }
 
+//--------------------------------------------------------------
+// Purpose  : Logic for god / quit game
+//
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
 void processUserInput()
 {
     // quits the game if player hits the escape key
@@ -371,6 +418,11 @@ void processUserInput()
 		debugging = false;
 }
 
+//--------------------------------------------------------------
+// Purpose  : clears screen
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
 void clearScreen()
 {
 	for (int p = 0; p < 2; ++p)
@@ -391,6 +443,12 @@ void clearScreen()
 	g_Console.clearBuffer(0);
 }
 
+//--------------------------------------------------------------
+// Purpose  : Renders splashscreen
+//
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
 void renderSplashScreen()  // renders the splash screen
 {
 	COORD c = g_Console.getConsoleSize();
@@ -421,6 +479,12 @@ void renderSplashScreen()  // renders the splash screen
 	g_Console.writeToBuffer(c, "Press <Esc> to quit", white);
 }
 
+//--------------------------------------------------------------
+// Purpose  : Renders loadingscreen
+//
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
 void renderLoadingScreen1()
 {
 	COORD c = g_Console.getConsoleSize();
@@ -617,6 +681,12 @@ void renderLoadingScreen5()
 	g_Console.writeToBuffer(c, "    RUN.    ", white);
 }
 
+//--------------------------------------------------------------
+// Purpose  : Renders winscreen
+//
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
 void renderWinScreen()  // renders the splash screen
 {
 	COORD c = g_Console.getConsoleSize();
@@ -638,6 +708,12 @@ void renderWinScreen()  // renders the splash screen
 	g_Console.writeToBuffer(c, "Press <Esc> to quit", white);
 }
 
+//--------------------------------------------------------------
+// Purpose  : Renders losescreen
+//
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
 void renderLoseScreen()  // renders the splash screen
 {
 	COORD c = g_Console.getConsoleSize();
@@ -659,6 +735,12 @@ void renderLoseScreen()  // renders the splash screen
 		g_Console.writeToBuffer(c, "Press <Esc> to quit", white);
 }
 
+//--------------------------------------------------------------
+// Purpose  : Renders main game 
+//
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
 void renderGame(Player* player)
 {
 	unsigned int storey = player->currentStorey;
@@ -694,6 +776,12 @@ void renderGame(Player* player)
 	renderEnemies(player);
 }
 
+//--------------------------------------------------------------
+// Purpose  : Renders framerate
+//
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
 void renderFramerate()
 {
     COORD c;
@@ -713,12 +801,24 @@ void renderFramerate()
     g_Console.writeToBuffer(c, ss.str(), 0x59);
 }
 
+//--------------------------------------------------------------
+// Purpose  : Flush buffer
+//
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
 void renderToScreen()
 {
     // Writes the buffer to the console, hence you will see what you have written
     g_Console.flushBufferToConsole();
 }
 
+//--------------------------------------------------------------
+// Purpose  : Checks gamestate
+//
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
 void checkGamestate()
 {
 	for (int p = 0; p < 2; ++p)
