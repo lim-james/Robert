@@ -10,6 +10,27 @@ Position::Position(COORD c, Direction d)
 {
 }
 
+Position::Position(COORD c, char d)
+	: coord(c)
+{
+	switch (d)
+	{
+	case 'U':
+		facing = up;
+		break;
+	case 'D':
+		facing = down;
+		break;
+	case 'L':
+		facing = left;
+		break;
+	case 'R':
+	default:
+		facing = right;
+		break;
+	}
+}
+
 double Position::distance(Position &p)
 {
 	return sqrt(pow(p.coord.X - coord.X, 2) + pow(p.coord.Y - coord.Y, 2));

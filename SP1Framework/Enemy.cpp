@@ -5,11 +5,24 @@ bool Enemy::A_STAR_NODE::operator==(A_STAR_NODE const&rhs) const
 	return coord == rhs.coord;
 }
 
+//--------------------------------------------------------------
+// Purpose  : Default constructor.
+//
+// Input    : void 
+// Output   : N.A.
+//--------------------------------------------------------------
 Enemy::Enemy()
 {
 	state = normal; 
 }
 
+//--------------------------------------------------------------
+// Purpose  : Comprehensive constructor.
+//			  Initialises variables based on the txt file
+//
+// Input    : string (path of file) 
+// Output   : N.A.
+//--------------------------------------------------------------
 Enemy::Enemy(std::string file)
 {
 	state = normal;
@@ -21,25 +34,10 @@ Enemy::Enemy(std::string file)
 	ifs >> numberOfPositions >> movementDelay; 
 	positions = new Position[numberOfPositions];
 	for (int p = 0; p < numberOfPositions; ++p) {
-		ifs >> positions[p].coord.X >> positions[p].coord.Y;
+		int x, y;
 		char dir;
-		ifs >> dir;
-		switch (dir)
-		{
-			case 'U':
-				positions[p].facing = up;
-				break;
-			case 'D':
-				positions[p].facing = down;
-				break;
-			case 'L':
-				positions[p].facing = left;
-				break;
-			case 'R':
-			default:
-				positions[p].facing = right;
-				break;
-		}
+		ifs >> x >> y >> dir;
+		positions[p] = Position({ x ,y }, dir);
 	}
 	nextPosition = 1;
 
