@@ -1,5 +1,11 @@
 #include "RenderMapHelpers.h"
 
+//--------------------------------------------------------------
+// Purpose  : Render map around the player if seen
+//
+// Input    : Player* (rendering for) 
+// Output   : void
+//--------------------------------------------------------------
 void renderMap(Player* player)
 {
 	unsigned int storey = player->currentStorey;
