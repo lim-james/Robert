@@ -5,11 +5,24 @@ bool Enemy::A_STAR_NODE::operator==(A_STAR_NODE const&rhs) const
 	return coord == rhs.coord;
 }
 
+//--------------------------------------------------------------
+// Purpose  : Default constructor.
+//
+// Input    : void 
+// Output   : N.A.
+//--------------------------------------------------------------
 Enemy::Enemy()
 {
 	state = normal; 
 }
 
+//--------------------------------------------------------------
+// Purpose  : Comprehensive constructor.
+//			  Initialises variables based on the txt file
+//
+// Input    : string (path of file) 
+// Output   : N.A.
+//--------------------------------------------------------------
 Enemy::Enemy(std::string file)
 {
 	state = normal;
@@ -21,25 +34,10 @@ Enemy::Enemy(std::string file)
 	ifs >> numberOfPositions >> movementDelay; 
 	positions = new Position[numberOfPositions];
 	for (int p = 0; p < numberOfPositions; ++p) {
-		ifs >> positions[p].coord.X >> positions[p].coord.Y;
+		int x, y;
 		char dir;
-		ifs >> dir;
-		switch (dir)
-		{
-			case 'U':
-				positions[p].facing = up;
-				break;
-			case 'D':
-				positions[p].facing = down;
-				break;
-			case 'L':
-				positions[p].facing = left;
-				break;
-			case 'R':
-			default:
-				positions[p].facing = right;
-				break;
-		}
+		ifs >> x >> y >> dir;
+		positions[p] = Position({ x ,y }, dir);
 	}
 	nextPosition = 1;
 
@@ -51,10 +49,23 @@ Enemy::Enemy(std::string file)
 	backgroundColor = (Colour)bc;
 }
 
+//--------------------------------------------------------------
+// Purpose  : Default destructor.
+//
+// Input    : void 
+// Output   : N.A.
+//--------------------------------------------------------------
 Enemy::~Enemy()
 {
 }
 
+//--------------------------------------------------------------
+// Purpose  : updates its target position based on selecting
+//		      a random near position
+//
+// Input    : Grid*
+// Output   : void
+//--------------------------------------------------------------
 void Enemy::updateTargetPosition(Grid* grid)
 {
 	std::vector<Position> choices;
@@ -65,11 +76,20 @@ void Enemy::updateTargetPosition(Grid* grid)
 			choices.push_back(positions[i]);
 		}
 	}
-	targetPosition = choices[rand() % choices.size()];
+	if (choices.size())
+		targetPosition =  choices[rand() % choices.size()];
 	generatePath(position, targetPosition, grid);
 	nextPosition = 0;
 }
 
+//--------------------------------------------------------------
+// Purpose  : generates a path based on the start and end
+//			  this takes into consideration doors and windows
+//			  as well as walls.
+//			  
+// Input    : Position (start), Position (goal), Grid*
+// Output   : void
+//--------------------------------------------------------------
 void Enemy::generatePath(Position start, Position goal, Grid* grid)
 {
 	std::vector<A_STAR_NODE*> OPEN;
@@ -188,11 +208,24 @@ void Enemy::generatePath(Position start, Position goal, Grid* grid)
 	std::reverse(getPath().begin(), getPath().end());
 }
 
+//--------------------------------------------------------------
+// Purpose  : returns movement delay of enemies based on state
+//			  
+// Input    : void
+// Output   : float
+//--------------------------------------------------------------
 float Enemy::getMovementDelay()
 {
 	return (float)(state == chasing ? movementDelay / 10.0 : movementDelay);
 }
 
+//--------------------------------------------------------------
+// Purpose  : check if any of the nodes distract the enemies
+//			  enemies will change their state and targetPosition
+//			  
+// Input    : Grid*
+// Output   : void
+//--------------------------------------------------------------
 void Enemy::check(Grid* grid)
 {
 	for (SHORT y = 0; y < grid->size.Y; y++)
@@ -236,6 +269,16 @@ void Enemy::check(Grid* grid)
 	}
 }
 
+//--------------------------------------------------------------
+// Purpose  : move player based on their path and perform 
+//			  actions if needed. 
+//			  
+//			  if enemies have reached their target position.
+//			  they will change state or target accordingly
+//			  
+// Input    : Grid*
+// Output   : void
+//--------------------------------------------------------------
 void Enemy::move(Grid* grid) 
 {
 	if (targetPosition.coord == position.coord)
@@ -267,6 +310,13 @@ void Enemy::move(Grid* grid)
 
 }
 
+//--------------------------------------------------------------
+// Purpose  : change its state to chasing and find a path to
+//			  target the player.
+//			  
+// Input    : Person*, Grid*
+// Output   : void
+//--------------------------------------------------------------
 void Enemy::chase(Person* p, Grid* grid)
 {
 	state = chasing;
@@ -280,16 +330,35 @@ void Enemy::chase(Person* p, Grid* grid)
 	position.facing = position.directionOf(p->position);
 }
 
+//--------------------------------------------------------------
+// Purpose  : returns a path based on the enemy's state
+//			  
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
 std::vector<PathNode>& Enemy::getPath()
 {
 	return state == normal ? standardPath : chasePath;
 }
 
+//--------------------------------------------------------------
+// Purpose  : returns a view range based on the enemy's state
+//			  
+// Input    : void
+// Output   : void
+//--------------------------------------------------------------
 int Enemy::getViewRange()
 {
 	return state == chasing ? viewRange * 5 : viewRange;
 }
 
+//--------------------------------------------------------------
+// Purpose  : returns whether the person specified is in view
+//			  or blocked.
+//			  
+// Input    : Person*, Grid*
+// Output   : bool
+//--------------------------------------------------------------
 bool Enemy::isInView(Person* p, Grid* grid)
 {
 	if (position.directionOf(p->position) == position.facing)
@@ -322,6 +391,13 @@ bool Enemy::isInView(Person* p, Grid* grid)
 	return false;
 }
 
+//--------------------------------------------------------------
+// Purpose  : alert the nearest enemy to target a person
+//			  
+//			  
+// Input    : unsigned int, Enemy*, Person*, Grid*
+// Output   : void
+//--------------------------------------------------------------
 void Enemy::alert(unsigned int count, Enemy** enemies, Person* p, Grid* grid)
 {
 	int shortestDist = 0;

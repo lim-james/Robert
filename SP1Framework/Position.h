@@ -16,6 +16,7 @@ public:
 
 	Position();
 	Position(COORD, Direction);
+	Position(COORD, char);
 
 	double distance(Position&);
 	Direction directionOf(Position&);
