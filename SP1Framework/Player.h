@@ -17,7 +17,6 @@ public:
 
 	void storeItem(State item);
 	bool hasItem(State item);
-	WORD getAttribute();
 };
 
 #endif

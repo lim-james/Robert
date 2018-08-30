@@ -25,15 +25,12 @@ void Player::storeItem(State item)
 {
 	for (int i = 0; i < 8; i++)
 	{
-		if (items[i] == State())
+		if (items[i].icon == ' ')
 		{
 			items[i] = item;
 			return;
 		} // else tell user that inventory is full
 	}
-
-	//items[itemIndex] = item;
-	//itemIndex++;
 }
 
 bool Player::hasItem(State item)

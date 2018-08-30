@@ -84,7 +84,7 @@ void playerAction(Player* player)
 	Node* item = player->facingIn(grid(player->currentStorey));
 
 	// key
-	if (item->getState() == interactiveItems[KEY] && currentLevel == L_AUNTYS_HOUSE)
+	if (item->getState() == interactiveItems[KEY])
 	{
 		player->storeItem(item->getState());
 		item->toggle();

@@ -1,5 +1,11 @@
 #include "Grid.h"
 
+//--------------------------------------------------------------
+// Purpose  : Default constructor.
+//
+// Input    : void 
+// Output   : N.A.
+//--------------------------------------------------------------
 Grid::Grid() : size(COORD())
 {
 	this->nodes = new Node*[this->size.Y];
@@ -72,6 +78,12 @@ Grid::Grid(std::string attr, std::string file)
 	ifs.close();
 }
 
+//--------------------------------------------------------------
+// Purpose  : Default destructor.
+//
+// Input    : N A.
+// Output   : N.A.
+//--------------------------------------------------------------
 Grid::~Grid()
 {
 	delete[] this->nodes;

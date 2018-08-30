@@ -1,4 +1,4 @@
-32
+34
 64 1 0 4 15 10 1 ]_off_stove
 64 1 0 0 15 0 0 ]_toggle_stove
 178 1 0 8 15 20 0 ]_open_door
@@ -14,6 +14,8 @@
 187 1 1 12 15 0 0 ]_hide_under_bed
 188 1 1 12 15 0 0 ]_hide_under_bed
 205 1 1 12 15 0 0 ]_hide_under_bed
+203 1 1 12 15 0 0 ]_hide_under_bed
+202 1 1 12 15 0 0 ]_hide_under_bed
 186 0 1 1 15 0 0 stairs
 228 1 0 9 15 0 0 fridge
 154 1 1 7 15 0 0 ]_flush_toilet

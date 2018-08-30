@@ -19,6 +19,7 @@ void mainLoop( void );
 int main( void ) 
 {
     init();      // initialize your variables
+	Sleep(5000);
     mainLoop();  // main loop
     shutdown();  // do clean up, if any. free memory.
     
