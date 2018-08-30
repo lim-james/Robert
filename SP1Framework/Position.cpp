@@ -1,5 +1,11 @@
 #include "Position.h"
 
+//--------------------------------------------------------------
+// Purpose  : Get position (coord and direction facing)
+//
+// Input    : void 
+// Output   : N.A
+//--------------------------------------------------------------
 Position::Position() 
 	: coord(COORD()), facing(up)
 {
@@ -10,11 +16,23 @@ Position::Position(COORD c, Direction d)
 {
 }
 
+//--------------------------------------------------------------
+// Purpose  : Distance frm positon
+//
+// Input    : bool 
+// Output   : double
+//--------------------------------------------------------------
 double Position::distance(Position &p)
 {
 	return sqrt(pow(p.coord.X - coord.X, 2) + pow(p.coord.Y - coord.Y, 2));
 }
 
+//--------------------------------------------------------------
+// Purpose  : Range and angle of view frm direction
+//
+// Input    : void 
+// Output   : N.A.
+//--------------------------------------------------------------
 Direction Position::directionOf(Position &p)
 {
 	double yDiff = -(p.coord.Y - coord.Y);
